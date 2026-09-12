@@ -6,12 +6,17 @@ import StickyScrollytelling from '../components/StickyScrollytelling.astro';
 import ArtifactReel from '../components/ArtifactReel.astro';
 import DockBar from '../components/DockBar.astro';
 import CartDrawer from '../components/CartDrawer.astro';
+import CustomCursor from '../components/CustomCursor.astro';
+import QuickInspectModal from '../components/QuickInspectModal.astro';
 ---
 
 <Layout 
   title="StackLab Atelier // Mindful Objects & Serene Living"
   description="Colección curada de objetos artesanales, cerámica atemporal y piezas de bienestar diseñadas para elevar la serenidad del espacio cotidiano."
 >
+  <!-- Tactical Precision Cursor -->
+  <CustomCursor />
+
   <!-- Main Glassmorphic Navigation -->
   <Navigation />
 
@@ -21,6 +26,9 @@ import CartDrawer from '../components/CartDrawer.astro';
     <StickyScrollytelling />
     <ArtifactReel />
   </main>
+
+  <!-- Interactive Quick Inspect Modal -->
+  <QuickInspectModal />
 
   <!-- Interactive Slide-Over Cart Drawer -->
   <CartDrawer />

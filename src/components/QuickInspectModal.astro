@@ -1,0 +1,188 @@
+---
+// QuickInspectModal.astro - Seamless In-Place Artifact Inspection
+// Allows visitors to examine details, provenance and materials without leaving the main scrollytelling path.
+---
+
+<aside 
+  id="quick-inspect-modal" 
+  class="fixed inset-0 z-50 bg-[#1C1F1D]/50 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 opacity-0 pointer-events-none transition-all duration-300"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="inspect-product-name"
+>
+  <div 
+    id="quick-inspect-panel" 
+    class="relative w-full max-w-3xl bg-[#FBFBFA] rounded-2xl border border-[#EBE7DF] shadow-2xl overflow-hidden flex flex-col md:flex-row transform scale-95 transition-all duration-300 ease-out"
+  >
+    <!-- Close Button -->
+    <button 
+      id="inspect-close-btn"
+      type="button"
+      aria-label="Cerrar vista de inspección"
+      class="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-white/90 border border-[#EBE7DF] hover:border-[#243026] text-[#1C1F1D] flex items-center justify-center transition-transform hover:scale-105 active:scale-95 cursor-pointer shadow-sm"
+    >
+      ✕
+    </button>
+
+    <!-- Product Visual Column -->
+    <div class="md:w-1/2 relative bg-[#F5F3EF] min-h-[280px] md:min-h-[420px] flex items-center justify-center overflow-hidden">
+      <img 
+        id="inspect-img" 
+        src="" 
+        alt="" 
+        class="w-full h-full object-cover object-center filter contrast-[0.98] transition-transform duration-700 hover:scale-105"
+      />
+      <div class="absolute bottom-3 left-3">
+        <span id="inspect-category" class="zen-badge bg-white/90 text-[#243026] text-[10px] shadow-sm"></span>
+      </div>
+    </div>
+
+    <!-- Product Details Column -->
+    <div class="md:w-1/2 p-6 sm:p-8 flex flex-col justify-between">
+      <div>
+        <div class="flex items-center gap-2 mb-2">
+          <span class="w-1.5 h-1.5 rounded-full bg-[#8A9A86]"></span>
+          <span id="inspect-origin" class="text-[11px] font-sans font-semibold tracking-wider text-[#8A9A86] uppercase"></span>
+        </div>
+
+        <h3 id="inspect-title" class="font-serif text-2xl sm:text-3xl text-[#243026] font-medium leading-snug mb-1"></h3>
+        <p id="inspect-subtitle" class="text-xs text-[#4A5B48] mb-4 font-sans"></p>
+        
+        <div class="text-xl font-serif text-[#243026] mb-4">
+          <span id="inspect-price"></span>
+          <span class="text-xs font-sans text-[#8A9A86] font-normal ml-1">USD</span>
+        </div>
+
+        <p id="inspect-desc" class="text-xs sm:text-sm text-[#4A5B48] leading-relaxed mb-6 font-sans"></p>
+
+        <!-- Technical specs badge grid -->
+        <div class="grid grid-cols-2 gap-2 text-[11px] font-sans bg-[#F5F3EF] p-3 rounded-xl border border-[#EBE7DF] mb-6">
+          <div>
+            <span class="text-[#8A9A86] block text-[10px]">DIMENSIONES</span>
+            <span id="inspect-dimensions" class="font-medium text-[#243026]"></span>
+          </div>
+          <div>
+            <span class="text-[#8A9A86] block text-[10px]">MATERIALES</span>
+            <span id="inspect-materials" class="font-medium text-[#243026] truncate block"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Footer -->
+      <div class="flex items-center gap-3 pt-2">
+        <button 
+          id="inspect-add-cart-btn"
+          type="button"
+          class="flex-1 py-3 px-6 rounded-full bg-[#243026] hover:bg-[#1C1F1D] text-[#FBFBFA] font-sans text-xs uppercase tracking-widest font-semibold transition-all hover:scale-[1.02] active:scale-95 shadow-md flex items-center justify-center gap-2 cursor-pointer"
+        >
+          <span>Añadir al Carrito</span>
+          <span class="text-[10px] opacity-70">✦</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<script>
+  import { soundEngine } from '../scripts/sound-engine';
+
+  function initQuickInspect() {
+    const modal = document.getElementById('quick-inspect-modal');
+    const panel = document.getElementById('quick-inspect-panel');
+    const closeBtn = document.getElementById('inspect-close-btn');
+    const addCartBtn = document.getElementById('inspect-add-cart-btn');
+
+    if (!modal || !panel || !closeBtn) return;
+
+    let currentProduct: any = null;
+
+    const openInspect = (product: any) => {
+      currentProduct = product;
+      
+      const img = document.getElementById('inspect-img') as HTMLImageElement;
+      const cat = document.getElementById('inspect-category');
+      const origin = document.getElementById('inspect-origin');
+      const title = document.getElementById('inspect-title');
+      const subtitle = document.getElementById('inspect-subtitle');
+      const price = document.getElementById('inspect-price');
+      const desc = document.getElementById('inspect-desc');
+      const dim = document.getElementById('inspect-dimensions');
+      const mat = document.getElementById('inspect-materials');
+
+      if (img) { img.src = product.image; img.alt = product.name; }
+      if (cat) cat.textContent = product.category || 'Atelier';
+      if (origin) origin.textContent = product.origin || 'Artesanía Noble';
+      if (title) title.textContent = product.name;
+      if (subtitle) subtitle.textContent = product.subtitle;
+      if (price) price.textContent = `$${product.price}`;
+      if (desc) desc.textContent = product.description;
+      if (dim) dim.textContent = product.dimensions;
+      if (mat) mat.textContent = product.materials;
+
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      panel.classList.remove('scale-95');
+      panel.classList.add('scale-100');
+
+      if (window.__lenis) {
+        window.__lenis.stop();
+      }
+
+      soundEngine.playChime();
+    };
+
+    const closeInspect = () => {
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      panel.classList.remove('scale-100');
+      panel.classList.add('scale-95');
+
+      if (window.__lenis) {
+        window.__lenis.start();
+      }
+
+      soundEngine.playTap(550, 0.03);
+    };
+
+    closeBtn.addEventListener('click', closeInspect);
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) closeInspect();
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && !modal.classList.contains('opacity-0')) {
+        closeInspect();
+      }
+    });
+
+    // Listen for custom trigger from cards
+    window.addEventListener('open-quick-inspect', ((e: CustomEvent) => {
+      if (e.detail) {
+        openInspect(e.detail);
+      }
+    }) as EventListener);
+
+    if (addCartBtn) {
+      addCartBtn.addEventListener('click', () => {
+        if (!currentProduct) return;
+        window.dispatchEvent(new CustomEvent('add-to-cart', {
+          detail: {
+            id: currentProduct.id,
+            name: currentProduct.name,
+            subtitle: currentProduct.subtitle,
+            price: currentProduct.price,
+            currency: currentProduct.currency || 'USD',
+            image: currentProduct.image,
+            quantity: 1,
+            stripePriceId: currentProduct.stripePriceId,
+          }
+        }));
+        closeInspect();
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initQuickInspect);
+  } else {
+    initQuickInspect();
+  }
+</script>

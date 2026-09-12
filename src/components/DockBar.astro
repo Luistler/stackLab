@@ -19,6 +19,17 @@
       <a href="#philosophy" class="hover:text-[#243026] transition-colors font-medium hidden sm:inline">Filosofía</a>
     </div>
 
+    <!-- Sound Toggle Button -->
+    <button 
+      id="dock-sound-btn"
+      type="button"
+      aria-label="Alternar micro-acústica háptica"
+      title="Micro-acústica háptica"
+      class="p-1.5 rounded-full border border-[#EBE7DF] hover:border-[#243026] text-[#4A5B48] hover:text-[#243026] transition-colors cursor-pointer flex items-center justify-center"
+    >
+      <span id="dock-sound-icon" class="text-xs">🔊</span>
+    </button>
+
     <!-- Quick Cart Trigger Button -->
     <button 
       id="dock-cart-btn"
@@ -36,9 +47,26 @@
 </aside>
 
 <script>
+  import { soundEngine } from '../scripts/sound-engine';
+
   function setupDockBar() {
     const dockBtn = document.getElementById('dock-cart-btn');
     const dockCount = document.getElementById('dock-cart-count');
+    const soundBtn = document.getElementById('dock-sound-btn');
+    const soundIcon = document.getElementById('dock-sound-icon');
+
+    // Setup sound toggle state
+    if (soundIcon) {
+      soundIcon.textContent = soundEngine.getMuted() ? '🔇' : '🔊';
+    }
+    if (soundBtn) {
+      soundBtn.addEventListener('click', () => {
+        const isMuted = soundEngine.toggleMute();
+        if (soundIcon) {
+          soundIcon.textContent = isMuted ? '🔇' : '🔊';
+        }
+      });
+    }
 
     // Initialize from localStorage
     try {
