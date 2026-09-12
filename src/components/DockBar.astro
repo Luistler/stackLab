@@ -48,23 +48,21 @@ import { AnimatedSoundToggle } from './icons/AnimatedSoundToggle';
 </aside>
 
 <script>
+  import { getScopedCart } from '../lib/cart-manager';
+
   function setupDockBar() {
     const dockBtn = document.getElementById('dock-cart-btn');
     const dockCount = document.getElementById('dock-cart-count');
 
-    // Initialize from localStorage
-    try {
-      const stored = localStorage.getItem('stacklab_atelier_cart_v1') || localStorage.getItem('stacklab_cart');
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && dockCount) {
-          const totalItems = parsed.reduce((sum: number, item: { quantity: number }) => sum + (item.quantity || 0), 0);
-          dockCount.textContent = totalItems.toString();
-        }
+    // Initialize from scoped cart
+    const updateDockCount = () => {
+      const items = getScopedCart();
+      if (dockCount) {
+        const totalItems = items.reduce((sum: number, item: { quantity: number }) => sum + (item.quantity || 0), 0);
+        dockCount.textContent = totalItems.toString();
       }
-    } catch (e) {
-      // LocalStorage unavailable
-    }
+    };
+    updateDockCount();
 
     // Open Cart Drawer
     if (dockBtn) {

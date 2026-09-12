@@ -175,6 +175,7 @@ import { AnimatedUserIcon, AnimatedShieldIcon, AnimatedArrowRightIcon } from '..
 <script>
   import { getSupabaseClient } from '../lib/supabase';
   import { soundEngine } from '../scripts/sound-engine';
+  import { syncUserCartSession } from '../lib/cart-manager';
 
   function setupAuthPage() {
     const tabLogin = document.getElementById('tab-btn-login');
@@ -211,6 +212,9 @@ import { AnimatedUserIcon, AnimatedShieldIcon, AnimatedArrowRightIcon } from '..
           if (displayAvatar && session.user.email) {
             displayAvatar.textContent = session.user.email[0].toUpperCase();
           }
+          syncUserCartSession(session.user.id);
+        } else {
+          syncUserCartSession(null);
         }
       } catch (err) {}
     };

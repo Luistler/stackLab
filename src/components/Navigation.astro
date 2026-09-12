@@ -78,23 +78,21 @@ import { AnimatedUserIcon, AnimatedCartIcon } from './icons/AnimatedIcons';
 </nav>
 
 <script>
+  import { getScopedCart } from '../lib/cart-manager';
+
   function setupNavigation() {
     const navCartBtn = document.getElementById('nav-cart-btn');
     const navCartCount = document.getElementById('nav-cart-count');
 
-    // Initialize count from localStorage
-    try {
-      const stored = localStorage.getItem('stacklab_atelier_cart_v1') || localStorage.getItem('stacklab_cart');
-      if (stored) {
-        const parsed = JSON.parse(stored);
-        if (Array.isArray(parsed) && navCartCount) {
-          const totalItems = parsed.reduce((sum: number, item: { quantity: number }) => sum + (item.quantity || 0), 0);
-          navCartCount.textContent = totalItems.toString();
-        }
+    // Initialize count from scoped user cart
+    const updateNavCartCount = () => {
+      const items = getScopedCart();
+      if (navCartCount) {
+        const totalItems = items.reduce((sum: number, item: { quantity: number }) => sum + (item.quantity || 0), 0);
+        navCartCount.textContent = totalItems.toString();
       }
-    } catch (e) {
-      // LocalStorage unavailable
-    }
+    };
+    updateNavCartCount();
 
     // Open auth modal on account button click
     const navAuthBtn = document.getElementById('nav-auth-btn');
@@ -123,7 +121,14 @@ import { AnimatedUserIcon, AnimatedCartIcon } from './icons/AnimatedIcons';
           navUserAvatar.className =
             'w-4 h-4 rounded-full bg-[#243026] text-[#FBFBFA] flex items-center justify-center text-[9px] font-bold';
         }
+      } else {
+        if (navUserLabel) navUserLabel.textContent = 'Cuenta';
+        if (navUserAvatar) {
+          navUserAvatar.className =
+            'w-5 h-5 rounded-full bg-[#8A9A86]/20 flex items-center justify-center text-[#243026]';
+        }
       }
+      updateNavCartCount();
     });
 
     // Open cart drawer on button click

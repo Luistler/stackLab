@@ -137,8 +137,7 @@ import { AnimatedCloseIcon, AnimatedArrowRightIcon } from './icons/AnimatedIcons
 
 <script>
   import { formatPrice, FREE_SHIPPING_THRESHOLD, initiateStripeCheckout, type CartItem } from '../lib/stripe';
-
-  const STORAGE_KEY = 'stacklab_atelier_cart_v1';
+  import { getScopedCart, saveScopedCart, syncUserCartSession } from '../lib/cart-manager';
 
   function escapeHtml(str: unknown): string {
     if (typeof str !== 'string') return '';
@@ -180,39 +179,12 @@ import { AnimatedCloseIcon, AnimatedArrowRightIcon } from './icons/AnimatedIcons
     const checkoutText = document.getElementById('checkout-btn-text');
     const checkoutMsg = document.getElementById('checkout-status-msg');
 
-    // Load initial cart from localStorage with key fallback and sanitization
-    let cart: CartItem[] = [];
-    try {
-      const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('stacklab_cart');
-      if (saved) {
-        const raw = JSON.parse(saved);
-        if (Array.isArray(raw)) {
-          cart = raw
-            .map((i) => ({
-              id: escapeHtml(i.id),
-              name: escapeHtml(i.name),
-              subtitle: escapeHtml(i.subtitle || ''),
-              price: typeof i.price === 'number' ? i.price : 0,
-              currency: escapeHtml(i.currency || 'USD'),
-              image: sanitizeImageUrl(i.image),
-              quantity: validateQuantity(i.quantity),
-              stripePriceId: typeof i.stripePriceId === 'string' ? escapeHtml(i.stripePriceId) : undefined,
-            }))
-            .filter((i) => i.id.length > 0 && i.quantity > 0);
-        }
-      }
-    } catch (e) {
-      cart = [];
-    }
+    // Load initial cart scoped to the active user or guest
+    let cart: CartItem[] = getScopedCart();
 
     function saveCart() {
-      try {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
-        // Backwards compatibility sync
-        localStorage.setItem('stacklab_cart', JSON.stringify(cart));
-      } catch (e) {}
+      saveScopedCart(cart);
       renderCart();
-      dispatchCartUpdate();
     }
 
     function dispatchCartUpdate() {
@@ -392,6 +364,12 @@ import { AnimatedCloseIcon, AnimatedArrowRightIcon } from './icons/AnimatedIcons
         addItem(e.detail);
       }
     }) as EventListener);
+
+    // Refresh cart items instantly when user logs in or logs out
+    window.addEventListener('cart-session-changed', () => {
+      cart = getScopedCart();
+      renderCart();
+    });
 
     // Stripe Checkout Handler -> Redirects to /checkout or initiates Stripe
     checkoutBtn?.addEventListener('click', async () => {
