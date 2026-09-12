@@ -46,10 +46,12 @@ if (!product) {
  * Filtra el catálogo provisto por el repositorio para mostrar hasta 3 artículos relacionados, excluyendo el actual.
  */
 const allCatalog = await productRepository.getAll();
-const relatedProducts = allCatalog.filter((p) => p.id !== product.id).slice(0, 3);
+const relatedProducts = allCatalog
+  .filter((p) => p.id !== product.id)
+  .slice(0, 3);
 ---
 
-<Layout 
+<Layout
   title={`${product.name} // StackLab Atelier`}
   description={product.description}
 >
@@ -62,30 +64,35 @@ const relatedProducts = allCatalog.filter((p) => p.id !== product.id).slice(0, 3
     <div class="absolute w-[550px] h-[550px] rounded-full bg-[#EAE6DF]/60 blur-[130px] top-1/2 -right-24 pointer-events-none -z-10"></div>
 
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-      
       <!-- Breadcrumb Navigation -->
-      <nav class="flex items-center gap-2 text-xs font-sans text-neutral-400 mb-8 sm:mb-12" aria-label="Ruta de navegación">
-        <a href="/" class="hover:text-[#243026] transition-colors">Inicio</a>
+      <nav
+        class="flex items-center gap-2 text-xs font-sans text-neutral-400 mb-8 sm:mb-12"
+        aria-label="Ruta de navegación"
+      >
+        <a href="/" class="hover:text-[#243026] transition-colors">
+          Inicio
+        </a>
         <span>/</span>
-        <a href="/#collection" class="hover:text-[#243026] transition-colors">Colección Permanente</a>
+        <a href="/#collection" class="hover:text-[#243026] transition-colors">
+          Colección Permanente
+        </a>
         <span>/</span>
         <span class="text-[#243026] font-medium">{product.name}</span>
       </nav>
 
       <!-- Main Product Stage (2-Column Luxury Editorial Grid) -->
       <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-16 items-start">
-        
         <!-- Left Column: Sticky High-Resolution Visual Presentation -->
         <div class="lg:col-span-7 lg:sticky lg:top-28 space-y-6">
           <div class="relative w-full aspect-[4/3] sm:aspect-[16/11] rounded-[28px] overflow-hidden bg-[#F5F3EF] border border-[#EBE7DF] shadow-zen-card group">
-            <img 
+            <img
               id="main-product-image"
-              src={product.image} 
-              alt={product.name} 
+              src={product.image}
+              alt={product.name}
               class="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-105 filter brightness-[0.98]"
               loading="eager"
             />
-            
+
             <!-- Category Badge -->
             <div class="absolute top-5 left-5">
               <span class="zen-badge bg-white/90 backdrop-blur-md text-[10px] text-[#243026]">
@@ -97,7 +104,9 @@ const relatedProducts = allCatalog.filter((p) => p.id !== product.id).slice(0, 3
             <div class="absolute top-5 right-5">
               <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#243026]/85 text-white text-[10px] font-sans font-medium backdrop-blur-md">
                 <span class="w-1.5 h-1.5 rounded-full bg-[#8A9A86] animate-pulse"></span>
-                <span>{product.inStock ? 'Pieza en Taller' : 'Bajo Demanda'}</span>
+                <span>
+                  {product.inStock ? 'Pieza en Taller' : 'Bajo Demanda'}
+                </span>
               </span>
             </div>
           </div>
@@ -105,23 +114,40 @@ const relatedProducts = allCatalog.filter((p) => p.id !== product.id).slice(0, 3
           <!-- Quick Craft Telemetry Grid -->
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3.5 text-xs font-sans">
             <div class="p-4 rounded-2xl bg-[#F5F3EF] border border-[#EBE7DF]">
-              <span class="block text-[10px] uppercase tracking-wider text-[#8A9A86] font-semibold mb-1">Origen</span>
-              <p class="font-medium text-[#243026] truncate">{product.origin}</p>
+              <span class="block text-[10px] uppercase tracking-wider text-[#8A9A86] font-semibold mb-1">
+                Origen
+              </span>
+              <p class="font-medium text-[#243026] truncate">
+                {product.origin}
+              </p>
             </div>
             <div class="p-4 rounded-2xl bg-[#F5F3EF] border border-[#EBE7DF]">
-              <span class="block text-[10px] uppercase tracking-wider text-[#8A9A86] font-semibold mb-1">Materiales</span>
-              <p class="font-medium text-[#243026] truncate" title={product.materials}>{product.materials}</p>
+              <span class="block text-[10px] uppercase tracking-wider text-[#8A9A86] font-semibold mb-1">
+                Materiales
+              </span>
+              <p
+                class="font-medium text-[#243026] truncate"
+                title={product.materials}
+              >
+                {product.materials}
+              </p>
             </div>
             <div class="p-4 rounded-2xl bg-[#F5F3EF] border border-[#EBE7DF]">
-              <span class="block text-[10px] uppercase tracking-wider text-[#8A9A86] font-semibold mb-1">Dimensiones</span>
-              <p class="font-medium text-[#243026] truncate">{product.dimensions}</p>
+              <span class="block text-[10px] uppercase tracking-wider text-[#8A9A86] font-semibold mb-1">
+                Dimensiones
+              </span>
+              <p class="font-medium text-[#243026] truncate">
+                {product.dimensions}
+              </p>
             </div>
           </div>
 
           <!-- Artisanal Narrative Quote -->
           <div class="p-6 rounded-2xl bg-[#FBFBFA] border border-[#EBE7DF] text-xs text-[#4A5B48] leading-relaxed">
             <p class="italic">
-              "Cada objeto se elabora con respeto minucioso al ritmo del material. Las vetas singulares y texturas naturales son el sello de autenticidad de una pieza única que madura con serenidad."
+              "Cada objeto se elabora con respeto minucioso al ritmo del
+              material. Las vetas singulares y texturas naturales son el sello
+              de autenticidad de una pieza única que madura con serenidad."
             </p>
           </div>
         </div>
@@ -130,10 +156,14 @@ const relatedProducts = allCatalog.filter((p) => p.id !== product.id).slice(0, 3
         <div class="lg:col-span-5 space-y-8">
           <div>
             <div class="flex items-center gap-3 mb-2">
-              <span class="zen-badge text-[10px] bg-[#DCE3DA]/50 text-[#243026]">COLECCIÓN PERMANENTE</span>
+              <span class="zen-badge text-[10px] bg-[#DCE3DA]/50 text-[#243026]">
+                COLECCIÓN PERMANENTE
+              </span>
               <div class="flex items-center gap-1 text-[#8A9A86] text-xs font-sans font-medium">
                 <span>★ {product.rating ?? 4.9}</span>
-                <span class="text-neutral-400">({product.reviewsCount ?? 28} reseñas verificadas)</span>
+                <span class="text-neutral-400">
+                  ({product.reviewsCount ?? 28} reseñas verificadas)
+                </span>
               </div>
             </div>
 
@@ -150,7 +180,9 @@ const relatedProducts = allCatalog.filter((p) => p.id !== product.id).slice(0, 3
                 {formatPrice(product.price)}
               </span>
               <span class="text-xs font-sans text-[#4A5B48] bg-[#DCE3DA]/40 px-3 py-1 rounded-full border border-[#8A9A86]/20 font-medium">
-                {product.price >= 150 ? '🌿 Envío Cortesía Incluido' : 'Envío asegurado en caja artesanal'}
+                {product.price >= 150
+                  ? '🌿 Envío Cortesía Incluido'
+                  : 'Envío asegurado en caja artesanal'}
               </span>
             </div>
           </div>
@@ -164,26 +196,37 @@ const relatedProducts = allCatalog.filter((p) => p.id !== product.id).slice(0, 3
           <div class="p-6 rounded-3xl bg-[#F5F3EF] border border-[#EBE7DF] space-y-4 shadow-sm">
             <!-- Quantity Selector -->
             <div class="flex items-center justify-between">
-              <span class="font-sans text-xs font-semibold text-[#243026] uppercase tracking-wider">Cantidad</span>
+              <span class="font-sans text-xs font-semibold text-[#243026] uppercase tracking-wider">
+                Cantidad
+              </span>
               <div class="flex items-center gap-3 bg-white border border-[#EBE7DF] rounded-full px-3 py-1 shadow-sm">
-                <button 
+                <button
                   id="qty-dec-btn"
-                  type="button" 
+                  type="button"
                   class="w-6 h-6 flex items-center justify-center text-sm font-bold text-[#4A5B48] hover:text-[#243026] active:scale-90"
                   aria-label="Disminuir cantidad"
-                >−</button>
-                <span id="qty-val" class="font-sans text-sm font-semibold min-w-[20px] text-center text-[#243026]">1</span>
-                <button 
+                >
+                  −
+                </button>
+                <span
+                  id="qty-val"
+                  class="font-sans text-sm font-semibold min-w-[20px] text-center text-[#243026]"
+                >
+                  1
+                </span>
+                <button
                   id="qty-inc-btn"
-                  type="button" 
+                  type="button"
                   class="w-6 h-6 flex items-center justify-center text-sm font-bold text-[#4A5B48] hover:text-[#243026] active:scale-90"
                   aria-label="Aumentar cantidad"
-                >+</button>
+                >
+                  +
+                </button>
               </div>
             </div>
 
             <!-- Primary Add to Cart Button -->
-            <button 
+            <button
               id="product-add-cart-btn"
               type="button"
               class="w-full py-4 px-6 rounded-full bg-[#243026] hover:bg-[#344637] text-white font-sans text-sm font-semibold tracking-wide transition-all duration-300 hover:shadow-xl active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer"
@@ -194,7 +237,7 @@ const relatedProducts = allCatalog.filter((p) => p.id !== product.id).slice(0, 3
             </button>
 
             <!-- 1-Click Instant Stripe Checkout Button -->
-            <button 
+            <button
               id="product-buy-now-btn"
               type="button"
               class="w-full py-3.5 px-6 rounded-full bg-white hover:bg-[#FBFBFA] border border-[#243026] text-[#243026] font-sans text-xs font-semibold tracking-wide transition-all hover:scale-[1.01] active:scale-[0.98] flex items-center justify-center gap-2 cursor-pointer shadow-sm"
@@ -209,40 +252,61 @@ const relatedProducts = allCatalog.filter((p) => p.id !== product.id).slice(0, 3
             <div class="flex items-start gap-3">
               <span class="text-[#8A9A86] text-sm">✓</span>
               <div>
-                <strong class="text-[#243026]">Certificación Sostenible:</strong>
-                <span> Packaging 100% libre de plásticos, papel kraft y relleno vegetal soluble.</span>
+                <strong class="text-[#243026]">
+                  Certificación Sostenible:
+                </strong>
+                <span>
+                  {' '}
+                  Packaging 100% libre de plásticos, papel kraft y relleno
+                  vegetal soluble.
+                </span>
               </div>
             </div>
             <div class="flex items-start gap-3">
               <span class="text-[#8A9A86] text-sm">✓</span>
               <div>
-                <strong class="text-[#243026]">Garantía de Satisfacción de 30 Días:</strong>
-                <span> Devolución completa sin fricciones si la pieza no armoniza con tu espacio.</span>
+                <strong class="text-[#243026]">
+                  Garantía de Satisfacción de 30 Días:
+                </strong>
+                <span>
+                  {' '}
+                  Devolución completa sin fricciones si la pieza no armoniza con
+                  tu espacio.
+                </span>
               </div>
             </div>
             <div class="flex items-start gap-3">
               <span class="text-[#8A9A86] text-sm">✓</span>
               <div>
-                <strong class="text-[#243026]">Pasarela de Pago Protegida:</strong>
-                <span> Encriptación de 256 bits procesada por Stripe (PCI DSS Nivel 1).</span>
+                <strong class="text-[#243026]">
+                  Pasarela de Pago Protegida:
+                </strong>
+                <span>
+                  {' '}
+                  Encriptación de 256 bits procesada por Stripe (PCI DSS Nivel
+                  1).
+                </span>
               </div>
             </div>
           </div>
-
         </div>
-
       </div>
 
       <!-- Related Objects Reel (Curated from Atelier Collection) -->
       <section class="mt-28 sm:mt-36 pt-16 border-t border-[#EBE7DF]">
         <div class="flex items-end justify-between mb-10">
           <div>
-            <span class="zen-badge bg-[#F5F3EF] text-[#243026] mb-2">ARMONÍA VISUAL</span>
+            <span class="zen-badge bg-[#F5F3EF] text-[#243026] mb-2">
+              ARMONÍA VISUAL
+            </span>
             <h2 class="font-serif text-2xl sm:text-3xl lg:text-4xl text-[#243026] font-medium">
               Piezas en Resonancia
             </h2>
           </div>
-          <a href="/#collection" class="font-sans text-xs font-medium text-[#4A5B48] hover:text-[#243026] transition-colors">
+          <a
+            href="/#collection"
+            class="font-sans text-xs font-medium text-[#4A5B48] hover:text-[#243026] transition-colors"
+          >
             Ver Toda la Colección →
           </a>
         </div>
@@ -250,10 +314,13 @@ const relatedProducts = allCatalog.filter((p) => p.id !== product.id).slice(0, 3
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
           {relatedProducts.map((item) => (
             <article class="bg-white rounded-3xl border border-[#EBE7DF] overflow-hidden shadow-zen-subtle hover:shadow-zen-card hover:border-[#8A9A86]/50 transition-all duration-300 flex flex-col justify-between group">
-              <a href={`/producto/${item.id}`} class="block aspect-[4/3] overflow-hidden bg-[#F5F3EF] relative">
-                <img 
-                  src={item.image} 
-                  alt={item.name} 
+              <a
+                href={`/producto/${item.id}`}
+                class="block aspect-[4/3] overflow-hidden bg-[#F5F3EF] relative"
+              >
+                <img
+                  src={item.image}
+                  alt={item.name}
                   class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out filter brightness-[0.98]"
                   loading="lazy"
                 />
@@ -266,18 +333,24 @@ const relatedProducts = allCatalog.filter((p) => p.id !== product.id).slice(0, 3
 
               <div class="p-6 flex-1 flex flex-col justify-between">
                 <div>
-                  <span class="text-[10px] font-sans text-neutral-400 uppercase tracking-wider">{item.category}</span>
+                  <span class="text-[10px] font-sans text-neutral-400 uppercase tracking-wider">
+                    {item.category}
+                  </span>
                   <a href={`/producto/${item.id}`}>
                     <h3 class="font-serif text-xl font-medium text-[#243026] group-hover:text-[#4A5B48] transition-colors mt-1 mb-1.5">
                       {item.name}
                     </h3>
                   </a>
-                  <p class="font-sans text-xs text-neutral-500 line-clamp-2 mb-4 leading-relaxed">{item.description}</p>
+                  <p class="font-sans text-xs text-neutral-500 line-clamp-2 mb-4 leading-relaxed">
+                    {item.description}
+                  </p>
                 </div>
 
                 <div class="pt-4 border-t border-[#EBE7DF] flex items-center justify-between">
-                  <span class="font-serif text-lg font-bold text-[#243026]">{formatPrice(item.price)}</span>
-                  <a 
+                  <span class="font-serif text-lg font-bold text-[#243026]">
+                    {formatPrice(item.price)}
+                  </span>
+                  <a
                     href={`/producto/${item.id}`}
                     class="px-4 py-2 rounded-full bg-[#F5F3EF] hover:bg-[#243026] hover:text-white text-[#243026] font-sans text-xs font-semibold transition-all"
                   >
@@ -289,7 +362,6 @@ const relatedProducts = allCatalog.filter((p) => p.id !== product.id).slice(0, 3
           ))}
         </div>
       </section>
-
     </div>
   </main>
 
@@ -337,12 +409,19 @@ const relatedProducts = allCatalog.filter((p) => p.id !== product.id).slice(0, 3
     function updateQuantity(newQty) {
       selectedQuantity = Math.max(1, Math.min(99, newQty));
       if (qtyVal) qtyVal.textContent = selectedQuantity.toString();
-      if (totalDisplay) totalDisplay.textContent = formatCurrency(productData.price * selectedQuantity);
+      if (totalDisplay)
+        totalDisplay.textContent = formatCurrency(
+          productData.price * selectedQuantity
+        );
     }
 
     // Botones de incremento y decremento
-    decBtn?.addEventListener('click', () => updateQuantity(selectedQuantity - 1));
-    incBtn?.addEventListener('click', () => updateQuantity(selectedQuantity + 1));
+    decBtn?.addEventListener('click', () =>
+      updateQuantity(selectedQuantity - 1)
+    );
+    incBtn?.addEventListener('click', () =>
+      updateQuantity(selectedQuantity + 1)
+    );
 
     /**
      * Botón Principal: "Añadir a la Cesta"
@@ -350,18 +429,20 @@ const relatedProducts = allCatalog.filter((p) => p.id !== product.id).slice(0, 3
      * Incluye 'stripePriceId' para asegurar la integridad de precios en Stripe.
      */
     addCartBtn?.addEventListener('click', () => {
-      window.dispatchEvent(new CustomEvent('add-to-cart', {
-        detail: {
-          id: productData.id,
-          name: productData.name,
-          subtitle: productData.subtitle,
-          price: productData.price,
-          currency: productData.currency,
-          image: productData.image,
-          quantity: selectedQuantity,
-          stripePriceId: productData.stripePriceId,
-        }
-      }));
+      window.dispatchEvent(
+        new CustomEvent('add-to-cart', {
+          detail: {
+            id: productData.id,
+            name: productData.name,
+            subtitle: productData.subtitle,
+            price: productData.price,
+            currency: productData.currency,
+            image: productData.image,
+            quantity: selectedQuantity,
+            stripePriceId: productData.stripePriceId,
+          },
+        })
+      );
     });
 
     /**
@@ -369,18 +450,20 @@ const relatedProducts = allCatalog.filter((p) => p.id !== product.id).slice(0, 3
      * Añade la pieza a la cesta e inmediatamente transiciona al usuario a /checkout.
      */
     buyNowBtn?.addEventListener('click', () => {
-      window.dispatchEvent(new CustomEvent('add-to-cart', {
-        detail: {
-          id: productData.id,
-          name: productData.name,
-          subtitle: productData.subtitle,
-          price: productData.price,
-          currency: productData.currency,
-          image: productData.image,
-          quantity: selectedQuantity,
-          stripePriceId: productData.stripePriceId,
-        }
-      }));
+      window.dispatchEvent(
+        new CustomEvent('add-to-cart', {
+          detail: {
+            id: productData.id,
+            name: productData.name,
+            subtitle: productData.subtitle,
+            price: productData.price,
+            currency: productData.currency,
+            image: productData.image,
+            quantity: selectedQuantity,
+            stripePriceId: productData.stripePriceId,
+          },
+        })
+      );
       setTimeout(() => {
         window.location.href = '/checkout';
       }, 120);

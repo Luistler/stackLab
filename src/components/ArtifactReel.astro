@@ -10,7 +10,10 @@ const totalCount = products.length;
 const totalCountFormatted = String(totalCount).padStart(2, '0');
 ---
 
-<section id="collection" class="horizontal-reel-container relative bg-[#F5F3EF] border-t border-[#EBE7DF] z-20 overflow-hidden">
+<section
+  id="collection"
+  class="horizontal-reel-container relative bg-[#F5F3EF] border-t border-[#EBE7DF] z-20 overflow-hidden"
+>
   <!-- Anchor alias for backwards compatibility -->
   <div id="capabilities" class="absolute -top-20"></div>
 
@@ -20,12 +23,13 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
 
   <!-- Viewport Stage -->
   <div class="reel-viewport-stage min-h-[100dvh] flex flex-col justify-between pt-8 pb-36 md:pt-10 md:pb-40 px-4 sm:px-8 lg:px-16 max-w-[1600px] mx-auto w-full relative z-10">
-    
     <!-- Reel Header & Telemetry Bar -->
     <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-6 border-b border-[#EBE7DF]">
       <div>
         <div class="flex items-center gap-3 mb-2">
-          <span class="zen-badge bg-white text-[#243026]">COLECCIÓN PERMANENTE</span>
+          <span class="zen-badge bg-white text-[#243026]">
+            COLECCIÓN PERMANENTE
+          </span>
           <span class="text-[11px] font-sans font-semibold text-[#8A9A86] hidden sm:inline-block">
             EDICIÓN ARTESANAL LIMITADA
           </span>
@@ -38,19 +42,24 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
       <!-- Telemetry Scrubber & Slide Index Indicator -->
       <div class="flex items-center gap-6">
         <p class="font-sans text-xs text-neutral-500 max-w-sm hidden xl:block leading-relaxed">
-          Cada pieza está concebida para durar generaciones, fabricada en lotes pequeños con materias primas sostenibles.
+          Cada pieza está concebida para durar generaciones, fabricada en lotes
+          pequeños con materias primas sostenibles.
         </p>
 
         <div class="flex items-center gap-4 bg-white px-5 py-2.5 rounded-full border border-[#EBE7DF] shadow-sm font-sans text-xs">
           <!-- Slide Counter (Dynamic total based on products.length) -->
           <span class="text-neutral-500 font-medium">
-            [ <span id="reel-counter-current" class="text-[#243026] font-bold">01</span> / <span id="reel-counter-total">{totalCountFormatted}</span> ]
+            [{' '}
+            <span id="reel-counter-current" class="text-[#243026] font-bold">
+              01
+            </span>{' '}
+            / <span id="reel-counter-total">{totalCountFormatted}</span> ]
           </span>
 
           <!-- Smooth Gradient Scrubber Bar -->
           <div class="w-24 sm:w-36 h-1.5 bg-[#EBE7DF] rounded-full overflow-hidden">
-            <div 
-              id="reel-progress-fill" 
+            <div
+              id="reel-progress-fill"
               class="h-full bg-gradient-to-r from-[#8A9A86] via-[#4A5B48] to-[#243026] w-full origin-left transform scale-x-0 transition-transform duration-75 rounded-full"
             ></div>
           </div>
@@ -59,22 +68,24 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
     </div>
 
     <!-- Horizontal Track Container (Mobile Snap Carousel + Desktop GSAP Pin) -->
-    <div id="reel-track-wrapper" class="reel-track-wrapper overflow-x-auto md:overflow-visible my-auto py-6 sm:py-8 snap-x snap-mandatory md:snap-none scroll-smooth">
+    <div
+      id="reel-track-wrapper"
+      class="reel-track-wrapper overflow-x-auto md:overflow-visible my-auto py-6 sm:py-8 snap-x snap-mandatory md:snap-none scroll-smooth"
+    >
       <div class="horizontal-track flex flex-row items-stretch gap-5 sm:gap-8 will-change-transform min-w-max md:min-w-0 px-2 md:px-0 [perspective:1000px]">
-        
         {products.map((product: Product, idx: number) => (
-          <article 
+          <article
             class="product-card w-[86vw] sm:w-[420px] md:w-[440px] lg:w-[480px] shrink-0 snap-center bg-white rounded-[24px] border border-[#EBE7DF] overflow-hidden shadow-[0_16px_36px_-12px_rgba(28,31,29,0.06)] hover:shadow-[0_20px_40px_-10px_rgba(36,48,38,0.10)] hover:border-[#8A9A86]/50 transition-shadow duration-300 flex flex-col justify-between group transform-gpu will-change-transform"
             data-index={idx}
           >
             <!-- Product High-Resolution Image Container (Linked to Product Page) -->
-            <a 
+            <a
               href={`/producto/${product.id}`}
               class="product-card-media block w-full h-40 sm:h-44 lg:h-48 max-h-[25vh] overflow-hidden relative bg-[#F5F3EF] transform-gpu will-change-transform"
               aria-label={`Ver detalles de ${product.name}`}
             >
-              <img 
-                src={product.image} 
+              <img
+                src={product.image}
                 alt={product.name}
                 class="product-card-img w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out filter brightness-[0.98] transform-gpu will-change-transform scale-105"
                 loading="lazy"
@@ -96,7 +107,9 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
               <div>
                 <div class="flex items-center justify-between mb-1 text-[11px] font-sans text-neutral-400">
                   <span>{product.origin}</span>
-                  <span class="text-[#8A9A86] font-medium">★ {product.rating} ({product.reviewsCount})</span>
+                  <span class="text-[#8A9A86] font-medium">
+                    ★ {product.rating} ({product.reviewsCount})
+                  </span>
                 </div>
 
                 <a href={`/producto/${product.id}`} class="block group/title">
@@ -123,14 +136,16 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
               <!-- Action Bar -->
               <div class="pt-2.5 border-t border-[#EBE7DF] flex items-center justify-between gap-3">
                 <div>
-                  <div class="font-sans text-[9px] text-neutral-400 uppercase tracking-wider">Precio</div>
+                  <div class="font-sans text-[9px] text-neutral-400 uppercase tracking-wider">
+                    Precio
+                  </div>
                   <div class="font-serif text-lg sm:text-xl font-bold text-[#243026]">
                     {formatPrice(product.price)}
                   </div>
                 </div>
 
                 <div class="flex items-center gap-2 sm:gap-3">
-                  <button 
+                  <button
                     type="button"
                     data-product={JSON.stringify(product)}
                     class="btn-inspect px-3.5 py-2 rounded-full border border-[#EBE7DF] hover:border-[#243026] text-xs font-sans font-medium text-[#4A5B48] hover:text-[#243026] transition-colors cursor-pointer bg-white/70 shadow-sm"
@@ -138,7 +153,7 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
                   >
                     <span>✦ Ver</span>
                   </button>
-                  <button 
+                  <button
                     type="button"
                     data-product={JSON.stringify(product)}
                     class="btn-add-cart px-4 sm:px-5 py-2 rounded-full bg-[#243026] hover:bg-[#344637] text-white font-sans text-xs font-semibold tracking-wide transition-all hover:scale-105 active:scale-95 shadow-md flex items-center gap-1.5 cursor-pointer"
@@ -149,10 +164,8 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
                 </div>
               </div>
             </div>
-
           </article>
         ))}
-
       </div>
     </div>
 
@@ -163,12 +176,15 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
         <span>ATELIER DISPONIBLE // ENVÍO INTERNACIONAL ASEGURADO</span>
       </span>
       <div class="flex items-center gap-4">
-        <span class="hidden lg:inline-block">DESLIZA O USA FLECHAS TECLADO</span>
+        <span class="hidden lg:inline-block">
+          DESLIZA O USA FLECHAS TECLADO
+        </span>
         <span class="text-neutral-300">|</span>
-        <span class="text-[#243026] font-semibold">{totalCount} / {totalCount} PIEZAS EN CATÁLOGO</span>
+        <span class="text-[#243026] font-semibold">
+          {totalCount} / {totalCount} PIEZAS EN CATÁLOGO
+        </span>
       </div>
     </div>
-
   </div>
 </section>
 
@@ -179,12 +195,23 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
   function initArtifactReel() {
     gsap.registerPlugin(ScrollTrigger);
 
-    const reelSection = document.querySelector('#collection') as HTMLElement | null;
-    const reelTrack = document.querySelector('.horizontal-track') as HTMLElement | null;
-    const progressFill = document.querySelector('#reel-progress-fill') as HTMLElement | null;
-    const counterCurrent = document.querySelector('#reel-counter-current') as HTMLElement | null;
-    const reelWrapper = document.querySelector('#reel-track-wrapper') as HTMLElement | null;
-    const productCards = document.querySelectorAll<HTMLElement>('.product-card');
+    const reelSection = document.querySelector(
+      '#collection'
+    ) as HTMLElement | null;
+    const reelTrack = document.querySelector(
+      '.horizontal-track'
+    ) as HTMLElement | null;
+    const progressFill = document.querySelector(
+      '#reel-progress-fill'
+    ) as HTMLElement | null;
+    const counterCurrent = document.querySelector(
+      '#reel-counter-current'
+    ) as HTMLElement | null;
+    const reelWrapper = document.querySelector(
+      '#reel-track-wrapper'
+    ) as HTMLElement | null;
+    const productCards =
+      document.querySelectorAll<HTMLElement>('.product-card');
 
     if (!reelSection || !reelTrack) return;
 
@@ -198,18 +225,20 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
         if (!dataRaw) return;
         try {
           const product = JSON.parse(dataRaw);
-          window.dispatchEvent(new CustomEvent('add-to-cart', {
-            detail: {
-              id: product.id,
-              name: product.name,
-              subtitle: product.subtitle,
-              price: product.price,
-              currency: product.currency,
-              image: product.image,
-              quantity: 1,
-              stripePriceId: product.stripePriceId,
-            }
-          }));
+          window.dispatchEvent(
+            new CustomEvent('add-to-cart', {
+              detail: {
+                id: product.id,
+                name: product.name,
+                subtitle: product.subtitle,
+                price: product.price,
+                currency: product.currency,
+                image: product.image,
+                quantity: 1,
+                stripePriceId: product.stripePriceId,
+              },
+            })
+          );
         } catch (err) {}
       });
     });
@@ -222,14 +251,18 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
         if (!dataRaw) return;
         try {
           const product = JSON.parse(dataRaw);
-          window.dispatchEvent(new CustomEvent('open-quick-inspect', {
-            detail: product
-          }));
+          window.dispatchEvent(
+            new CustomEvent('open-quick-inspect', {
+              detail: product,
+            })
+          );
         } catch (err) {}
       });
     });
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
     const isDesktop = window.innerWidth >= 768;
 
     // Mobile snap swipe listener
@@ -237,17 +270,25 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
       const updateMobileProgress = () => {
         const maxScroll = reelWrapper.scrollWidth - reelWrapper.clientWidth;
         if (maxScroll <= 0) return;
-        const progress = Math.max(0, Math.min(1, reelWrapper.scrollLeft / maxScroll));
+        const progress = Math.max(
+          0,
+          Math.min(1, reelWrapper.scrollLeft / maxScroll)
+        );
         if (progressFill) {
           progressFill.style.transform = `scaleX(${progress})`;
         }
         if (counterCurrent) {
-          const slideIndex = Math.min(totalSlides, Math.max(1, Math.round(progress * (totalSlides - 1)) + 1));
+          const slideIndex = Math.min(
+            totalSlides,
+            Math.max(1, Math.round(progress * (totalSlides - 1)) + 1)
+          );
           counterCurrent.textContent = String(slideIndex).padStart(2, '0');
         }
       };
 
-      reelWrapper.addEventListener('scroll', updateMobileProgress, { passive: true });
+      reelWrapper.addEventListener('scroll', updateMobileProgress, {
+        passive: true,
+      });
       updateMobileProgress();
     }
 
@@ -275,7 +316,10 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
             if (counterCurrent) {
               const slideIndex = Math.min(
                 totalSlides,
-                Math.max(1, Math.floor(self.progress * (totalSlides - 0.05)) + 1)
+                Math.max(
+                  1,
+                  Math.floor(self.progress * (totalSlides - 0.05)) + 1
+                )
               );
               counterCurrent.textContent = String(slideIndex).padStart(2, '0');
             }
@@ -290,7 +334,8 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
       });
 
       // Subtle horizontal parallax on inner card images during track movement
-      const cardImages = document.querySelectorAll<HTMLElement>('.product-card-img');
+      const cardImages =
+        document.querySelectorAll<HTMLElement>('.product-card-img');
       cardImages.forEach((img) => {
         reelTimeline.fromTo(
           img,
@@ -305,12 +350,25 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
         const img = card.querySelector<HTMLElement>('.product-card-img');
 
         // Prepare high-performance quickTo setters for 60 FPS transform-gpu
-        const setCardRotateX = gsap.quickTo(card, 'rotationX', { duration: 0.45, ease: 'power3.out' });
-        const setCardRotateY = gsap.quickTo(card, 'rotationY', { duration: 0.45, ease: 'power3.out' });
-        const setCardZ = gsap.quickTo(card, 'z', { duration: 0.45, ease: 'power3.out' });
+        const setCardRotateX = gsap.quickTo(card, 'rotationX', {
+          duration: 0.45,
+          ease: 'power3.out',
+        });
+        const setCardRotateY = gsap.quickTo(card, 'rotationY', {
+          duration: 0.45,
+          ease: 'power3.out',
+        });
+        const setCardZ = gsap.quickTo(card, 'z', {
+          duration: 0.45,
+          ease: 'power3.out',
+        });
 
-        const setImgX = img ? gsap.quickTo(img, 'x', { duration: 0.4, ease: 'power3.out' }) : null;
-        const setImgY = img ? gsap.quickTo(img, 'y', { duration: 0.4, ease: 'power3.out' }) : null;
+        const setImgX = img
+          ? gsap.quickTo(img, 'x', { duration: 0.4, ease: 'power3.out' })
+          : null;
+        const setImgY = img
+          ? gsap.quickTo(img, 'y', { duration: 0.4, ease: 'power3.out' })
+          : null;
 
         let rect: DOMRect | null = null;
 
@@ -364,13 +422,17 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
         if (cartActive) return;
 
         if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-          const st = ScrollTrigger.getById('collection-trigger') || ScrollTrigger.getAll().find((s) => s.trigger === reelSection);
+          const st =
+            ScrollTrigger.getById('collection-trigger') ||
+            ScrollTrigger.getAll().find((s) => s.trigger === reelSection);
           if (st) {
             const stepDelta = 1 / Math.max(1, totalSlides - 1);
-            let targetProgress = st.progress + (e.key === 'ArrowRight' ? stepDelta : -stepDelta);
+            let targetProgress =
+              st.progress + (e.key === 'ArrowRight' ? stepDelta : -stepDelta);
             targetProgress = Math.max(0, Math.min(1, targetProgress));
             if (window.__lenis) {
-              const targetScroll = st.start + targetProgress * (st.end - st.start);
+              const targetScroll =
+                st.start + targetProgress * (st.end - st.start);
               window.__lenis.scrollTo(targetScroll);
             }
           }

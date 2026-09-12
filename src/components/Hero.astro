@@ -3,8 +3,10 @@
 // Cormorant Garamond Editorial Typography, Natural Light Imagery, and GSAP Depth Scrub
 ---
 
-<header id="hero-container" class="relative w-full h-[100dvh] flex flex-col justify-between items-center text-center px-4 sm:px-6 py-12 md:py-16 overflow-hidden z-10 bg-[#FBFBFA]">
-  
+<header
+  id="hero-container"
+  class="relative w-full h-[100dvh] flex flex-col justify-between items-center text-center px-4 sm:px-6 py-12 md:py-16 overflow-hidden z-10 bg-[#FBFBFA]"
+>
   <!-- Layer 0: Ambient Organic Watercolor Mist & Natural Light Bloom -->
   <div class="hero-ambient-mist absolute inset-0 pointer-events-none -z-20 overflow-hidden transform-gpu will-change-transform opacity-90">
     <div class="mist-blob-1 absolute w-[600px] h-[600px] rounded-full bg-[#DCE3DA]/50 blur-[140px] -top-24 -left-24 transform-gpu will-change-transform"></div>
@@ -15,9 +17,9 @@
   <!-- Layer 1: High-Resolution Serene Living Visual Backdrop -->
   <div class="hero-bg-visual absolute inset-0 -z-10 pointer-events-none transform-gpu will-change-transform overflow-hidden flex items-center justify-center opacity-85">
     <div class="w-full h-full relative overflow-hidden">
-      <img 
-        src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=2000&q=85" 
-        alt="Serene Minimalist Living Atelier" 
+      <img
+        src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=2000&q=85"
+        alt="Serene Minimalist Living Atelier"
         class="hero-backdrop-img w-full h-full object-cover object-center filter brightness-[0.98] contrast-[0.96] scale-105 transform-gpu will-change-transform"
       />
       <!-- Gentle Cream Gradient Vignette to Blend Seamlessly -->
@@ -29,7 +31,9 @@
   <div class="hero-meta-pill pt-12 sm:pt-16 transform-gpu will-change-transform z-10 opacity-0">
     <div class="zen-badge flex items-center gap-2.5 px-4 py-1.5 shadow-sm bg-white/80 backdrop-blur-md">
       <span class="w-1.5 h-1.5 rounded-full bg-[#8A9A86] animate-pulse"></span>
-      <span class="tracking-widest text-[#243026]">STACKLAB ATELIER // COLECCIÓN 2026</span>
+      <span class="tracking-widest text-[#243026]">
+        STACKLAB ATELIER // COLECCIÓN 2026
+      </span>
     </div>
   </div>
 
@@ -48,7 +52,9 @@
 
     <!-- Editorial Subtitle -->
     <p class="hero-subtitle max-w-xl mx-auto text-[#4A5B48] font-sans text-xs sm:text-sm md:text-base leading-relaxed mb-8 px-4 font-normal transform-gpu will-change-transform opacity-0">
-      Una cuidada selección de mobiliario esencial, vasijas acústicas y textiles de lino orgánico diseñados para inspirar presencia, calidez y belleza silenciosa.
+      Una cuidada selección de mobiliario esencial, vasijas acústicas y textiles
+      de lino orgánico diseñados para inspirar presencia, calidez y belleza
+      silenciosa.
     </p>
 
     <!-- Action CTAs -->
@@ -71,7 +77,9 @@
 
   <!-- Bottom Scroll Cue -->
   <div class="hero-scroll-cue flex flex-col items-center gap-2 text-[#4A5B48] font-sans text-[11px] tracking-widest uppercase select-none pointer-events-none pb-4 z-10 opacity-0">
-    <span class="text-[10px] tracking-[0.2em] font-medium text-neutral-500">DESCUBRE LA SERENIDAD</span>
+    <span class="text-[10px] tracking-[0.2em] font-medium text-neutral-500">
+      DESCUBRE LA SERENIDAD
+    </span>
     <div class="w-4 h-7 rounded-full border border-[#8A9A86]/40 flex justify-center pt-1.5 bg-white/40">
       <div class="w-1 h-2 rounded-full bg-[#8A9A86] animate-bounce"></div>
     </div>
@@ -85,20 +93,27 @@
   function initHeroAnimation() {
     gsap.registerPlugin(ScrollTrigger);
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const heroContainer = document.querySelector('#hero-container') as HTMLElement | null;
+    const prefersReducedMotion = window.matchMedia(
+      '(prefers-reduced-motion: reduce)'
+    ).matches;
+    const heroContainer = document.querySelector(
+      '#hero-container'
+    ) as HTMLElement | null;
     if (!heroContainer) return;
 
     if (prefersReducedMotion) {
       // Graceful fallback for reduced motion: reveal instantly without motion transform
-      gsap.set([
-        '.hero-meta-pill',
-        '.hero-title-line-1',
-        '.hero-title-line-2',
-        '.hero-subtitle',
-        '.hero-cta',
-        '.hero-scroll-cue',
-      ], { opacity: 1, y: 0, scale: 1 });
+      gsap.set(
+        [
+          '.hero-meta-pill',
+          '.hero-title-line-1',
+          '.hero-title-line-2',
+          '.hero-subtitle',
+          '.hero-cta',
+          '.hero-scroll-cue',
+        ],
+        { opacity: 1, y: 0, scale: 1 }
+      );
       return;
     }
 
@@ -228,12 +243,36 @@
         0
       )
       // Editorial headline and text graceful exit drift
-      .to('.hero-title-line-1', { yPercent: -35, opacity: 0.2, ease: 'power1.inOut' }, 0)
-      .to('.hero-title-line-2', { yPercent: -60, opacity: 0.08, ease: 'power1.inOut' }, 0.04)
-      .to('.hero-subtitle', { yPercent: -40, opacity: 0, ease: 'power1.in' }, 0.02)
-      .to('.hero-meta-pill', { yPercent: -30, opacity: 0, ease: 'power1.in' }, 0)
-      .to('.hero-cta', { yPercent: -20, opacity: 0, duration: 0.35, ease: 'power1.in' }, 0)
-      .to('.hero-scroll-cue', { opacity: 0, duration: 0.2, ease: 'power1.in' }, 0);
+      .to(
+        '.hero-title-line-1',
+        { yPercent: -35, opacity: 0.2, ease: 'power1.inOut' },
+        0
+      )
+      .to(
+        '.hero-title-line-2',
+        { yPercent: -60, opacity: 0.08, ease: 'power1.inOut' },
+        0.04
+      )
+      .to(
+        '.hero-subtitle',
+        { yPercent: -40, opacity: 0, ease: 'power1.in' },
+        0.02
+      )
+      .to(
+        '.hero-meta-pill',
+        { yPercent: -30, opacity: 0, ease: 'power1.in' },
+        0
+      )
+      .to(
+        '.hero-cta',
+        { yPercent: -20, opacity: 0, duration: 0.35, ease: 'power1.in' },
+        0
+      )
+      .to(
+        '.hero-scroll-cue',
+        { opacity: 0, duration: 0.2, ease: 'power1.in' },
+        0
+      );
   }
 
   if (document.readyState === 'loading') {

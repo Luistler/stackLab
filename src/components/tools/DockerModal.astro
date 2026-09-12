@@ -4,9 +4,11 @@
 // 100% Client-Side, Cero Telemetría, Tokenizer O(N) Anti-ReDoS, Escapado Seguro HTML
 ---
 
-<div id="modal-docker" class="modal-overlay fixed inset-0 z-50 bg-black/80 backdrop-blur-2xl flex items-center justify-center p-4 overflow-y-auto opacity-0 pointer-events-none transition-all duration-300">
+<div
+  id="modal-docker"
+  class="modal-overlay fixed inset-0 z-50 bg-black/80 backdrop-blur-2xl flex items-center justify-center p-4 overflow-y-auto opacity-0 pointer-events-none transition-all duration-300"
+>
   <div class="modal-card bg-[#141414]/95 border border-white/15 rounded-[26px] max-w-3xl w-full p-6 md:p-8 relative shadow-2xl corner-cross text-white transform scale-95 transition-all duration-300 my-8">
-    
     <!-- Modal Header -->
     <div class="flex justify-between items-start mb-6 border-b border-white/10 pb-4">
       <div>
@@ -20,10 +22,11 @@
           DOCKER TO COMPOSE<span class="text-[#D71921]">.</span>
         </h3>
         <p class="font-mono text-xs text-neutral-400 mt-0.5">
-          Conversor de comandos `docker run` a manifiestos `docker-compose.yml` limpios
+          Conversor de comandos `docker run` a manifiestos `docker-compose.yml`
+          limpios
         </p>
       </div>
-      <button 
+      <button
         id="docker-close-btn"
         type="button"
         aria-label="Cerrar modal Docker to Compose"
@@ -37,13 +40,18 @@
     <div class="space-y-4 font-mono text-xs">
       <div>
         <div class="flex justify-between items-center mb-1.5">
-          <label for="docker-input" class="text-neutral-300 font-semibold flex items-center gap-2">
+          <label
+            for="docker-input"
+            class="text-neutral-300 font-semibold flex items-center gap-2"
+          >
             <span>COMANDO DOCKER RUN:</span>
-            <span class="text-[10px] font-normal text-neutral-500">(Soporta multilínea con `\`)</span>
+            <span class="text-[10px] font-normal text-neutral-500">
+              (Soporta multilínea con `\`)
+            </span>
           </label>
           <div class="flex items-center gap-2">
             <span class="text-[10px] text-neutral-500">PRESETS:</span>
-            <button 
+            <button
               id="docker-preset-vault"
               type="button"
               class="btn-sound text-[10px] text-cyan-400 hover:text-cyan-300 hover:underline"
@@ -51,7 +59,7 @@
               Vaultwarden
             </button>
             <span class="text-neutral-600">·</span>
-            <button 
+            <button
               id="docker-preset-postgres"
               type="button"
               class="btn-sound text-[10px] text-cyan-400 hover:text-cyan-300 hover:underline"
@@ -59,7 +67,7 @@
               Postgres
             </button>
             <span class="text-neutral-600">·</span>
-            <button 
+            <button
               id="docker-preset-nginx"
               type="button"
               class="btn-sound text-[10px] text-cyan-400 hover:text-cyan-300 hover:underline"
@@ -68,9 +76,9 @@
             </button>
           </div>
         </div>
-        <textarea 
-          id="docker-input" 
-          rows="4" 
+        <textarea
+          id="docker-input"
+          rows="4"
           class="w-full bg-black/60 border border-white/15 rounded-xl p-3.5 text-white font-mono text-xs leading-relaxed focus:border-[#D71921] focus:ring-1 focus:ring-[#D71921] focus:outline-none placeholder-neutral-600 transition-colors resize-y"
           placeholder="docker run -d --name mi_servicio -p 8080:80 -v /data:/app/data --restart unless-stopped nginx:alpine"
           spellcheck="false"
@@ -90,7 +98,7 @@
       <!-- Action Buttons & Toggles -->
       <div class="flex flex-wrap justify-between items-center gap-2">
         <div class="flex items-center gap-2">
-          <button 
+          <button
             id="docker-convert-btn"
             type="button"
             class="btn-sound bg-white hover:bg-neutral-200 active:scale-95 text-black font-bold px-5 py-2.5 rounded-xl transition-all flex items-center gap-2"
@@ -98,17 +106,17 @@
             <span>_COMPILAR A YAML</span>
             <span class="text-neutral-600">⚡</span>
           </button>
-          
+
           <!-- View Toggle: Compose YAML vs .env -->
           <div class="flex items-center bg-white/5 border border-white/10 rounded-xl p-1">
-            <button 
+            <button
               id="docker-view-yaml-btn"
               type="button"
               class="btn-sound px-3 py-1 rounded-lg text-[11px] font-bold bg-white/15 text-white transition-colors"
             >
               docker-compose.yml
             </button>
-            <button 
+            <button
               id="docker-view-env-btn"
               type="button"
               class="btn-sound px-3 py-1 rounded-lg text-[11px] text-neutral-400 hover:text-white transition-colors"
@@ -118,7 +126,7 @@
           </div>
         </div>
 
-        <button 
+        <button
           id="docker-copy-btn"
           type="button"
           class="btn-sound border border-white/20 hover:border-white text-white px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 hover:bg-white/5 active:scale-95"
@@ -131,7 +139,10 @@
       <!-- Output Display with Syntax Highlighting -->
       <div class="relative">
         <div class="flex justify-between items-center text-[10px] text-neutral-400 mb-1 px-1">
-          <span id="docker-output-label" class="font-bold uppercase tracking-wider text-emerald-400">
+          <span
+            id="docker-output-label"
+            class="font-bold uppercase tracking-wider text-emerald-400"
+          >
             DOCKER-COMPOSE.YML (COMPOSE SPEC v3.8)
           </span>
           <span id="docker-parsed-stats" class="text-neutral-500 font-mono">
@@ -146,14 +157,21 @@
               <span class="w-2.5 h-2.5 rounded-full bg-[#D71921]/70 inline-block"></span>
               <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/70 inline-block"></span>
               <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/70 inline-block"></span>
-              <span id="docker-filename-tag" class="ml-2 font-mono text-neutral-400">docker-compose.yml</span>
+              <span
+                id="docker-filename-tag"
+                class="ml-2 font-mono text-neutral-400"
+              >
+                docker-compose.yml
+              </span>
             </div>
-            <span class="font-mono text-[9px] text-neutral-600">ZERO_NETWORK_EXFILTRATION</span>
+            <span class="font-mono text-[9px] text-neutral-600">
+              ZERO_NETWORK_EXFILTRATION
+            </span>
           </div>
 
           <!-- Code View -->
-          <pre 
-            id="docker-code-output" 
+          <pre
+            id="docker-code-output"
             class="p-4 overflow-x-auto text-[11px] font-mono leading-relaxed max-h-72 select-all focus:outline-none"
           ></pre>
         </div>
@@ -165,9 +183,10 @@
           <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
           NO EVAL() // SAFE O(N) LINEAR LEXER // RE-DOS RESISTANT
         </span>
-        <span class="font-mono text-neutral-600">SPEC: OCI / DOCKER COMPOSE</span>
+        <span class="font-mono text-neutral-600">
+          SPEC: OCI / DOCKER COMPOSE
+        </span>
       </div>
-
     </div>
   </div>
 </div>
@@ -203,7 +222,10 @@
 
     // Tokenizer O(N) lineal sin Regex complejos (Anti-ReDoS & Injection-Safe)
     function tokenize(rawCmd) {
-      const clean = rawCmd.replace(/\\\r?\n/g, ' ').replace(/\\\n/g, ' ').trim();
+      const clean = rawCmd
+        .replace(/\\\r?\n/g, ' ')
+        .replace(/\\\n/g, ' ')
+        .trim();
       const tokens = [];
       let current = '';
       let inDouble = false;
@@ -269,7 +291,7 @@
         privileged: false,
         memory: '',
         cpus: '',
-        entrypoint: ''
+        entrypoint: '',
       };
 
       let idx = 0;
@@ -294,19 +316,28 @@
           config.name = tokens[++idx];
         } else if (token.startsWith('--name=')) {
           config.name = token.slice(7);
-        } else if ((token === '-p' || token === '--publish') && idx + 1 < tokens.length) {
+        } else if (
+          (token === '-p' || token === '--publish') &&
+          idx + 1 < tokens.length
+        ) {
           config.ports.push(tokens[++idx]);
         } else if (token.startsWith('-p=')) {
           config.ports.push(token.slice(3));
         } else if (token.startsWith('--publish=')) {
           config.ports.push(token.slice(10));
-        } else if ((token === '-v' || token === '--volume') && idx + 1 < tokens.length) {
+        } else if (
+          (token === '-v' || token === '--volume') &&
+          idx + 1 < tokens.length
+        ) {
           config.volumes.push(tokens[++idx]);
         } else if (token.startsWith('-v=')) {
           config.volumes.push(token.slice(3));
         } else if (token.startsWith('--volume=')) {
           config.volumes.push(token.slice(9));
-        } else if ((token === '-e' || token === '--env') && idx + 1 < tokens.length) {
+        } else if (
+          (token === '-e' || token === '--env') &&
+          idx + 1 < tokens.length
+        ) {
           config.environment.push(tokens[++idx]);
         } else if (token.startsWith('-e=')) {
           config.environment.push(token.slice(3));
@@ -320,32 +351,47 @@
           config.restart = tokens[++idx];
         } else if (token.startsWith('--restart=')) {
           config.restart = token.slice(10);
-        } else if ((token === '--network' || token === '--net') && idx + 1 < tokens.length) {
+        } else if (
+          (token === '--network' || token === '--net') &&
+          idx + 1 < tokens.length
+        ) {
           config.network = tokens[++idx];
         } else if (token.startsWith('--network=')) {
           config.network = token.slice(10);
         } else if (token.startsWith('--net=')) {
           config.network = token.slice(6);
-        } else if ((token === '-w' || token === '--workdir') && idx + 1 < tokens.length) {
+        } else if (
+          (token === '-w' || token === '--workdir') &&
+          idx + 1 < tokens.length
+        ) {
           config.workdir = tokens[++idx];
-        } else if ((token === '-u' || token === '--user') && idx + 1 < tokens.length) {
+        } else if (
+          (token === '-u' || token === '--user') &&
+          idx + 1 < tokens.length
+        ) {
           config.user = tokens[++idx];
-        } else if ((token === '-h' || token === '--hostname') && idx + 1 < tokens.length) {
+        } else if (
+          (token === '-h' || token === '--hostname') &&
+          idx + 1 < tokens.length
+        ) {
           config.hostname = tokens[++idx];
         } else if (token === '--privileged') {
           config.privileged = true;
-        } else if ((token === '-m' || token === '--memory') && idx + 1 < tokens.length) {
+        } else if (
+          (token === '-m' || token === '--memory') &&
+          idx + 1 < tokens.length
+        ) {
           config.memory = tokens[++idx];
         } else if (token === '--cpus' && idx + 1 < tokens.length) {
           config.cpus = tokens[++idx];
         } else if (token === '--entrypoint' && idx + 1 < tokens.length) {
           config.entrypoint = tokens[++idx];
         } else if (
-          token === '-d' || 
-          token === '--detach' || 
-          token === '--rm' || 
-          token === '-it' || 
-          token === '-i' || 
+          token === '-d' ||
+          token === '--detach' ||
+          token === '--rm' ||
+          token === '-it' ||
+          token === '-i' ||
           token === '-t'
         ) {
           // Flags conocidos de CLI sin argumento en Compose
@@ -363,12 +409,13 @@
 
     // Generador de Compose YAML
     function generateYaml(config) {
-      const serviceName = config.name.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase() || 'app';
+      const serviceName =
+        config.name.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase() || 'app';
       const lines = [];
 
       lines.push("version: '3.8'");
-      lines.push("");
-      lines.push("services:");
+      lines.push('');
+      lines.push('services:');
       lines.push(`  ${serviceName}:`);
       lines.push(`    image: ${config.image}`);
       lines.push(`    container_name: ${config.name}`);
@@ -402,7 +449,7 @@
           lines.push(`    command: ${config.command[0]}`);
         } else {
           lines.push(`    command:`);
-          config.command.forEach(arg => {
+          config.command.forEach((arg) => {
             lines.push(`      - "${arg}"`);
           });
         }
@@ -415,28 +462,28 @@
 
       if (config.ports.length > 0) {
         lines.push(`    ports:`);
-        config.ports.forEach(p => {
+        config.ports.forEach((p) => {
           lines.push(`      - "${p}"`);
         });
       }
 
       if (config.environment.length > 0) {
         lines.push(`    environment:`);
-        config.environment.forEach(e => {
+        config.environment.forEach((e) => {
           lines.push(`      - ${e}`);
         });
       }
 
       if (config.envFiles.length > 0) {
         lines.push(`    env_file:`);
-        config.envFiles.forEach(f => {
+        config.envFiles.forEach((f) => {
           lines.push(`      - ${f}`);
         });
       }
 
       if (config.volumes.length > 0) {
         lines.push(`    volumes:`);
-        config.volumes.forEach(v => {
+        config.volumes.forEach((v) => {
           lines.push(`      - ${v}`);
         });
       }
@@ -450,8 +497,8 @@
       }
 
       if (config.network) {
-        lines.push("");
-        lines.push("networks:");
+        lines.push('');
+        lines.push('networks:');
         lines.push(`  ${config.network}:`);
         lines.push(`    external: true`);
       }
@@ -467,9 +514,9 @@
       const lines = [
         `# Variables de entorno extraídas de docker run para ${config.name}:`,
         `# Generado por StackLab Docker-to-Compose`,
-        ""
+        '',
       ];
-      config.environment.forEach(item => {
+      config.environment.forEach((item) => {
         lines.push(item);
       });
       return lines.join('\n');
@@ -486,42 +533,44 @@
 
     function highlightYaml(yamlText) {
       const lines = yamlText.split('\n');
-      return lines.map(line => {
-        // Comentarios
-        if (line.trim().startsWith('#')) {
-          return `<span class="text-neutral-500 italic">${escapeHtml(line)}</span>`;
-        }
-
-        // Key: Value
-        const match = line.match(/^(\s*)([a-zA-Z0-9_-]+):(\s*)(.*)$/);
-        if (match) {
-          const indent = match[1] ?? '';
-          const key = match[2] ?? '';
-          const colonSpace = ':' + (match[3] ?? '');
-          const rawVal = match[4] ?? '';
-
-          let highlightedVal = escapeHtml(rawVal);
-          if (rawVal.startsWith('"') || rawVal.startsWith("'")) {
-            highlightedVal = `<span class="text-cyan-300">${escapeHtml(rawVal)}</span>`;
-          } else if (rawVal === 'true' || rawVal === 'false') {
-            highlightedVal = `<span class="text-[#D71921] font-bold">${rawVal}</span>`;
-          } else if (/^\d+$/.test(rawVal)) {
-            highlightedVal = `<span class="text-purple-400">${rawVal}</span>`;
+      return lines
+        .map((line) => {
+          // Comentarios
+          if (line.trim().startsWith('#')) {
+            return `<span class="text-neutral-500 italic">${escapeHtml(line)}</span>`;
           }
 
-          return `${indent}<span class="text-emerald-400 font-bold">${escapeHtml(key)}</span>${colonSpace}${highlightedVal}`;
-        }
+          // Key: Value
+          const match = line.match(/^(\s*)([a-zA-Z0-9_-]+):(\s*)(.*)$/);
+          if (match) {
+            const indent = match[1] ?? '';
+            const key = match[2] ?? '';
+            const colonSpace = ':' + (match[3] ?? '');
+            const rawVal = match[4] ?? '';
 
-        // Elementos de lista (- "80:80")
-        const listMatch = line.match(/^(\s*-\s*)(.*)$/);
-        if (listMatch) {
-          const dash = listMatch[1] ?? '';
-          const val = listMatch[2] ?? '';
-          return `${dash}<span class="text-neutral-200">${escapeHtml(val)}</span>`;
-        }
+            let highlightedVal = escapeHtml(rawVal);
+            if (rawVal.startsWith('"') || rawVal.startsWith("'")) {
+              highlightedVal = `<span class="text-cyan-300">${escapeHtml(rawVal)}</span>`;
+            } else if (rawVal === 'true' || rawVal === 'false') {
+              highlightedVal = `<span class="text-[#D71921] font-bold">${rawVal}</span>`;
+            } else if (/^\d+$/.test(rawVal)) {
+              highlightedVal = `<span class="text-purple-400">${rawVal}</span>`;
+            }
 
-        return escapeHtml(line);
-      }).join('\n');
+            return `${indent}<span class="text-emerald-400 font-bold">${escapeHtml(key)}</span>${colonSpace}${highlightedVal}`;
+          }
+
+          // Elementos de lista (- "80:80")
+          const listMatch = line.match(/^(\s*-\s*)(.*)$/);
+          if (listMatch) {
+            const dash = listMatch[1] ?? '';
+            const val = listMatch[2] ?? '';
+            return `${dash}<span class="text-neutral-200">${escapeHtml(val)}</span>`;
+          }
+
+          return escapeHtml(line);
+        })
+        .join('\n');
     }
 
     // Renderizado según modo
@@ -540,11 +589,13 @@
       if (currentMode === 'yaml') {
         codeOutput.innerHTML = highlightYaml(currentYaml);
         if (filenameTag) filenameTag.textContent = 'docker-compose.yml';
-        if (outputLabel) outputLabel.textContent = 'DOCKER-COMPOSE.YML (COMPOSE SPEC v3.8)';
+        if (outputLabel)
+          outputLabel.textContent = 'DOCKER-COMPOSE.YML (COMPOSE SPEC v3.8)';
       } else {
         codeOutput.innerHTML = highlightYaml(currentEnv);
         if (filenameTag) filenameTag.textContent = '.env';
-        if (outputLabel) outputLabel.textContent = 'ENVIRONMENT VARIABLES (.ENV)';
+        if (outputLabel)
+          outputLabel.textContent = 'ENVIRONMENT VARIABLES (.ENV)';
       }
     }
 
@@ -560,7 +611,8 @@
           copyBtn?.classList.add('border-emerald-400', 'text-emerald-400');
           setTimeout(() => {
             copyIcon.textContent = '📋';
-            copyText.textContent = currentMode === 'yaml' ? 'Copiar Manifiesto' : 'Copiar .env';
+            copyText.textContent =
+              currentMode === 'yaml' ? 'Copiar Manifiesto' : 'Copiar .env';
             copyBtn?.classList.remove('border-emerald-400', 'text-emerald-400');
           }, 1800);
         }

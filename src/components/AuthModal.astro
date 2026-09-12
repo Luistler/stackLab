@@ -3,19 +3,19 @@
 // Allows seamless account login / register + quick Supabase project credential linking directly from UI.
 ---
 
-<aside 
-  id="auth-modal" 
+<aside
+  id="auth-modal"
   class="fixed inset-0 z-50 bg-[#1C1F1D]/50 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 opacity-0 pointer-events-none transition-all duration-300"
   role="dialog"
   aria-modal="true"
   aria-labelledby="auth-modal-title"
 >
-  <div 
-    id="auth-modal-panel" 
+  <div
+    id="auth-modal-panel"
     class="relative w-full max-w-md bg-[#FBFBFA] rounded-3xl border border-[#EBE7DF] shadow-2xl overflow-hidden p-6 sm:p-8 transform scale-95 transition-all duration-300 ease-out"
   >
     <!-- Close Button -->
-    <button 
+    <button
       id="auth-close-btn"
       type="button"
       aria-label="Cerrar modal de autenticación"
@@ -30,7 +30,10 @@
         <span class="w-1.5 h-1.5 rounded-full bg-[#8A9A86] animate-pulse"></span>
         Cuenta Personal Atelier
       </div>
-      <h3 id="auth-modal-title" class="font-serif text-2xl sm:text-3xl text-[#243026] font-medium tracking-tight">
+      <h3
+        id="auth-modal-title"
+        class="font-serif text-2xl sm:text-3xl text-[#243026] font-medium tracking-tight"
+      >
         Bienvenido al Atelier
       </h3>
       <p class="font-sans text-xs text-[#4A5B48] mt-1">
@@ -40,100 +43,121 @@
 
     <!-- Mode Selector Tabs -->
     <div class="flex rounded-full bg-[#F5F3EF] p-1 border border-[#EBE7DF] mb-6 text-xs font-sans">
-      <button 
-        id="tab-auth-login" 
-        type="button" 
+      <button
+        id="tab-auth-login"
+        type="button"
         class="flex-1 py-1.5 rounded-full font-medium transition-all bg-white text-[#243026] shadow-sm cursor-pointer"
       >
         Ingresar
       </button>
-      <button 
-        id="tab-auth-config" 
-        type="button" 
+      <button
+        id="tab-auth-config"
+        type="button"
         class="flex-1 py-1.5 rounded-full font-medium text-[#4A5B48] hover:text-[#243026] transition-all cursor-pointer flex items-center justify-center gap-1"
       >
         <span>Conectar Supabase</span>
-        <span class="text-[9px] bg-[#8A9A86]/20 text-[#4A5B48] px-1.5 rounded-full">API</span>
+        <span class="text-[9px] bg-[#8A9A86]/20 text-[#4A5B48] px-1.5 rounded-full">
+          API
+        </span>
       </button>
     </div>
 
     <!-- Panel 1: Login / Magic Link / Email Form -->
     <form id="auth-login-form" class="space-y-4">
       <div>
-        <label for="auth-email" class="block font-sans text-[11px] uppercase tracking-wider font-semibold text-[#243026] mb-1.5">
+        <label
+          for="auth-email"
+          class="block font-sans text-[11px] uppercase tracking-wider font-semibold text-[#243026] mb-1.5"
+        >
           Correo Electrónico
         </label>
-        <input 
-          id="auth-email" 
-          type="email" 
-          required 
-          placeholder="tu@correo.com" 
+        <input
+          id="auth-email"
+          type="email"
+          required
+          placeholder="tu@correo.com"
           class="w-full px-4 py-2.5 rounded-xl bg-white border border-[#EBE7DF] text-xs font-sans text-[#1C1F1D] focus:outline-none focus:border-[#4A5B48] transition-colors"
         />
       </div>
 
       <div>
-        <label for="auth-password" class="block font-sans text-[11px] uppercase tracking-wider font-semibold text-[#243026] mb-1.5">
+        <label
+          for="auth-password"
+          class="block font-sans text-[11px] uppercase tracking-wider font-semibold text-[#243026] mb-1.5"
+        >
           Contraseña (o dejar vacío para Magic Link)
         </label>
-        <input 
-          id="auth-password" 
-          type="password" 
-          placeholder="••••••••" 
+        <input
+          id="auth-password"
+          type="password"
+          placeholder="••••••••"
           class="w-full px-4 py-2.5 rounded-xl bg-white border border-[#EBE7DF] text-xs font-sans text-[#1C1F1D] focus:outline-none focus:border-[#4A5B48] transition-colors"
         />
       </div>
 
-      <button 
+      <button
         id="auth-submit-btn"
-        type="submit" 
+        type="submit"
         class="w-full py-3 rounded-full bg-[#243026] hover:bg-[#1C1F1D] text-[#FBFBFA] font-sans text-xs uppercase tracking-widest font-semibold transition-all hover:scale-[1.02] active:scale-95 shadow-md flex items-center justify-center gap-2 cursor-pointer mt-2"
       >
         <span>Acceder con Supabase</span>
         <span class="text-[10px]">→</span>
       </button>
 
-      <div id="auth-status-msg" class="hidden text-[11px] font-sans text-center py-1 rounded-lg"></div>
+      <div
+        id="auth-status-msg"
+        class="hidden text-[11px] font-sans text-center py-1 rounded-lg"
+      ></div>
     </form>
 
     <!-- Panel 2: Quick Supabase Credentials Connector -->
     <div id="auth-config-panel" class="hidden space-y-4">
       <div class="p-3 rounded-xl bg-[#F5F3EF] border border-[#EBE7DF] text-[11px] font-sans text-[#4A5B48] leading-relaxed">
-        Pega la URL de tu proyecto y tu anon key pública de Supabase para conectar tu base de datos y autenticación instantáneamente.
+        Pega la URL de tu proyecto y tu anon key pública de Supabase para
+        conectar tu base de datos y autenticación instantáneamente.
       </div>
 
       <div>
-        <label for="config-supa-url" class="block font-sans text-[10px] uppercase tracking-wider font-semibold text-[#243026] mb-1">
+        <label
+          for="config-supa-url"
+          class="block font-sans text-[10px] uppercase tracking-wider font-semibold text-[#243026] mb-1"
+        >
           Supabase Project URL
         </label>
-        <input 
-          id="config-supa-url" 
-          type="url" 
-          placeholder="https://xyzproject.supabase.co" 
+        <input
+          id="config-supa-url"
+          type="url"
+          placeholder="https://xyzproject.supabase.co"
           class="w-full px-3 py-2 rounded-xl bg-white border border-[#EBE7DF] text-xs font-sans text-[#1C1F1D] focus:outline-none focus:border-[#4A5B48]"
         />
       </div>
 
       <div>
-        <label for="config-supa-key" class="block font-sans text-[10px] uppercase tracking-wider font-semibold text-[#243026] mb-1">
+        <label
+          for="config-supa-key"
+          class="block font-sans text-[10px] uppercase tracking-wider font-semibold text-[#243026] mb-1"
+        >
           Supabase Anon / Public Key
         </label>
-        <input 
-          id="config-supa-key" 
-          type="password" 
-          placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..." 
+        <input
+          id="config-supa-key"
+          type="password"
+          placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
           class="w-full px-3 py-2 rounded-xl bg-white border border-[#EBE7DF] text-xs font-sans text-[#1C1F1D] focus:outline-none focus:border-[#4A5B48]"
         />
       </div>
 
-      <button 
-        id="config-save-btn" 
-        type="button" 
+      <button
+        id="config-save-btn"
+        type="button"
         class="w-full py-2.5 rounded-full bg-[#4A5B48] hover:bg-[#243026] text-white font-sans text-xs font-medium tracking-wider transition-all hover:scale-[1.02] active:scale-95 cursor-pointer shadow-sm"
       >
         Guardar y Reconectar
       </button>
-      <div id="config-status-msg" class="hidden text-[11px] font-sans text-center py-1 text-[#4A5B48]"></div>
+      <div
+        id="config-status-msg"
+        class="hidden text-[11px] font-sans text-center py-1 text-[#4A5B48]"
+      ></div>
     </div>
 
     <!-- Active User State (When already logged in) -->
@@ -142,18 +166,22 @@
         <span id="user-avatar-initial">L</span>
       </div>
       <div>
-        <h4 id="user-email-display" class="font-serif text-lg text-[#243026] font-medium"></h4>
-        <span class="text-[11px] text-[#8A9A86] font-sans">Sesión activa en Supabase Auth</span>
+        <h4
+          id="user-email-display"
+          class="font-serif text-lg text-[#243026] font-medium"
+        ></h4>
+        <span class="text-[11px] text-[#8A9A86] font-sans">
+          Sesión activa en Supabase Auth
+        </span>
       </div>
-      <button 
-        id="auth-logout-btn" 
-        type="button" 
+      <button
+        id="auth-logout-btn"
+        type="button"
         class="px-6 py-2 rounded-full border border-[#EBE7DF] hover:border-red-400 text-xs font-sans text-neutral-600 hover:text-red-600 transition-colors cursor-pointer"
       >
         Cerrar Sesión
       </button>
     </div>
-
   </div>
 </aside>
 
@@ -171,8 +199,12 @@
     const configPanel = document.getElementById('auth-config-panel');
     const loggedInPanel = document.getElementById('auth-logged-in-panel');
     const configSaveBtn = document.getElementById('config-save-btn');
-    const configUrl = document.getElementById('config-supa-url') as HTMLInputElement;
-    const configKey = document.getElementById('config-supa-key') as HTMLInputElement;
+    const configUrl = document.getElementById(
+      'config-supa-url'
+    ) as HTMLInputElement;
+    const configKey = document.getElementById(
+      'config-supa-key'
+    ) as HTMLInputElement;
     const logoutBtn = document.getElementById('auth-logout-btn');
 
     if (!modal || !panel || !closeBtn) return;
@@ -180,7 +212,8 @@
     // Prefill saved credentials in config inputs
     if (configUrl && configKey && typeof localStorage !== 'undefined') {
       configUrl.value = localStorage.getItem('stacklab_supabase_url') || '';
-      configKey.value = localStorage.getItem('stacklab_supabase_anon_key') || '';
+      configKey.value =
+        localStorage.getItem('stacklab_supabase_anon_key') || '';
     }
 
     // Tab switching
@@ -210,7 +243,7 @@
 
       localStorage.setItem('stacklab_supabase_url', urlVal);
       localStorage.setItem('stacklab_supabase_anon_key', keyVal);
-      
+
       const msg = document.getElementById('config-status-msg');
       if (msg) {
         msg.textContent = '✓ Credenciales enlazadas. Recargando conexión...';
@@ -225,7 +258,9 @@
     const checkSession = async () => {
       try {
         const client = getSupabaseClient();
-        const { data: { session } } = await client.auth.getSession();
+        const {
+          data: { session },
+        } = await client.auth.getSession();
         if (session && session.user) {
           loginForm?.classList.add('hidden');
           configPanel?.classList.add('hidden');
@@ -233,8 +268,13 @@
           const emailDisp = document.getElementById('user-email-display');
           const initial = document.getElementById('user-avatar-initial');
           if (emailDisp) emailDisp.textContent = session.user.email || '';
-          if (initial && session.user.email) initial.textContent = session.user.email[0].toUpperCase();
-          window.dispatchEvent(new CustomEvent('auth-state-changed', { detail: { user: session.user } }));
+          if (initial && session.user.email)
+            initial.textContent = session.user.email[0].toUpperCase();
+          window.dispatchEvent(
+            new CustomEvent('auth-state-changed', {
+              detail: { user: session.user },
+            })
+          );
         }
       } catch (e) {}
     };
@@ -263,14 +303,18 @@
       if (e.target === modal) closeModal();
     });
     window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !modal.classList.contains('opacity-0')) closeModal();
+      if (e.key === 'Escape' && !modal.classList.contains('opacity-0'))
+        closeModal();
     });
 
     // Form submit
     loginForm?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = (document.getElementById('auth-email') as HTMLInputElement).value;
-      const pass = (document.getElementById('auth-password') as HTMLInputElement).value;
+      const email = (document.getElementById('auth-email') as HTMLInputElement)
+        .value;
+      const pass = (
+        document.getElementById('auth-password') as HTMLInputElement
+      ).value;
       const msg = document.getElementById('auth-status-msg');
       const submitBtn = document.getElementById('auth-submit-btn');
 
@@ -282,19 +326,27 @@
 
         if (pass) {
           // Password sign in or up
-          const { data, error } = await client.auth.signInWithPassword({ email, password: pass });
+          const { data, error } = await client.auth.signInWithPassword({
+            email,
+            password: pass,
+          });
           if (error) {
             // Attempt sign up if user doesn't exist
-            const signUpRes = await client.auth.signUp({ email, password: pass });
+            const signUpRes = await client.auth.signUp({
+              email,
+              password: pass,
+            });
             if (signUpRes.error) throw signUpRes.error;
             if (msg) {
               msg.textContent = '✓ Cuenta creada con éxito. Verificando...';
-              msg.className = 'text-[11px] font-sans text-center py-1 text-emerald-700 bg-emerald-50 rounded-lg';
+              msg.className =
+                'text-[11px] font-sans text-center py-1 text-emerald-700 bg-emerald-50 rounded-lg';
             }
           } else {
             if (msg) {
               msg.textContent = '✓ Sesión iniciada.';
-              msg.className = 'text-[11px] font-sans text-center py-1 text-emerald-700 bg-emerald-50 rounded-lg';
+              msg.className =
+                'text-[11px] font-sans text-center py-1 text-emerald-700 bg-emerald-50 rounded-lg';
             }
           }
         } else {
@@ -303,7 +355,8 @@
           if (error) throw error;
           if (msg) {
             msg.textContent = '✉ Enlace mágico enviado a tu correo.';
-            msg.className = 'text-[11px] font-sans text-center py-1 text-emerald-700 bg-emerald-50 rounded-lg';
+            msg.className =
+              'text-[11px] font-sans text-center py-1 text-emerald-700 bg-emerald-50 rounded-lg';
           }
         }
 
@@ -313,7 +366,8 @@
       } catch (err: any) {
         if (msg) {
           msg.textContent = err.message || 'Error al conectar con Supabase.';
-          msg.className = 'text-[11px] font-sans text-center py-1 text-amber-800 bg-amber-50 rounded-lg';
+          msg.className =
+            'text-[11px] font-sans text-center py-1 text-amber-800 bg-amber-50 rounded-lg';
         }
       } finally {
         if (submitBtn) submitBtn.textContent = 'Acceder con Supabase →';

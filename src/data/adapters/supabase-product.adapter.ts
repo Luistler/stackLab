@@ -26,7 +26,11 @@ export class SupabaseProductAdapter implements ProductDataSource {
     try {
       const client = getSupabaseClient();
       if (!client) return inMemoryProductAdapter.getById(id);
-      const { data, error } = await client.from('products').select('*').eq('id', id).single();
+      const { data, error } = await client
+        .from('products')
+        .select('*')
+        .eq('id', id)
+        .single();
       if (error || !data) {
         return inMemoryProductAdapter.getById(id);
       }
@@ -40,7 +44,10 @@ export class SupabaseProductAdapter implements ProductDataSource {
     try {
       const client = getSupabaseClient();
       if (!client) return inMemoryProductAdapter.getByCategory(category);
-      const { data, error } = await client.from('products').select('*').eq('category', category);
+      const { data, error } = await client
+        .from('products')
+        .select('*')
+        .eq('category', category);
       if (error || !data || data.length === 0) {
         return inMemoryProductAdapter.getByCategory(category);
       }

@@ -3,28 +3,37 @@
 // Integrated with Stripe Checkout Pipeline, Free Shipping Threshold, and Persistent LocalStorage
 ---
 
-<aside 
-  id="cart-drawer-overlay" 
+<aside
+  id="cart-drawer-overlay"
   class="cart-overlay fixed inset-0 z-50 bg-black/40 backdrop-blur-md flex justify-end opacity-0 pointer-events-none transition-all duration-300"
   role="dialog"
   aria-modal="true"
   aria-labelledby="cart-drawer-title"
 >
   <div class="cart-drawer-panel w-full max-w-md sm:max-w-lg bg-[#FBFBFA] h-full shadow-2xl flex flex-col justify-between border-l border-[#EBE7DF] text-[#1C1F1D] transform translate-x-full transition-transform duration-400 ease-out">
-    
     <!-- Drawer Header -->
     <div class="p-6 sm:p-8 border-b border-[#EBE7DF] flex items-center justify-between">
       <div>
         <div class="flex items-center gap-2 mb-1">
-          <span class="zen-badge text-[10px] bg-[#DCE3DA]/50 text-[#243026]">ATELIER COMMERCE</span>
-          <span id="cart-item-badge" class="text-[11px] font-sans font-semibold text-[#8A9A86]">[ 0 ARTÍCULOS ]</span>
+          <span class="zen-badge text-[10px] bg-[#DCE3DA]/50 text-[#243026]">
+            ATELIER COMMERCE
+          </span>
+          <span
+            id="cart-item-badge"
+            class="text-[11px] font-sans font-semibold text-[#8A9A86]"
+          >
+            [ 0 ARTÍCULOS ]
+          </span>
         </div>
-        <h2 id="cart-drawer-title" class="font-serif text-2xl sm:text-3xl font-medium tracking-wide text-[#243026]">
+        <h2
+          id="cart-drawer-title"
+          class="font-serif text-2xl sm:text-3xl font-medium tracking-wide text-[#243026]"
+        >
           Tu Selección
         </h2>
       </div>
 
-      <button 
+      <button
         id="cart-close-btn"
         type="button"
         aria-label="Cerrar carrito de compras"
@@ -40,30 +49,41 @@
         <span id="shipping-progress-text" class="text-[#4A5B48] font-medium">
           Envío internacional asegurado
         </span>
-        <span id="shipping-progress-val" class="font-bold text-[#243026]">$150 para envío gratuito</span>
+        <span id="shipping-progress-val" class="font-bold text-[#243026]">
+          $150 para envío gratuito
+        </span>
       </div>
       <div class="w-full h-1.5 bg-[#EBE7DF] rounded-full overflow-hidden">
-        <div 
-          id="shipping-progress-bar" 
-          class="h-full bg-gradient-to-r from-[#8A9A86] to-[#243026] rounded-full transition-all duration-300" 
+        <div
+          id="shipping-progress-bar"
+          class="h-full bg-gradient-to-r from-[#8A9A86] to-[#243026] rounded-full transition-all duration-300"
           style="width: 0%;"
         ></div>
       </div>
     </div>
 
     <!-- Scrollable Items List -->
-    <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 sm:p-8 space-y-4">
+    <div
+      id="cart-items-container"
+      class="flex-1 overflow-y-auto p-6 sm:p-8 space-y-4"
+    >
       <!-- Items dynamically populated via client JS -->
-      <div id="cart-empty-state" class="h-full flex flex-col items-center justify-center text-center py-12">
+      <div
+        id="cart-empty-state"
+        class="h-full flex flex-col items-center justify-center text-center py-12"
+      >
         <div class="w-16 h-16 rounded-full bg-[#F5F3EF] border border-[#EBE7DF] flex items-center justify-center text-2xl mb-4 text-[#8A9A86]">
           🌿
         </div>
-        <h3 class="font-serif text-xl text-[#243026] mb-2 font-medium">Tu cesta está vacía</h3>
+        <h3 class="font-serif text-xl text-[#243026] mb-2 font-medium">
+          Tu cesta está vacía
+        </h3>
         <p class="font-sans text-xs text-neutral-500 max-w-xs leading-relaxed mb-6">
-          Explora nuestra selección de objetos de artesanía serena para transformar tu espacio cotidiano.
+          Explora nuestra selección de objetos de artesanía serena para
+          transformar tu espacio cotidiano.
         </p>
-        <button 
-          id="cart-empty-explore-btn" 
+        <button
+          id="cart-empty-explore-btn"
           type="button"
           class="px-6 py-2.5 rounded-full bg-[#243026] hover:bg-[#344637] text-white font-sans text-xs font-medium transition-all hover:scale-105 active:scale-95"
         >
@@ -82,7 +102,9 @@
       <div class="space-y-2 text-xs font-sans">
         <div class="flex justify-between text-neutral-600">
           <span>Subtotal</span>
-          <span id="cart-subtotal" class="font-bold text-[#243026] text-sm">$0 USD</span>
+          <span id="cart-subtotal" class="font-bold text-[#243026] text-sm">
+            $0 USD
+          </span>
         </div>
         <div class="flex justify-between text-neutral-600">
           <span>Packaging Sostenible & Certificado</span>
@@ -90,12 +112,14 @@
         </div>
         <div class="flex justify-between text-neutral-600">
           <span>Envío</span>
-          <span id="cart-shipping-cost" class="font-medium">Calculado al pagar</span>
+          <span id="cart-shipping-cost" class="font-medium">
+            Calculado al pagar
+          </span>
         </div>
       </div>
 
       <!-- Stripe Checkout Primary Button -->
-      <button 
+      <button
         id="stripe-checkout-btn"
         type="button"
         class="w-full py-4 px-6 rounded-full bg-[#243026] hover:bg-[#344637] text-white font-sans text-sm font-semibold tracking-wide transition-all duration-300 hover:shadow-xl active:scale-[0.98] flex items-center justify-center gap-3 relative overflow-hidden"
@@ -105,8 +129,10 @@
       </button>
 
       <!-- Status Message Box -->
-      <div id="checkout-status-msg" class="hidden text-center text-xs font-sans font-medium text-[#4A5B48] py-1 bg-white/60 rounded-lg border border-[#EBE7DF]">
-      </div>
+      <div
+        id="checkout-status-msg"
+        class="hidden text-center text-xs font-sans font-medium text-[#4A5B48] py-1 bg-white/60 rounded-lg border border-[#EBE7DF]"
+      ></div>
 
       <!-- Trust Badges & Stripe Guarantee -->
       <div class="pt-2 border-t border-[#EBE7DF]/80 flex flex-col items-center gap-1.5 text-[10px] text-neutral-500 font-sans">
@@ -122,12 +148,16 @@
         </div>
       </div>
     </div>
-
   </div>
 </aside>
 
 <script>
-  import { formatPrice, FREE_SHIPPING_THRESHOLD, initiateStripeCheckout, type CartItem } from '../lib/stripe';
+  import {
+    formatPrice,
+    FREE_SHIPPING_THRESHOLD,
+    initiateStripeCheckout,
+    type CartItem,
+  } from '../lib/stripe';
 
   const STORAGE_KEY = 'stacklab_atelier_cart_v1';
 
@@ -174,20 +204,27 @@
     // Load initial cart from localStorage with key fallback and sanitization
     let cart: CartItem[] = [];
     try {
-      const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('stacklab_cart');
+      const saved =
+        localStorage.getItem(STORAGE_KEY) ||
+        localStorage.getItem('stacklab_cart');
       if (saved) {
         const raw = JSON.parse(saved);
         if (Array.isArray(raw)) {
-          cart = raw.map(i => ({
-            id: escapeHtml(i.id),
-            name: escapeHtml(i.name),
-            subtitle: escapeHtml(i.subtitle || ''),
-            price: typeof i.price === 'number' ? i.price : 0,
-            currency: escapeHtml(i.currency || 'USD'),
-            image: sanitizeImageUrl(i.image),
-            quantity: validateQuantity(i.quantity),
-            stripePriceId: typeof i.stripePriceId === 'string' ? escapeHtml(i.stripePriceId) : undefined,
-          })).filter(i => i.id.length > 0 && i.quantity > 0);
+          cart = raw
+            .map((i) => ({
+              id: escapeHtml(i.id),
+              name: escapeHtml(i.name),
+              subtitle: escapeHtml(i.subtitle || ''),
+              price: typeof i.price === 'number' ? i.price : 0,
+              currency: escapeHtml(i.currency || 'USD'),
+              image: sanitizeImageUrl(i.image),
+              quantity: validateQuantity(i.quantity),
+              stripePriceId:
+                typeof i.stripePriceId === 'string'
+                  ? escapeHtml(i.stripePriceId)
+                  : undefined,
+            }))
+            .filter((i) => i.id.length > 0 && i.quantity > 0);
         }
       }
     } catch (e) {
@@ -207,9 +244,11 @@
     function dispatchCartUpdate() {
       const totalCount = cart.reduce((sum, i) => sum + i.quantity, 0);
       const subtotal = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
-      window.dispatchEvent(new CustomEvent('cart-updated', {
-        detail: { count: totalCount, subtotal }
-      }));
+      window.dispatchEvent(
+        new CustomEvent('cart-updated', {
+          detail: { count: totalCount, subtotal },
+        })
+      );
     }
 
     function openDrawer() {
@@ -241,12 +280,16 @@
       const subtotal = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
       // Update badge and subtotal
-      if (itemBadge) itemBadge.textContent = `[ ${totalCount} ${totalCount === 1 ? 'ARTÍCULO' : 'ARTÍCULOS'} ]`;
+      if (itemBadge)
+        itemBadge.textContent = `[ ${totalCount} ${totalCount === 1 ? 'ARTÍCULO' : 'ARTÍCULOS'} ]`;
       if (subtotalEl) subtotalEl.textContent = formatPrice(subtotal);
 
       // Shipping progress
       if (shippingBar && shippingText && shippingVal) {
-        const progress = Math.min(100, Math.round((subtotal / FREE_SHIPPING_THRESHOLD) * 100));
+        const progress = Math.min(
+          100,
+          Math.round((subtotal / FREE_SHIPPING_THRESHOLD) * 100)
+        );
         shippingBar.style.width = `${progress}%`;
         if (subtotal >= FREE_SHIPPING_THRESHOLD) {
           shippingText.textContent = '🌿 ¡Calificas para Envío Gratuito!';
@@ -270,7 +313,9 @@
       itemsList?.classList.remove('hidden');
 
       if (!itemsList) return;
-      itemsList.innerHTML = cart.map((item, idx) => `
+      itemsList.innerHTML = cart
+        .map(
+          (item, idx) => `
         <div class="flex items-center gap-4 bg-white p-3.5 sm:p-4 rounded-2xl border border-[#EBE7DF] shadow-sm">
           <img src="${sanitizeImageUrl(item.image)}" alt="${escapeHtml(item.name)}" class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-xl border border-[#EBE7DF]" />
           <div class="flex-1 min-w-0">
@@ -289,7 +334,9 @@
           </div>
           <button type="button" data-action="del" data-index="${idx}" class="btn-del text-neutral-400 hover:text-[#B87D65] p-1 text-sm transition-colors" title="Eliminar artículo" aria-label="Eliminar artículo">✕</button>
         </div>
-      `).join('');
+      `
+        )
+        .join('');
 
       // Attach quantity and delete listeners
       itemsList.querySelectorAll('.btn-qty').forEach((btn) => {
@@ -332,12 +379,18 @@
         currency: escapeHtml(newItem.currency || 'USD'),
         image: sanitizeImageUrl(newItem.image),
         quantity: validateQuantity(newItem.quantity || 1),
-        stripePriceId: typeof newItem.stripePriceId === 'string' ? escapeHtml(newItem.stripePriceId) : undefined,
+        stripePriceId:
+          typeof newItem.stripePriceId === 'string'
+            ? escapeHtml(newItem.stripePriceId)
+            : undefined,
       };
 
-      const existing = cart.find(i => i.id === sanitizedItem.id);
+      const existing = cart.find((i) => i.id === sanitizedItem.id);
       if (existing) {
-        existing.quantity = Math.min(99, existing.quantity + sanitizedItem.quantity);
+        existing.quantity = Math.min(
+          99,
+          existing.quantity + sanitizedItem.quantity
+        );
       } else {
         cart.push(sanitizedItem);
       }
@@ -379,7 +432,8 @@
     // Stripe Checkout Handler -> Redirects to /checkout or initiates Stripe
     checkoutBtn?.addEventListener('click', async () => {
       if (cart.length === 0) return;
-      if (checkoutText) checkoutText.textContent = 'Conectando con Stripe Checkout...';
+      if (checkoutText)
+        checkoutText.textContent = 'Conectando con Stripe Checkout...';
       if (checkoutBtn) checkoutBtn.setAttribute('disabled', 'true');
 
       const res = await initiateStripeCheckout(cart);
@@ -389,7 +443,8 @@
       }
 
       setTimeout(() => {
-        if (checkoutText) checkoutText.textContent = 'Proceder al Pago con Stripe';
+        if (checkoutText)
+          checkoutText.textContent = 'Proceder al Pago con Stripe';
         if (checkoutBtn) checkoutBtn.removeAttribute('disabled');
         window.location.href = '/checkout';
       }, 800);

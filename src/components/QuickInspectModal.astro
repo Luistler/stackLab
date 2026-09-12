@@ -3,19 +3,19 @@
 // Allows visitors to examine details, provenance and materials without leaving the main scrollytelling path.
 ---
 
-<aside 
-  id="quick-inspect-modal" 
+<aside
+  id="quick-inspect-modal"
   class="fixed inset-0 z-50 bg-[#1C1F1D]/50 backdrop-blur-md flex items-center justify-center p-4 sm:p-6 opacity-0 pointer-events-none transition-all duration-300"
   role="dialog"
   aria-modal="true"
   aria-labelledby="inspect-product-name"
 >
-  <div 
-    id="quick-inspect-panel" 
+  <div
+    id="quick-inspect-panel"
     class="relative w-full max-w-3xl bg-[#FBFBFA] rounded-2xl border border-[#EBE7DF] shadow-2xl overflow-hidden flex flex-col md:flex-row transform scale-95 transition-all duration-300 ease-out"
   >
     <!-- Close Button -->
-    <button 
+    <button
       id="inspect-close-btn"
       type="button"
       aria-label="Cerrar vista de inspección"
@@ -26,14 +26,17 @@
 
     <!-- Product Visual Column -->
     <div class="md:w-1/2 relative bg-[#F5F3EF] min-h-[280px] md:min-h-[420px] flex items-center justify-center overflow-hidden">
-      <img 
-        id="inspect-img" 
-        src="" 
-        alt="" 
+      <img
+        id="inspect-img"
+        src=""
+        alt=""
         class="w-full h-full object-cover object-center filter contrast-[0.98] transition-transform duration-700 hover:scale-105"
       />
       <div class="absolute bottom-3 left-3">
-        <span id="inspect-category" class="zen-badge bg-white/90 text-[#243026] text-[10px] shadow-sm"></span>
+        <span
+          id="inspect-category"
+          class="zen-badge bg-white/90 text-[#243026] text-[10px] shadow-sm"
+        ></span>
       </div>
     </div>
 
@@ -42,35 +45,55 @@
       <div>
         <div class="flex items-center gap-2 mb-2">
           <span class="w-1.5 h-1.5 rounded-full bg-[#8A9A86]"></span>
-          <span id="inspect-origin" class="text-[11px] font-sans font-semibold tracking-wider text-[#8A9A86] uppercase"></span>
+          <span
+            id="inspect-origin"
+            class="text-[11px] font-sans font-semibold tracking-wider text-[#8A9A86] uppercase"
+          ></span>
         </div>
 
-        <h3 id="inspect-title" class="font-serif text-2xl sm:text-3xl text-[#243026] font-medium leading-snug mb-1"></h3>
-        <p id="inspect-subtitle" class="text-xs text-[#4A5B48] mb-4 font-sans"></p>
-        
+        <h3
+          id="inspect-title"
+          class="font-serif text-2xl sm:text-3xl text-[#243026] font-medium leading-snug mb-1"
+        ></h3>
+        <p
+          id="inspect-subtitle"
+          class="text-xs text-[#4A5B48] mb-4 font-sans"
+        ></p>
+
         <div class="text-xl font-serif text-[#243026] mb-4">
           <span id="inspect-price"></span>
-          <span class="text-xs font-sans text-[#8A9A86] font-normal ml-1">USD</span>
+          <span class="text-xs font-sans text-[#8A9A86] font-normal ml-1">
+            USD
+          </span>
         </div>
 
-        <p id="inspect-desc" class="text-xs sm:text-sm text-[#4A5B48] leading-relaxed mb-6 font-sans"></p>
+        <p
+          id="inspect-desc"
+          class="text-xs sm:text-sm text-[#4A5B48] leading-relaxed mb-6 font-sans"
+        ></p>
 
         <!-- Technical specs badge grid -->
         <div class="grid grid-cols-2 gap-2 text-[11px] font-sans bg-[#F5F3EF] p-3 rounded-xl border border-[#EBE7DF] mb-6">
           <div>
             <span class="text-[#8A9A86] block text-[10px]">DIMENSIONES</span>
-            <span id="inspect-dimensions" class="font-medium text-[#243026]"></span>
+            <span
+              id="inspect-dimensions"
+              class="font-medium text-[#243026]"
+            ></span>
           </div>
           <div>
             <span class="text-[#8A9A86] block text-[10px]">MATERIALES</span>
-            <span id="inspect-materials" class="font-medium text-[#243026] truncate block"></span>
+            <span
+              id="inspect-materials"
+              class="font-medium text-[#243026] truncate block"
+            ></span>
           </div>
         </div>
       </div>
 
       <!-- Action Footer -->
       <div class="flex items-center gap-3 pt-2">
-        <button 
+        <button
           id="inspect-add-cart-btn"
           type="button"
           class="flex-1 py-3 px-6 rounded-full bg-[#243026] hover:bg-[#1C1F1D] text-[#FBFBFA] font-sans text-xs uppercase tracking-widest font-semibold transition-all hover:scale-[1.02] active:scale-95 shadow-md flex items-center justify-center gap-2 cursor-pointer"
@@ -98,7 +121,7 @@
 
     const openInspect = (product: any) => {
       currentProduct = product;
-      
+
       const img = document.getElementById('inspect-img') as HTMLImageElement;
       const cat = document.getElementById('inspect-category');
       const origin = document.getElementById('inspect-origin');
@@ -109,7 +132,10 @@
       const dim = document.getElementById('inspect-dimensions');
       const mat = document.getElementById('inspect-materials');
 
-      if (img) { img.src = product.image; img.alt = product.name; }
+      if (img) {
+        img.src = product.image;
+        img.alt = product.name;
+      }
       if (cat) cat.textContent = product.category || 'Atelier';
       if (origin) origin.textContent = product.origin || 'Artesanía Noble';
       if (title) title.textContent = product.name;
@@ -163,18 +189,20 @@
     if (addCartBtn) {
       addCartBtn.addEventListener('click', () => {
         if (!currentProduct) return;
-        window.dispatchEvent(new CustomEvent('add-to-cart', {
-          detail: {
-            id: currentProduct.id,
-            name: currentProduct.name,
-            subtitle: currentProduct.subtitle,
-            price: currentProduct.price,
-            currency: currentProduct.currency || 'USD',
-            image: currentProduct.image,
-            quantity: 1,
-            stripePriceId: currentProduct.stripePriceId,
-          }
-        }));
+        window.dispatchEvent(
+          new CustomEvent('add-to-cart', {
+            detail: {
+              id: currentProduct.id,
+              name: currentProduct.name,
+              subtitle: currentProduct.subtitle,
+              price: currentProduct.price,
+              currency: currentProduct.currency || 'USD',
+              image: currentProduct.image,
+              quantity: 1,
+              stripePriceId: currentProduct.stripePriceId,
+            },
+          })
+        );
         closeInspect();
       });
     }
