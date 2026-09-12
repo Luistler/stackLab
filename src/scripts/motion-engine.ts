@@ -14,20 +14,24 @@ export function initMotionEngine() {
 
   if (!prefersReducedMotion) {
     lenis = new Lenis({
-      duration: 1.2,
+      duration: 1.0,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
-      touchMultiplier: 1.2,
+      wheelMultiplier: 1.0,
+      touchMultiplier: 1.5,
       infinite: false,
     });
 
-    lenis.on('scroll', ScrollTrigger.update);
-
-    gsap.ticker.add((time: number) => {
-      lenis?.raf(time * 1000);
+    lenis.on('scroll', () => {
+      ScrollTrigger.update();
     });
 
-    gsap.ticker.lagSmoothing(0);
+    const updateTicker = (time: number) => {
+      lenis?.raf(time * 1000);
+    };
+
+    gsap.ticker.add(updateTicker);
+    gsap.ticker.lagSmoothing(500, 33);
     window.__lenis = lenis;
     (window as any).lenis = lenis;
 

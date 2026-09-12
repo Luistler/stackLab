@@ -29,7 +29,7 @@ import { AnimatedSoundToggle } from './icons/AnimatedSoundToggle';
     </div>
 
     <!-- Sound Toggle Button with Animated Icon -->
-    <AnimatedSoundToggle client:only="react" />
+    <AnimatedSoundToggle client:load />
 
     <!-- Quick Cart Trigger Button -->
     <button
@@ -38,7 +38,7 @@ import { AnimatedSoundToggle } from './icons/AnimatedSoundToggle';
       aria-label="Abrir cesta de compras"
       class="ml-1 sm:ml-2 flex items-center gap-1.5 sm:gap-2 bg-[#243026] hover:bg-[#1C1F1D] text-[#FBFBFA] px-3.5 sm:px-4 py-1.5 rounded-full font-medium text-xs transition-all hover:scale-[1.02] active:scale-95 shadow-sm cursor-pointer"
     >
-      <AnimatedCartIcon client:only="react" size={14} color="#DCE3DA" />
+      <AnimatedCartIcon client:load size={14} color="#DCE3DA" />
       <span>Cesta</span>
       <span id="dock-cart-count" class="text-[10px] bg-[#4A5B48] text-[#FBFBFA] px-1.5 py-0.5 rounded-full font-bold">
         0
