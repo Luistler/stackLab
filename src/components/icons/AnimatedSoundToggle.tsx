@@ -1,3 +1,4 @@
+/** @jsxImportSource react */
 import React, { useState, useEffect } from 'react';
 import { Volume2Icon, VolumeXIcon } from '@animateicons/react/lucide';
 import { soundEngine } from '../../scripts/sound-engine';

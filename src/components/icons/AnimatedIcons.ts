@@ -1,0 +1,15 @@
+export {
+  ShoppingBagIcon as AnimatedCartIcon,
+  UserIcon as AnimatedUserIcon,
+  EyeIcon as AnimatedEyeIcon,
+  ArrowRightIcon as AnimatedArrowRightIcon,
+  ShieldCheckIcon as AnimatedShieldIcon,
+  PackageIcon as AnimatedPackageIcon,
+  ClockIcon as AnimatedClockIcon,
+  XIcon as AnimatedCloseIcon,
+  PlusIcon as AnimatedPlusIcon,
+  CheckIcon as AnimatedCheckIcon,
+  Trash2Icon as AnimatedTrashIcon,
+  Volume2Icon,
+  VolumeXIcon,
+} from '@animateicons/react/lucide';

@@ -51,7 +51,7 @@ import { AnimatedUserIcon, AnimatedCartIcon } from './icons/AnimatedIcons';
         id="nav-user-avatar"
         class="w-5 h-5 rounded-full bg-[#8A9A86]/20 flex items-center justify-center text-[#243026]"
       >
-        <AnimatedUserIcon client:only="react" size={13} color="#243026" />
+        <AnimatedUserIcon client:load size={13} color="#243026" />
       </span>
       <span id="nav-user-label" class="hidden sm:inline text-xs tracking-wider uppercase font-semibold">
         Cuenta
@@ -65,7 +65,7 @@ import { AnimatedUserIcon, AnimatedCartIcon } from './icons/AnimatedIcons';
       aria-label="Abrir cesta de compras"
       class="flex items-center gap-2.5 bg-[#FBFBFA]/90 hover:bg-[#F5F3EF] backdrop-blur-xl border border-[#EBE7DF] hover:border-[#8A9A86] px-4 py-2 rounded-full text-xs font-sans font-medium text-[#243026] shadow-[0_4px_20px_rgba(28,31,29,0.06)] transition-all active:scale-95 cursor-pointer group"
     >
-      <AnimatedCartIcon client:only="react" size={15} color="#4A5B48" className="group-hover:text-[#243026] transition-colors" />
+      <AnimatedCartIcon client:load size={15} color="#4A5B48" className="group-hover:text-[#243026] transition-colors" />
       <span class="hidden sm:inline text-xs tracking-wider uppercase">Cesta</span>
       <span
         id="nav-cart-count"
