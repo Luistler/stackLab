@@ -1,0 +1,13 @@
+{
+  "files.exclude": {
+    "dist": true,
+    ".astro": true,
+    "node_modules": true
+  },
+  "editor.wordWrap": "on",
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "[astro]": {
+    "editor.defaultFormatter": "astro-build.astro-vscode"
+  }
+}
