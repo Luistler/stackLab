@@ -13,9 +13,7 @@ async function seed() {
   if (!connectionString) {
     console.error('❌ Error: DATABASE_URL environment variable is missing.');
     console.log('Provide your Supabase Postgres direct or pooled URL in .env:');
-    console.log(
-      'DATABASE_URL="postgresql://postgres:[PASSWORD]@[HOST]:5432/postgres"'
-    );
+    console.log('DATABASE_URL="postgresql://postgres:[PASSWORD]@[HOST]:5432/postgres"');
     process.exit(1);
   }
 
@@ -23,9 +21,7 @@ async function seed() {
   const client = postgres(connectionString);
   const db = drizzle(client);
 
-  console.log(
-    `📦 Seeding ${products.length} products into "products" table...`
-  );
+  console.log(`📦 Seeding ${products.length} products into "products" table...`);
 
   for (const item of products) {
     await db

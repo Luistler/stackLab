@@ -1,11 +1,8 @@
 import { createClient } from '@supabase/supabase-js';
 
 // Environment variables with fallback to browser localStorage for quick UI testing / connecting
-const defaultUrl =
-  import.meta.env.PUBLIC_SUPABASE_URL ||
-  'https://placeholder-project.supabase.co';
-const defaultKey =
-  import.meta.env.PUBLIC_SUPABASE_ANON_KEY || 'placeholder-anon-key';
+const defaultUrl = import.meta.env.PUBLIC_SUPABASE_URL || 'https://placeholder-project.supabase.co';
+const defaultKey = import.meta.env.PUBLIC_SUPABASE_ANON_KEY || 'placeholder-anon-key';
 
 export const getSupabaseClient = () => {
   let url = import.meta.env.PUBLIC_SUPABASE_URL || '';

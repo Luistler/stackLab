@@ -17,9 +17,7 @@
       class="font-serif tracking-widest text-sm md:text-base font-semibold text-[#1C1F1D] hover:text-[#243026] transition-colors flex items-center gap-2"
     >
       <span>STACKLAB</span>
-      <span class="text-[#8A9A86] text-xs font-sans tracking-wider uppercase font-normal">
-        // ATELIER
-      </span>
+      <span class="text-[#8A9A86] text-xs font-sans tracking-wider uppercase font-normal">// ATELIER</span>
     </a>
   </div>
 
@@ -54,10 +52,7 @@
       >
         👤
       </span>
-      <span
-        id="nav-user-label"
-        class="hidden sm:inline text-xs tracking-wider uppercase font-semibold"
-      >
+      <span id="nav-user-label" class="hidden sm:inline text-xs tracking-wider uppercase font-semibold">
         Cuenta
       </span>
     </button>
@@ -76,15 +71,9 @@
         stroke="currentColor"
         stroke-width="1.75"
       >
-        <path
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"
-        />
+        <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
       </svg>
-      <span class="hidden sm:inline text-xs tracking-wider uppercase">
-        Cesta
-      </span>
+      <span class="hidden sm:inline text-xs tracking-wider uppercase">Cesta</span>
       <span
         id="nav-cart-count"
         class="inline-flex items-center justify-center min-w-[20px] h-5 px-1.5 rounded-full text-[10px] font-bold bg-[#243026] text-[#FBFBFA] transition-transform duration-300"
@@ -102,17 +91,11 @@
 
     // Initialize count from localStorage
     try {
-      const stored =
-        localStorage.getItem('stacklab_atelier_cart_v1') ||
-        localStorage.getItem('stacklab_cart');
+      const stored = localStorage.getItem('stacklab_atelier_cart_v1') || localStorage.getItem('stacklab_cart');
       if (stored) {
         const parsed = JSON.parse(stored);
         if (Array.isArray(parsed) && navCartCount) {
-          const totalItems = parsed.reduce(
-            (sum: number, item: { quantity: number }) =>
-              sum + (item.quantity || 0),
-            0
-          );
+          const totalItems = parsed.reduce((sum: number, item: { quantity: number }) => sum + (item.quantity || 0), 0);
           navCartCount.textContent = totalItems.toString();
         }
       }
@@ -136,8 +119,7 @@
     window.addEventListener('auth-state-changed', (e: Event) => {
       const detail = (e as CustomEvent).detail;
       if (detail && detail.user && detail.user.email) {
-        if (navUserLabel)
-          navUserLabel.textContent = detail.user.email.split('@')[0];
+        if (navUserLabel) navUserLabel.textContent = detail.user.email.split('@')[0];
         if (navUserAvatar) {
           navUserAvatar.textContent = detail.user.email[0].toUpperCase();
           navUserAvatar.className =

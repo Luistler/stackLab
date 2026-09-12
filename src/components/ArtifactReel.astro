@@ -27,9 +27,7 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
     <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-6 border-b border-[#EBE7DF]">
       <div>
         <div class="flex items-center gap-3 mb-2">
-          <span class="zen-badge bg-white text-[#243026]">
-            COLECCIÓN PERMANENTE
-          </span>
+          <span class="zen-badge bg-white text-[#243026]">COLECCIÓN PERMANENTE</span>
           <span class="text-[11px] font-sans font-semibold text-[#8A9A86] hidden sm:inline-block">
             EDICIÓN ARTESANAL LIMITADA
           </span>
@@ -42,8 +40,8 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
       <!-- Telemetry Scrubber & Slide Index Indicator -->
       <div class="flex items-center gap-6">
         <p class="font-sans text-xs text-neutral-500 max-w-sm hidden xl:block leading-relaxed">
-          Cada pieza está concebida para durar generaciones, fabricada en lotes
-          pequeños con materias primas sostenibles.
+          Cada pieza está concebida para durar generaciones, fabricada en lotes pequeños con materias primas
+          sostenibles.
         </p>
 
         <div class="flex items-center gap-4 bg-white px-5 py-2.5 rounded-full border border-[#EBE7DF] shadow-sm font-sans text-xs">
@@ -127,21 +125,15 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
                   <span class="px-2 py-0.5 rounded-lg bg-[#F5F3EF] border border-[#EBE7DF] truncate max-w-[200px]">
                     {product.materials}
                   </span>
-                  <span class="px-2 py-0.5 rounded-lg bg-[#F5F3EF] border border-[#EBE7DF]">
-                    {product.dimensions}
-                  </span>
+                  <span class="px-2 py-0.5 rounded-lg bg-[#F5F3EF] border border-[#EBE7DF]">{product.dimensions}</span>
                 </div>
               </div>
 
               <!-- Action Bar -->
               <div class="pt-2.5 border-t border-[#EBE7DF] flex items-center justify-between gap-3">
                 <div>
-                  <div class="font-sans text-[9px] text-neutral-400 uppercase tracking-wider">
-                    Precio
-                  </div>
-                  <div class="font-serif text-lg sm:text-xl font-bold text-[#243026]">
-                    {formatPrice(product.price)}
-                  </div>
+                  <div class="font-sans text-[9px] text-neutral-400 uppercase tracking-wider">Precio</div>
+                  <div class="font-serif text-lg sm:text-xl font-bold text-[#243026]">{formatPrice(product.price)}</div>
                 </div>
 
                 <div class="flex items-center gap-2 sm:gap-3">
@@ -176,9 +168,7 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
         <span>ATELIER DISPONIBLE // ENVÍO INTERNACIONAL ASEGURADO</span>
       </span>
       <div class="flex items-center gap-4">
-        <span class="hidden lg:inline-block">
-          DESLIZA O USA FLECHAS TECLADO
-        </span>
+        <span class="hidden lg:inline-block">DESLIZA O USA FLECHAS TECLADO</span>
         <span class="text-neutral-300">|</span>
         <span class="text-[#243026] font-semibold">
           {totalCount} / {totalCount} PIEZAS EN CATÁLOGO
@@ -195,23 +185,12 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
   function initArtifactReel() {
     gsap.registerPlugin(ScrollTrigger);
 
-    const reelSection = document.querySelector(
-      '#collection'
-    ) as HTMLElement | null;
-    const reelTrack = document.querySelector(
-      '.horizontal-track'
-    ) as HTMLElement | null;
-    const progressFill = document.querySelector(
-      '#reel-progress-fill'
-    ) as HTMLElement | null;
-    const counterCurrent = document.querySelector(
-      '#reel-counter-current'
-    ) as HTMLElement | null;
-    const reelWrapper = document.querySelector(
-      '#reel-track-wrapper'
-    ) as HTMLElement | null;
-    const productCards =
-      document.querySelectorAll<HTMLElement>('.product-card');
+    const reelSection = document.querySelector('#collection') as HTMLElement | null;
+    const reelTrack = document.querySelector('.horizontal-track') as HTMLElement | null;
+    const progressFill = document.querySelector('#reel-progress-fill') as HTMLElement | null;
+    const counterCurrent = document.querySelector('#reel-counter-current') as HTMLElement | null;
+    const reelWrapper = document.querySelector('#reel-track-wrapper') as HTMLElement | null;
+    const productCards = document.querySelectorAll<HTMLElement>('.product-card');
 
     if (!reelSection || !reelTrack) return;
 
@@ -260,9 +239,7 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
       });
     });
 
-    const prefersReducedMotion = window.matchMedia(
-      '(prefers-reduced-motion: reduce)'
-    ).matches;
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
     const isDesktop = window.innerWidth >= 768;
 
     // Mobile snap swipe listener
@@ -270,18 +247,12 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
       const updateMobileProgress = () => {
         const maxScroll = reelWrapper.scrollWidth - reelWrapper.clientWidth;
         if (maxScroll <= 0) return;
-        const progress = Math.max(
-          0,
-          Math.min(1, reelWrapper.scrollLeft / maxScroll)
-        );
+        const progress = Math.max(0, Math.min(1, reelWrapper.scrollLeft / maxScroll));
         if (progressFill) {
           progressFill.style.transform = `scaleX(${progress})`;
         }
         if (counterCurrent) {
-          const slideIndex = Math.min(
-            totalSlides,
-            Math.max(1, Math.round(progress * (totalSlides - 1)) + 1)
-          );
+          const slideIndex = Math.min(totalSlides, Math.max(1, Math.round(progress * (totalSlides - 1)) + 1));
           counterCurrent.textContent = String(slideIndex).padStart(2, '0');
         }
       };
@@ -316,10 +287,7 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
             if (counterCurrent) {
               const slideIndex = Math.min(
                 totalSlides,
-                Math.max(
-                  1,
-                  Math.floor(self.progress * (totalSlides - 0.05)) + 1
-                )
+                Math.max(1, Math.floor(self.progress * (totalSlides - 0.05)) + 1)
               );
               counterCurrent.textContent = String(slideIndex).padStart(2, '0');
             }
@@ -334,15 +302,9 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
       });
 
       // Subtle horizontal parallax on inner card images during track movement
-      const cardImages =
-        document.querySelectorAll<HTMLElement>('.product-card-img');
+      const cardImages = document.querySelectorAll<HTMLElement>('.product-card-img');
       cardImages.forEach((img) => {
-        reelTimeline.fromTo(
-          img,
-          { xPercent: 8 },
-          { xPercent: -8, ease: 'none' },
-          0
-        );
+        reelTimeline.fromTo(img, { xPercent: 8 }, { xPercent: -8, ease: 'none' }, 0);
       });
 
       // 2. Desktop Micro-Interaction: 3D Subtle Tilt & Image Parallax using gsap.quickTo
@@ -363,12 +325,8 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
           ease: 'power3.out',
         });
 
-        const setImgX = img
-          ? gsap.quickTo(img, 'x', { duration: 0.4, ease: 'power3.out' })
-          : null;
-        const setImgY = img
-          ? gsap.quickTo(img, 'y', { duration: 0.4, ease: 'power3.out' })
-          : null;
+        const setImgX = img ? gsap.quickTo(img, 'x', { duration: 0.4, ease: 'power3.out' }) : null;
+        const setImgY = img ? gsap.quickTo(img, 'y', { duration: 0.4, ease: 'power3.out' }) : null;
 
         let rect: DOMRect | null = null;
 
@@ -427,12 +385,10 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
             ScrollTrigger.getAll().find((s) => s.trigger === reelSection);
           if (st) {
             const stepDelta = 1 / Math.max(1, totalSlides - 1);
-            let targetProgress =
-              st.progress + (e.key === 'ArrowRight' ? stepDelta : -stepDelta);
+            let targetProgress = st.progress + (e.key === 'ArrowRight' ? stepDelta : -stepDelta);
             targetProgress = Math.max(0, Math.min(1, targetProgress));
             if (window.__lenis) {
-              const targetScroll =
-                st.start + targetProgress * (st.end - st.start);
+              const targetScroll = st.start + targetProgress * (st.end - st.start);
               window.__lenis.scrollTo(targetScroll);
             }
           }

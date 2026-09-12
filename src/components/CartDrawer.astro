@@ -15,20 +15,12 @@
     <div class="p-6 sm:p-8 border-b border-[#EBE7DF] flex items-center justify-between">
       <div>
         <div class="flex items-center gap-2 mb-1">
-          <span class="zen-badge text-[10px] bg-[#DCE3DA]/50 text-[#243026]">
-            ATELIER COMMERCE
-          </span>
-          <span
-            id="cart-item-badge"
-            class="text-[11px] font-sans font-semibold text-[#8A9A86]"
-          >
+          <span class="zen-badge text-[10px] bg-[#DCE3DA]/50 text-[#243026]">ATELIER COMMERCE</span>
+          <span id="cart-item-badge" class="text-[11px] font-sans font-semibold text-[#8A9A86]">
             [ 0 ARTÍCULOS ]
           </span>
         </div>
-        <h2
-          id="cart-drawer-title"
-          class="font-serif text-2xl sm:text-3xl font-medium tracking-wide text-[#243026]"
-        >
+        <h2 id="cart-drawer-title" class="font-serif text-2xl sm:text-3xl font-medium tracking-wide text-[#243026]">
           Tu Selección
         </h2>
       </div>
@@ -63,24 +55,15 @@
     </div>
 
     <!-- Scrollable Items List -->
-    <div
-      id="cart-items-container"
-      class="flex-1 overflow-y-auto p-6 sm:p-8 space-y-4"
-    >
+    <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 sm:p-8 space-y-4">
       <!-- Items dynamically populated via client JS -->
-      <div
-        id="cart-empty-state"
-        class="h-full flex flex-col items-center justify-center text-center py-12"
-      >
+      <div id="cart-empty-state" class="h-full flex flex-col items-center justify-center text-center py-12">
         <div class="w-16 h-16 rounded-full bg-[#F5F3EF] border border-[#EBE7DF] flex items-center justify-center text-2xl mb-4 text-[#8A9A86]">
           🌿
         </div>
-        <h3 class="font-serif text-xl text-[#243026] mb-2 font-medium">
-          Tu cesta está vacía
-        </h3>
+        <h3 class="font-serif text-xl text-[#243026] mb-2 font-medium">Tu cesta está vacía</h3>
         <p class="font-sans text-xs text-neutral-500 max-w-xs leading-relaxed mb-6">
-          Explora nuestra selección de objetos de artesanía serena para
-          transformar tu espacio cotidiano.
+          Explora nuestra selección de objetos de artesanía serena para transformar tu espacio cotidiano.
         </p>
         <button
           id="cart-empty-explore-btn"
@@ -152,12 +135,7 @@
 </aside>
 
 <script>
-  import {
-    formatPrice,
-    FREE_SHIPPING_THRESHOLD,
-    initiateStripeCheckout,
-    type CartItem,
-  } from '../lib/stripe';
+  import { formatPrice, FREE_SHIPPING_THRESHOLD, initiateStripeCheckout, type CartItem } from '../lib/stripe';
 
   const STORAGE_KEY = 'stacklab_atelier_cart_v1';
 
@@ -204,9 +182,7 @@
     // Load initial cart from localStorage with key fallback and sanitization
     let cart: CartItem[] = [];
     try {
-      const saved =
-        localStorage.getItem(STORAGE_KEY) ||
-        localStorage.getItem('stacklab_cart');
+      const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('stacklab_cart');
       if (saved) {
         const raw = JSON.parse(saved);
         if (Array.isArray(raw)) {
@@ -219,10 +195,7 @@
               currency: escapeHtml(i.currency || 'USD'),
               image: sanitizeImageUrl(i.image),
               quantity: validateQuantity(i.quantity),
-              stripePriceId:
-                typeof i.stripePriceId === 'string'
-                  ? escapeHtml(i.stripePriceId)
-                  : undefined,
+              stripePriceId: typeof i.stripePriceId === 'string' ? escapeHtml(i.stripePriceId) : undefined,
             }))
             .filter((i) => i.id.length > 0 && i.quantity > 0);
         }
@@ -280,16 +253,12 @@
       const subtotal = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
 
       // Update badge and subtotal
-      if (itemBadge)
-        itemBadge.textContent = `[ ${totalCount} ${totalCount === 1 ? 'ARTÍCULO' : 'ARTÍCULOS'} ]`;
+      if (itemBadge) itemBadge.textContent = `[ ${totalCount} ${totalCount === 1 ? 'ARTÍCULO' : 'ARTÍCULOS'} ]`;
       if (subtotalEl) subtotalEl.textContent = formatPrice(subtotal);
 
       // Shipping progress
       if (shippingBar && shippingText && shippingVal) {
-        const progress = Math.min(
-          100,
-          Math.round((subtotal / FREE_SHIPPING_THRESHOLD) * 100)
-        );
+        const progress = Math.min(100, Math.round((subtotal / FREE_SHIPPING_THRESHOLD) * 100));
         shippingBar.style.width = `${progress}%`;
         if (subtotal >= FREE_SHIPPING_THRESHOLD) {
           shippingText.textContent = '🌿 ¡Calificas para Envío Gratuito!';
@@ -379,18 +348,12 @@
         currency: escapeHtml(newItem.currency || 'USD'),
         image: sanitizeImageUrl(newItem.image),
         quantity: validateQuantity(newItem.quantity || 1),
-        stripePriceId:
-          typeof newItem.stripePriceId === 'string'
-            ? escapeHtml(newItem.stripePriceId)
-            : undefined,
+        stripePriceId: typeof newItem.stripePriceId === 'string' ? escapeHtml(newItem.stripePriceId) : undefined,
       };
 
       const existing = cart.find((i) => i.id === sanitizedItem.id);
       if (existing) {
-        existing.quantity = Math.min(
-          99,
-          existing.quantity + sanitizedItem.quantity
-        );
+        existing.quantity = Math.min(99, existing.quantity + sanitizedItem.quantity);
       } else {
         cart.push(sanitizedItem);
       }
@@ -432,8 +395,7 @@
     // Stripe Checkout Handler -> Redirects to /checkout or initiates Stripe
     checkoutBtn?.addEventListener('click', async () => {
       if (cart.length === 0) return;
-      if (checkoutText)
-        checkoutText.textContent = 'Conectando con Stripe Checkout...';
+      if (checkoutText) checkoutText.textContent = 'Conectando con Stripe Checkout...';
       if (checkoutBtn) checkoutBtn.setAttribute('disabled', 'true');
 
       const res = await initiateStripeCheckout(cart);
@@ -443,8 +405,7 @@
       }
 
       setTimeout(() => {
-        if (checkoutText)
-          checkoutText.textContent = 'Proceder al Pago con Stripe';
+        if (checkoutText) checkoutText.textContent = 'Proceder al Pago con Stripe';
         if (checkoutBtn) checkoutBtn.removeAttribute('disabled');
         window.location.href = '/checkout';
       }, 800);

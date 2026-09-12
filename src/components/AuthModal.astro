@@ -30,10 +30,7 @@
         <span class="w-1.5 h-1.5 rounded-full bg-[#8A9A86] animate-pulse"></span>
         Cuenta Personal Atelier
       </div>
-      <h3
-        id="auth-modal-title"
-        class="font-serif text-2xl sm:text-3xl text-[#243026] font-medium tracking-tight"
-      >
+      <h3 id="auth-modal-title" class="font-serif text-2xl sm:text-3xl text-[#243026] font-medium tracking-tight">
         Bienvenido al Atelier
       </h3>
       <p class="font-sans text-xs text-[#4A5B48] mt-1">
@@ -56,9 +53,7 @@
         class="flex-1 py-1.5 rounded-full font-medium text-[#4A5B48] hover:text-[#243026] transition-all cursor-pointer flex items-center justify-center gap-1"
       >
         <span>Conectar Supabase</span>
-        <span class="text-[9px] bg-[#8A9A86]/20 text-[#4A5B48] px-1.5 rounded-full">
-          API
-        </span>
+        <span class="text-[9px] bg-[#8A9A86]/20 text-[#4A5B48] px-1.5 rounded-full">API</span>
       </button>
     </div>
 
@@ -104,17 +99,14 @@
         <span class="text-[10px]">→</span>
       </button>
 
-      <div
-        id="auth-status-msg"
-        class="hidden text-[11px] font-sans text-center py-1 rounded-lg"
-      ></div>
+      <div id="auth-status-msg" class="hidden text-[11px] font-sans text-center py-1 rounded-lg"></div>
     </form>
 
     <!-- Panel 2: Quick Supabase Credentials Connector -->
     <div id="auth-config-panel" class="hidden space-y-4">
       <div class="p-3 rounded-xl bg-[#F5F3EF] border border-[#EBE7DF] text-[11px] font-sans text-[#4A5B48] leading-relaxed">
-        Pega la URL de tu proyecto y tu anon key pública de Supabase para
-        conectar tu base de datos y autenticación instantáneamente.
+        Pega la URL de tu proyecto y tu anon key pública de Supabase para conectar tu base de datos y autenticación
+        instantáneamente.
       </div>
 
       <div>
@@ -154,10 +146,7 @@
       >
         Guardar y Reconectar
       </button>
-      <div
-        id="config-status-msg"
-        class="hidden text-[11px] font-sans text-center py-1 text-[#4A5B48]"
-      ></div>
+      <div id="config-status-msg" class="hidden text-[11px] font-sans text-center py-1 text-[#4A5B48]"></div>
     </div>
 
     <!-- Active User State (When already logged in) -->
@@ -166,13 +155,8 @@
         <span id="user-avatar-initial">L</span>
       </div>
       <div>
-        <h4
-          id="user-email-display"
-          class="font-serif text-lg text-[#243026] font-medium"
-        ></h4>
-        <span class="text-[11px] text-[#8A9A86] font-sans">
-          Sesión activa en Supabase Auth
-        </span>
+        <h4 id="user-email-display" class="font-serif text-lg text-[#243026] font-medium"></h4>
+        <span class="text-[11px] text-[#8A9A86] font-sans">Sesión activa en Supabase Auth</span>
       </div>
       <button
         id="auth-logout-btn"
@@ -199,12 +183,8 @@
     const configPanel = document.getElementById('auth-config-panel');
     const loggedInPanel = document.getElementById('auth-logged-in-panel');
     const configSaveBtn = document.getElementById('config-save-btn');
-    const configUrl = document.getElementById(
-      'config-supa-url'
-    ) as HTMLInputElement;
-    const configKey = document.getElementById(
-      'config-supa-key'
-    ) as HTMLInputElement;
+    const configUrl = document.getElementById('config-supa-url') as HTMLInputElement;
+    const configKey = document.getElementById('config-supa-key') as HTMLInputElement;
     const logoutBtn = document.getElementById('auth-logout-btn');
 
     if (!modal || !panel || !closeBtn) return;
@@ -212,8 +192,7 @@
     // Prefill saved credentials in config inputs
     if (configUrl && configKey && typeof localStorage !== 'undefined') {
       configUrl.value = localStorage.getItem('stacklab_supabase_url') || '';
-      configKey.value =
-        localStorage.getItem('stacklab_supabase_anon_key') || '';
+      configKey.value = localStorage.getItem('stacklab_supabase_anon_key') || '';
     }
 
     // Tab switching
@@ -268,8 +247,7 @@
           const emailDisp = document.getElementById('user-email-display');
           const initial = document.getElementById('user-avatar-initial');
           if (emailDisp) emailDisp.textContent = session.user.email || '';
-          if (initial && session.user.email)
-            initial.textContent = session.user.email[0].toUpperCase();
+          if (initial && session.user.email) initial.textContent = session.user.email[0].toUpperCase();
           window.dispatchEvent(
             new CustomEvent('auth-state-changed', {
               detail: { user: session.user },
@@ -303,18 +281,14 @@
       if (e.target === modal) closeModal();
     });
     window.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape' && !modal.classList.contains('opacity-0'))
-        closeModal();
+      if (e.key === 'Escape' && !modal.classList.contains('opacity-0')) closeModal();
     });
 
     // Form submit
     loginForm?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = (document.getElementById('auth-email') as HTMLInputElement)
-        .value;
-      const pass = (
-        document.getElementById('auth-password') as HTMLInputElement
-      ).value;
+      const email = (document.getElementById('auth-email') as HTMLInputElement).value;
+      const pass = (document.getElementById('auth-password') as HTMLInputElement).value;
       const msg = document.getElementById('auth-status-msg');
       const submitBtn = document.getElementById('auth-submit-btn');
 
@@ -339,14 +313,12 @@
             if (signUpRes.error) throw signUpRes.error;
             if (msg) {
               msg.textContent = '✓ Cuenta creada con éxito. Verificando...';
-              msg.className =
-                'text-[11px] font-sans text-center py-1 text-emerald-700 bg-emerald-50 rounded-lg';
+              msg.className = 'text-[11px] font-sans text-center py-1 text-emerald-700 bg-emerald-50 rounded-lg';
             }
           } else {
             if (msg) {
               msg.textContent = '✓ Sesión iniciada.';
-              msg.className =
-                'text-[11px] font-sans text-center py-1 text-emerald-700 bg-emerald-50 rounded-lg';
+              msg.className = 'text-[11px] font-sans text-center py-1 text-emerald-700 bg-emerald-50 rounded-lg';
             }
           }
         } else {
@@ -355,8 +327,7 @@
           if (error) throw error;
           if (msg) {
             msg.textContent = '✉ Enlace mágico enviado a tu correo.';
-            msg.className =
-              'text-[11px] font-sans text-center py-1 text-emerald-700 bg-emerald-50 rounded-lg';
+            msg.className = 'text-[11px] font-sans text-center py-1 text-emerald-700 bg-emerald-50 rounded-lg';
           }
         }
 
@@ -366,8 +337,7 @@
       } catch (err: any) {
         if (msg) {
           msg.textContent = err.message || 'Error al conectar con Supabase.';
-          msg.className =
-            'text-[11px] font-sans text-center py-1 text-amber-800 bg-amber-50 rounded-lg';
+          msg.className = 'text-[11px] font-sans text-center py-1 text-amber-800 bg-amber-50 rounded-lg';
         }
       } finally {
         if (submitBtn) submitBtn.textContent = 'Acceder con Supabase →';

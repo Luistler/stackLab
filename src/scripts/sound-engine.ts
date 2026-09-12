@@ -7,17 +7,13 @@ class SoundEngine {
   private isMuted: boolean = false;
 
   constructor() {
-    const saved =
-      typeof localStorage !== 'undefined'
-        ? localStorage.getItem('stacklab_audio_muted')
-        : null;
+    const saved = typeof localStorage !== 'undefined' ? localStorage.getItem('stacklab_audio_muted') : null;
     this.isMuted = saved === 'true';
   }
 
   private initContext() {
     if (!this.ctx && typeof window !== 'undefined') {
-      const AudioContextClass =
-        window.AudioContext || (window as any).webkitAudioContext;
+      const AudioContextClass = window.AudioContext || (window as any).webkitAudioContext;
       if (AudioContextClass) {
         this.ctx = new AudioContextClass();
       }
@@ -35,9 +31,7 @@ class SoundEngine {
     if (!this.isMuted) {
       this.playTap(900, 0.04);
     }
-    window.dispatchEvent(
-      new CustomEvent('sound-mute-change', { detail: { muted: this.isMuted } })
-    );
+    window.dispatchEvent(new CustomEvent('sound-mute-change', { detail: { muted: this.isMuted } }));
     return this.isMuted;
   }
 
@@ -59,16 +53,10 @@ class SoundEngine {
 
       osc.type = 'sine';
       osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-      osc.frequency.exponentialRampToValueAtTime(
-        freq * 0.35,
-        this.ctx.currentTime + duration
-      );
+      osc.frequency.exponentialRampToValueAtTime(freq * 0.35, this.ctx.currentTime + duration);
 
       gain.gain.setValueAtTime(0.04, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(
-        0.0001,
-        this.ctx.currentTime + duration
-      );
+      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + duration);
 
       osc.connect(gain);
       gain.connect(this.ctx.destination);
@@ -92,16 +80,10 @@ class SoundEngine {
 
       osc.type = 'triangle';
       osc.frequency.setValueAtTime(freq, this.ctx.currentTime);
-      osc.frequency.linearRampToValueAtTime(
-        freq * 1.05,
-        this.ctx.currentTime + 0.03
-      );
+      osc.frequency.linearRampToValueAtTime(freq * 1.05, this.ctx.currentTime + 0.03);
 
       gain.gain.setValueAtTime(0.012, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(
-        0.0001,
-        this.ctx.currentTime + 0.035
-      );
+      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.035);
 
       osc.connect(gain);
       gain.connect(this.ctx.destination);
@@ -127,10 +109,7 @@ class SoundEngine {
       osc.frequency.setValueAtTime(528, this.ctx.currentTime); // 528 Hz Solfeggio / Zen frequency
 
       gain.gain.setValueAtTime(0.035, this.ctx.currentTime);
-      gain.gain.exponentialRampToValueAtTime(
-        0.0001,
-        this.ctx.currentTime + 0.45
-      );
+      gain.gain.exponentialRampToValueAtTime(0.0001, this.ctx.currentTime + 0.45);
 
       osc.connect(gain);
       gain.connect(this.ctx.destination);
@@ -146,6 +125,5 @@ export const soundEngine = new SoundEngine();
 // Attach globally for legacy / template compatibility
 if (typeof window !== 'undefined') {
   (window as any).soundEngine = soundEngine;
-  (window as any).playMechanicalClick = (freq?: number, dur?: number) =>
-    soundEngine.playTap(freq, dur);
+  (window as any).playMechanicalClick = (freq?: number, dur?: number) => soundEngine.playTap(freq, dur);
 }

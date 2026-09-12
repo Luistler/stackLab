@@ -22,8 +22,7 @@
           DOCKER TO COMPOSE<span class="text-[#D71921]">.</span>
         </h3>
         <p class="font-mono text-xs text-neutral-400 mt-0.5">
-          Conversor de comandos `docker run` a manifiestos `docker-compose.yml`
-          limpios
+          Conversor de comandos `docker run` a manifiestos `docker-compose.yml` limpios
         </p>
       </div>
       <button
@@ -40,14 +39,9 @@
     <div class="space-y-4 font-mono text-xs">
       <div>
         <div class="flex justify-between items-center mb-1.5">
-          <label
-            for="docker-input"
-            class="text-neutral-300 font-semibold flex items-center gap-2"
-          >
+          <label for="docker-input" class="text-neutral-300 font-semibold flex items-center gap-2">
             <span>COMANDO DOCKER RUN:</span>
-            <span class="text-[10px] font-normal text-neutral-500">
-              (Soporta multilínea con `\`)
-            </span>
+            <span class="text-[10px] font-normal text-neutral-500">(Soporta multilínea con `\`)</span>
           </label>
           <div class="flex items-center gap-2">
             <span class="text-[10px] text-neutral-500">PRESETS:</span>
@@ -139,10 +133,7 @@
       <!-- Output Display with Syntax Highlighting -->
       <div class="relative">
         <div class="flex justify-between items-center text-[10px] text-neutral-400 mb-1 px-1">
-          <span
-            id="docker-output-label"
-            class="font-bold uppercase tracking-wider text-emerald-400"
-          >
+          <span id="docker-output-label" class="font-bold uppercase tracking-wider text-emerald-400">
             DOCKER-COMPOSE.YML (COMPOSE SPEC v3.8)
           </span>
           <span id="docker-parsed-stats" class="text-neutral-500 font-mono">
@@ -157,16 +148,11 @@
               <span class="w-2.5 h-2.5 rounded-full bg-[#D71921]/70 inline-block"></span>
               <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/70 inline-block"></span>
               <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/70 inline-block"></span>
-              <span
-                id="docker-filename-tag"
-                class="ml-2 font-mono text-neutral-400"
-              >
+              <span id="docker-filename-tag" class="ml-2 font-mono text-neutral-400">
                 docker-compose.yml
               </span>
             </div>
-            <span class="font-mono text-[9px] text-neutral-600">
-              ZERO_NETWORK_EXFILTRATION
-            </span>
+            <span class="font-mono text-[9px] text-neutral-600">ZERO_NETWORK_EXFILTRATION</span>
           </div>
 
           <!-- Code View -->
@@ -183,9 +169,7 @@
           <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
           NO EVAL() // SAFE O(N) LINEAR LEXER // RE-DOS RESISTANT
         </span>
-        <span class="font-mono text-neutral-600">
-          SPEC: OCI / DOCKER COMPOSE
-        </span>
+        <span class="font-mono text-neutral-600">SPEC: OCI / DOCKER COMPOSE</span>
       </div>
     </div>
   </div>
@@ -316,28 +300,19 @@
           config.name = tokens[++idx];
         } else if (token.startsWith('--name=')) {
           config.name = token.slice(7);
-        } else if (
-          (token === '-p' || token === '--publish') &&
-          idx + 1 < tokens.length
-        ) {
+        } else if ((token === '-p' || token === '--publish') && idx + 1 < tokens.length) {
           config.ports.push(tokens[++idx]);
         } else if (token.startsWith('-p=')) {
           config.ports.push(token.slice(3));
         } else if (token.startsWith('--publish=')) {
           config.ports.push(token.slice(10));
-        } else if (
-          (token === '-v' || token === '--volume') &&
-          idx + 1 < tokens.length
-        ) {
+        } else if ((token === '-v' || token === '--volume') && idx + 1 < tokens.length) {
           config.volumes.push(tokens[++idx]);
         } else if (token.startsWith('-v=')) {
           config.volumes.push(token.slice(3));
         } else if (token.startsWith('--volume=')) {
           config.volumes.push(token.slice(9));
-        } else if (
-          (token === '-e' || token === '--env') &&
-          idx + 1 < tokens.length
-        ) {
+        } else if ((token === '-e' || token === '--env') && idx + 1 < tokens.length) {
           config.environment.push(tokens[++idx]);
         } else if (token.startsWith('-e=')) {
           config.environment.push(token.slice(3));
@@ -351,36 +326,21 @@
           config.restart = tokens[++idx];
         } else if (token.startsWith('--restart=')) {
           config.restart = token.slice(10);
-        } else if (
-          (token === '--network' || token === '--net') &&
-          idx + 1 < tokens.length
-        ) {
+        } else if ((token === '--network' || token === '--net') && idx + 1 < tokens.length) {
           config.network = tokens[++idx];
         } else if (token.startsWith('--network=')) {
           config.network = token.slice(10);
         } else if (token.startsWith('--net=')) {
           config.network = token.slice(6);
-        } else if (
-          (token === '-w' || token === '--workdir') &&
-          idx + 1 < tokens.length
-        ) {
+        } else if ((token === '-w' || token === '--workdir') && idx + 1 < tokens.length) {
           config.workdir = tokens[++idx];
-        } else if (
-          (token === '-u' || token === '--user') &&
-          idx + 1 < tokens.length
-        ) {
+        } else if ((token === '-u' || token === '--user') && idx + 1 < tokens.length) {
           config.user = tokens[++idx];
-        } else if (
-          (token === '-h' || token === '--hostname') &&
-          idx + 1 < tokens.length
-        ) {
+        } else if ((token === '-h' || token === '--hostname') && idx + 1 < tokens.length) {
           config.hostname = tokens[++idx];
         } else if (token === '--privileged') {
           config.privileged = true;
-        } else if (
-          (token === '-m' || token === '--memory') &&
-          idx + 1 < tokens.length
-        ) {
+        } else if ((token === '-m' || token === '--memory') && idx + 1 < tokens.length) {
           config.memory = tokens[++idx];
         } else if (token === '--cpus' && idx + 1 < tokens.length) {
           config.cpus = tokens[++idx];
@@ -409,8 +369,7 @@
 
     // Generador de Compose YAML
     function generateYaml(config) {
-      const serviceName =
-        config.name.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase() || 'app';
+      const serviceName = config.name.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase() || 'app';
       const lines = [];
 
       lines.push("version: '3.8'");
@@ -524,11 +483,7 @@
 
     // Resaltador de sintaxis seguro con Nothing Palette (Escapado HTML estricto)
     function escapeHtml(str) {
-      return str
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;');
+      return str.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
     }
 
     function highlightYaml(yamlText) {
@@ -589,13 +544,11 @@
       if (currentMode === 'yaml') {
         codeOutput.innerHTML = highlightYaml(currentYaml);
         if (filenameTag) filenameTag.textContent = 'docker-compose.yml';
-        if (outputLabel)
-          outputLabel.textContent = 'DOCKER-COMPOSE.YML (COMPOSE SPEC v3.8)';
+        if (outputLabel) outputLabel.textContent = 'DOCKER-COMPOSE.YML (COMPOSE SPEC v3.8)';
       } else {
         codeOutput.innerHTML = highlightYaml(currentEnv);
         if (filenameTag) filenameTag.textContent = '.env';
-        if (outputLabel)
-          outputLabel.textContent = 'ENVIRONMENT VARIABLES (.ENV)';
+        if (outputLabel) outputLabel.textContent = 'ENVIRONMENT VARIABLES (.ENV)';
       }
     }
 
@@ -611,8 +564,7 @@
           copyBtn?.classList.add('border-emerald-400', 'text-emerald-400');
           setTimeout(() => {
             copyIcon.textContent = '📋';
-            copyText.textContent =
-              currentMode === 'yaml' ? 'Copiar Manifiesto' : 'Copiar .env';
+            copyText.textContent = currentMode === 'yaml' ? 'Copiar Manifiesto' : 'Copiar .env';
             copyBtn?.classList.remove('border-emerald-400', 'text-emerald-400');
           }, 1800);
         }

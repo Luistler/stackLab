@@ -64,10 +64,7 @@ html.lenis body {
 /* Zen Texture Subtle Canvas */
 .bg-zen-canvas {
   background-color: #fbfbfa;
-  background-image: radial-gradient(
-    rgba(45, 71, 54, 0.04) 1px,
-    transparent 1px
-  );
+  background-image: radial-gradient(rgba(45, 71, 54, 0.04) 1px, transparent 1px);
   background-size: 28px 28px;
 }
 
