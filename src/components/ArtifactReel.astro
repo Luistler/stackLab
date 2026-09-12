@@ -1,8 +1,11 @@
 ---
 // ArtifactReel.astro - Pinned Horizontal Product Showcase Reel (StackLab Atelier)
 // Showcasing 4 Curated Zen Luxury Living Objects with Quick Add to Cart & Real-Time Scrubber
-import { products, type Product } from '../data/products';
+import { productRepository } from '../data/repositories/product.repository';
+import type { Product } from '../data/products';
 import { formatPrice } from '../lib/stripe';
+
+const products = await productRepository.getAll();
 ---
 
 <section id="collection" class="horizontal-reel-container relative bg-[#F5F3EF] border-t border-[#EBE7DF] z-20 overflow-hidden">

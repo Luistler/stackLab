@@ -12,16 +12,18 @@ import Layout from '../../layouts/Layout.astro';
 import Navigation from '../../components/Navigation.astro';
 import CartDrawer from '../../components/CartDrawer.astro';
 import DockBar from '../../components/DockBar.astro';
-import { products, type Product } from '../../data/products';
+import { productRepository } from '../../data/repositories/product.repository';
+import type { Product } from '../../data/products';
 import { formatPrice } from '../../lib/stripe';
 
 /**
  * getStaticPaths():
  * Genera en tiempo de compilación (build time) las rutas HTML estáticas para
- * cada producto definido en src/data/products.ts (/producto/prod-cypress-console, etc.).
+ * cada producto provisto por el repositorio (/producto/prod-cypress-console, etc.).
  */
 export async function getStaticPaths() {
-  return products.map((product) => ({
+  const allProducts = await productRepository.getAll();
+  return allProducts.map((product) => ({
     params: { id: product.id },
     props: { product },
   }));
@@ -41,9 +43,10 @@ if (!product) {
 
 /**
  * Curaduría de "Piezas en Resonancia":
- * Filtra el catálogo para mostrar hasta 3 artículos relacionados, excluyendo el actual.
+ * Filtra el catálogo provisto por el repositorio para mostrar hasta 3 artículos relacionados, excluyendo el actual.
  */
-const relatedProducts = products.filter((p) => p.id !== product.id).slice(0, 3);
+const allCatalog = await productRepository.getAll();
+const relatedProducts = allCatalog.filter((p) => p.id !== product.id).slice(0, 3);
 ---
 
 <Layout 
