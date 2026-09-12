@@ -104,7 +104,12 @@ import { AnimatedUserIcon, AnimatedCartIcon } from './icons/AnimatedIcons';
     if (navAuthBtn) {
       navAuthBtn.addEventListener('click', (e) => {
         e.preventDefault();
-        window.dispatchEvent(new CustomEvent('open-auth-modal'));
+        const modal = document.getElementById('auth-modal');
+        if (modal) {
+          window.dispatchEvent(new CustomEvent('open-auth-modal'));
+        } else {
+          window.location.href = '/login';
+        }
       });
     }
 

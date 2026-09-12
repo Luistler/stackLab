@@ -1,0 +1,374 @@
+---
+// src/pages/login.astro - Dedicated Zen Luxury Sign In & Register Page
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import { AnimatedUserIcon, AnimatedShieldIcon, AnimatedArrowRightIcon } from '../components/icons/AnimatedIcons';
+---
+
+<Layout
+  title="Acceso de Clientes // StackLab Atelier"
+  description="Inicia sesión o crea tu cuenta en StackLab Atelier para gestionar órdenes, piezas guardadas y seguimiento de envíos."
+>
+  <Navigation />
+
+  <main class="relative min-h-screen bg-[#FBFBFA] flex items-center justify-center pt-24 pb-20 px-4 sm:px-6 overflow-hidden">
+    <!-- Ambient Botanical Mist -->
+    <div class="absolute w-[600px] h-[600px] rounded-full bg-[#DCE3DA]/40 blur-[150px] -top-24 -left-24 pointer-events-none -z-10"></div>
+    <div class="absolute w-[550px] h-[550px] rounded-full bg-[#EAE6DF]/60 blur-[140px] -bottom-24 -right-24 pointer-events-none -z-10"></div>
+
+    <div class="w-full max-w-md my-auto">
+      <!-- Back to Shop Link -->
+      <div class="mb-6 text-center">
+        <a
+          href="/#collection"
+          class="inline-flex items-center gap-1.5 text-xs font-sans text-[#8A9A86] hover:text-[#243026] transition-colors"
+        >
+          ← Retornar al Atelier
+        </a>
+      </div>
+
+      <!-- Auth Card -->
+      <div class="relative bg-white/90 backdrop-blur-xl border border-[#EBE7DF] rounded-3xl p-7 sm:p-9 shadow-[0_20px_50px_rgba(28,31,29,0.06)]">
+        <!-- Header -->
+        <div class="text-center mb-8">
+          <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#DCE3DA]/50 border border-[#DCE3DA] text-[10px] font-sans font-semibold tracking-wider text-[#243026] uppercase mb-3">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#8A9A86] animate-pulse"></span>
+            Cuenta Personal Atelier
+          </div>
+          <h1 id="page-auth-title" class="font-serif text-3xl sm:text-4xl text-[#243026] font-medium tracking-tight">
+            Bienvenido al Atelier
+          </h1>
+          <p class="font-sans text-xs text-[#4A5B48] mt-2">
+            Gestiona tus adquisiciones, rastreo de envíos y piezas guardadas.
+          </p>
+        </div>
+
+        <!-- Mode Tabs: Iniciar Sesión / Crear Cuenta -->
+        <div class="flex rounded-full bg-[#F5F3EF] p-1 border border-[#EBE7DF] mb-6 text-xs font-sans">
+          <button
+            id="tab-btn-login"
+            type="button"
+            class="flex-1 py-2 rounded-full font-medium transition-all bg-white text-[#243026] shadow-sm cursor-pointer"
+          >
+            Iniciar Sesión
+          </button>
+          <button
+            id="tab-btn-register"
+            type="button"
+            class="flex-1 py-2 rounded-full font-medium text-[#4A5B48] hover:text-[#243026] transition-all cursor-pointer"
+          >
+            Crear Cuenta
+          </button>
+        </div>
+
+        <!-- Main Form -->
+        <form id="page-auth-form" class="space-y-4">
+          <!-- Full Name (Only on Register Mode) -->
+          <div id="field-fullname" class="hidden">
+            <label
+              for="input-fullname"
+              class="block font-sans text-[11px] uppercase tracking-wider font-semibold text-[#243026] mb-1.5"
+            >
+              Nombre Completo
+            </label>
+            <input
+              id="input-fullname"
+              type="text"
+              placeholder="Luis Morales"
+              class="w-full px-4 py-2.5 rounded-xl bg-[#FBFBFA] border border-[#EBE7DF] text-xs font-sans text-[#1C1F1D] focus:outline-none focus:border-[#4A5B48] transition-colors"
+            />
+          </div>
+
+          <!-- Email -->
+          <div>
+            <label
+              for="input-email"
+              class="block font-sans text-[11px] uppercase tracking-wider font-semibold text-[#243026] mb-1.5"
+            >
+              Correo Electrónico
+            </label>
+            <input
+              id="input-email"
+              type="email"
+              required
+              placeholder="tu@correo.com"
+              class="w-full px-4 py-2.5 rounded-xl bg-[#FBFBFA] border border-[#EBE7DF] text-xs font-sans text-[#1C1F1D] focus:outline-none focus:border-[#4A5B48] transition-colors"
+            />
+          </div>
+
+          <!-- Password -->
+          <div>
+            <div class="flex items-center justify-between mb-1.5">
+              <label
+                for="input-password"
+                class="block font-sans text-[11px] uppercase tracking-wider font-semibold text-[#243026]"
+              >
+                Contraseña
+              </label>
+              <button
+                id="btn-magic-link-toggle"
+                type="button"
+                class="text-[10px] text-[#4A5B48] hover:text-[#243026] underline cursor-pointer"
+              >
+                O usar Enlace Mágico
+              </button>
+            </div>
+            <input
+              id="input-password"
+              type="password"
+              placeholder="••••••••"
+              class="w-full px-4 py-2.5 rounded-xl bg-[#FBFBFA] border border-[#EBE7DF] text-xs font-sans text-[#1C1F1D] focus:outline-none focus:border-[#4A5B48] transition-colors"
+            />
+          </div>
+
+          <!-- Submit Button -->
+          <button
+            id="btn-auth-submit"
+            type="submit"
+            class="w-full py-3.5 rounded-full bg-[#243026] hover:bg-[#1C1F1D] text-[#FBFBFA] font-sans text-xs uppercase tracking-widest font-semibold transition-all hover:scale-[1.01] active:scale-95 shadow-md flex items-center justify-center gap-2 cursor-pointer mt-3"
+          >
+            <span id="btn-auth-label">Iniciar Sesión</span>
+            <span class="text-[10px]">→</span>
+          </button>
+
+          <!-- Feedback Status Message -->
+          <div id="auth-feedback" class="hidden text-xs font-sans text-center py-2.5 px-3 rounded-xl leading-relaxed"></div>
+        </form>
+
+        <!-- Active Logged In Panel (Shown if user already has an active session) -->
+        <div id="page-logged-in-panel" class="hidden text-center py-4 space-y-5">
+          <div class="w-16 h-16 rounded-full bg-[#DCE3DA] text-[#243026] flex items-center justify-center font-serif text-2xl font-bold mx-auto shadow-inner">
+            <span id="display-user-avatar">L</span>
+          </div>
+          <div>
+            <div class="text-[11px] uppercase tracking-wider text-[#8A9A86] font-semibold">Sesión Activa</div>
+            <h3 id="display-user-email" class="font-serif text-xl text-[#243026] font-medium mt-1"></h3>
+          </div>
+
+          <div class="pt-2 flex flex-col gap-2">
+            <a
+              href="/#collection"
+              class="w-full py-3 rounded-full bg-[#243026] hover:bg-[#1C1F1D] text-[#FBFBFA] font-sans text-xs uppercase tracking-widest font-semibold transition-all"
+            >
+              Explorar Colección Atelier
+            </a>
+            <button
+              id="btn-page-logout"
+              type="button"
+              class="w-full py-2.5 rounded-full border border-[#EBE7DF] hover:border-red-400 text-xs font-sans text-neutral-600 hover:text-red-600 transition-colors cursor-pointer"
+            >
+              Cerrar Sesión
+            </button>
+          </div>
+        </div>
+
+        <!-- Trust Footer Note -->
+        <div class="mt-8 pt-6 border-t border-[#EBE7DF] flex items-center justify-center gap-2 text-[11px] text-[#717E6F] font-sans">
+          <AnimatedShieldIcon client:load size={13} color="#8A9A86" />
+          <span>Autenticación cifrada vía Supabase Auth & JWT</span>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<script>
+  import { getSupabaseClient } from '../lib/supabase';
+  import { soundEngine } from '../scripts/sound-engine';
+
+  function setupAuthPage() {
+    const tabLogin = document.getElementById('tab-btn-login');
+    const tabRegister = document.getElementById('tab-btn-register');
+    const form = document.getElementById('page-auth-form');
+    const fieldFullName = document.getElementById('field-fullname');
+    const inputFullName = document.getElementById('input-fullname') as HTMLInputElement;
+    const inputEmail = document.getElementById('input-email') as HTMLInputElement;
+    const inputPass = document.getElementById('input-password') as HTMLInputElement;
+    const magicToggle = document.getElementById('btn-magic-link-toggle');
+    const submitBtn = document.getElementById('btn-auth-submit');
+    const submitLabel = document.getElementById('btn-auth-label');
+    const feedback = document.getElementById('auth-feedback');
+    const loggedInPanel = document.getElementById('page-logged-in-panel');
+    const logoutBtn = document.getElementById('btn-page-logout');
+    const displayEmail = document.getElementById('display-user-email');
+    const displayAvatar = document.getElementById('display-user-avatar');
+    const pageTitle = document.getElementById('page-auth-title');
+
+    let isRegisterMode = false;
+    let isMagicLinkMode = false;
+
+    // Check existing session
+    const checkActiveSession = async () => {
+      try {
+        const client = getSupabaseClient();
+        const { data: { session } } = await client.auth.getSession();
+        if (session && session.user) {
+          form?.classList.add('hidden');
+          document.querySelector('#tab-btn-login')?.parentElement?.classList.add('hidden');
+          loggedInPanel?.classList.remove('hidden');
+          if (pageTitle) pageTitle.textContent = 'Tu Cuenta de Atelier';
+          if (displayEmail) displayEmail.textContent = session.user.email || '';
+          if (displayAvatar && session.user.email) {
+            displayAvatar.textContent = session.user.email[0].toUpperCase();
+          }
+        }
+      } catch (err) {}
+    };
+
+    checkActiveSession();
+
+    // Tab Switch: Iniciar Sesión
+    tabLogin?.addEventListener('click', () => {
+      isRegisterMode = false;
+      tabLogin.classList.add('bg-white', 'text-[#243026]', 'shadow-sm');
+      tabLogin.classList.remove('text-[#4A5B48]');
+      tabRegister?.classList.remove('bg-white', 'text-[#243026]', 'shadow-sm');
+      tabRegister?.classList.add('text-[#4A5B48]');
+      fieldFullName?.classList.add('hidden');
+      if (submitLabel) submitLabel.textContent = isMagicLinkMode ? 'Enviar Enlace Mágico' : 'Iniciar Sesión';
+      if (feedback) feedback.classList.add('hidden');
+      soundEngine.playTap(600, 0.03);
+    });
+
+    // Tab Switch: Crear Cuenta
+    tabRegister?.addEventListener('click', () => {
+      isRegisterMode = true;
+      tabRegister.classList.add('bg-white', 'text-[#243026]', 'shadow-sm');
+      tabRegister.classList.remove('text-[#4A5B48]');
+      tabLogin?.classList.remove('bg-white', 'text-[#243026]', 'shadow-sm');
+      tabLogin?.classList.add('text-[#4A5B48]');
+      fieldFullName?.classList.remove('hidden');
+      if (submitLabel) submitLabel.textContent = 'Crear Cuenta';
+      if (feedback) feedback.classList.add('hidden');
+      soundEngine.playTap(600, 0.03);
+    });
+
+    // Magic Link Toggle
+    magicToggle?.addEventListener('click', () => {
+      isMagicLinkMode = !isMagicLinkMode;
+      if (isMagicLinkMode) {
+        inputPass.disabled = true;
+        inputPass.placeholder = '(No requerida para Enlace Mágico)';
+        inputPass.value = '';
+        magicToggle.textContent = 'Usar contraseña normal';
+        if (submitLabel) submitLabel.textContent = 'Enviar Enlace Mágico';
+      } else {
+        inputPass.disabled = false;
+        inputPass.placeholder = '••••••••';
+        magicToggle.textContent = 'O usar Enlace Mágico';
+        if (submitLabel) submitLabel.textContent = isRegisterMode ? 'Crear Cuenta' : 'Iniciar Sesión';
+      }
+      soundEngine.playTap(700, 0.02);
+    });
+
+    // Handle Form Submit
+    form?.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const email = inputEmail?.value.trim();
+      const pass = inputPass?.value.trim();
+      const fullName = inputFullName?.value.trim();
+      const client = getSupabaseClient();
+
+      if (!email) return;
+
+      if (submitLabel) submitLabel.textContent = 'Procesando...';
+      if (feedback) feedback.classList.add('hidden');
+
+      try {
+        if (isMagicLinkMode) {
+          // Magic link via email OTP
+          const { error } = await client.auth.signInWithOtp({
+            email,
+            options: {
+              emailRedirectTo: window.location.origin,
+            },
+          });
+          if (error) throw error;
+          if (feedback) {
+            feedback.textContent = '✉ Enlace de acceso seguro enviado a tu correo. Haz clic en el enlace para entrar.';
+            feedback.className = 'text-xs font-sans text-center py-2.5 px-3 text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-xl';
+            feedback.classList.remove('hidden');
+          }
+          soundEngine.playChime();
+        } else if (isRegisterMode) {
+          // New User Sign Up
+          if (!pass || pass.length < 6) {
+            throw new Error('La contraseña debe tener al menos 6 caracteres.');
+          }
+
+          const { data, error } = await client.auth.signUp({
+            email,
+            password: pass,
+            options: {
+              data: {
+                full_name: fullName || '',
+              },
+            },
+          });
+          if (error) throw error;
+
+          if (feedback) {
+            feedback.textContent = '✓ Cuenta creada con éxito. Hemos enviado un correo de confirmación.';
+            feedback.className = 'text-xs font-sans text-center py-2.5 px-3 text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-xl';
+            feedback.classList.remove('hidden');
+          }
+          soundEngine.playChime();
+
+          setTimeout(() => {
+            checkActiveSession();
+          }, 1200);
+        } else {
+          // Normal Password Sign In
+          if (!pass) {
+            throw new Error('Por favor ingresa tu contraseña o usa Enlace Mágico.');
+          }
+
+          const { data, error } = await client.auth.signInWithPassword({
+            email,
+            password: pass,
+          });
+          if (error) throw error;
+
+          if (feedback) {
+            feedback.textContent = '✓ Sesión iniciada correctamente. Redirigiendo...';
+            feedback.className = 'text-xs font-sans text-center py-2.5 px-3 text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-xl';
+            feedback.classList.remove('hidden');
+          }
+          soundEngine.playChime();
+
+          setTimeout(() => {
+            window.location.href = '/';
+          }, 900);
+        }
+      } catch (err: any) {
+        if (feedback) {
+          feedback.textContent = err.message || 'Error al autenticar. Revisa tus credenciales.';
+          feedback.className = 'text-xs font-sans text-center py-2.5 px-3 text-amber-900 bg-amber-50 border border-amber-200 rounded-xl';
+          feedback.classList.remove('hidden');
+        }
+        soundEngine.playTap(350, 0.06);
+      } finally {
+        if (submitLabel) {
+          if (isMagicLinkMode) submitLabel.textContent = 'Enviar Enlace Mágico';
+          else if (isRegisterMode) submitLabel.textContent = 'Crear Cuenta';
+          else submitLabel.textContent = 'Iniciar Sesión';
+        }
+      }
+    });
+
+    // Logout
+    logoutBtn?.addEventListener('click', async () => {
+      try {
+        const client = getSupabaseClient();
+        await client.auth.signOut();
+        window.location.reload();
+      } catch (e) {}
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', setupAuthPage);
+  } else {
+    setupAuthPage();
+  }
+</script>
