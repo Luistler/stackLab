@@ -1,0 +1,44 @@
+---
+import '../styles/global.css';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { 
+  title = "StackLab Atelier // Mindful Objects & Serene Living", 
+  description = "Colección curada de objetos artesanales, cerámica atemporal y piezas de bienestar diseñadas para elevar la serenidad del espacio cotidiano." 
+} = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang="es" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    
+    <!-- OpenGraph / Twitter -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content="https://stacklab.work" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#FBFBFA" />
+    
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body class="antialiased selection:bg-[#8A9A86]/30 selection:text-[#243026] bg-[#FBFBFA] text-[#1C1F1D] font-sans overflow-x-hidden min-h-screen">
+    <slot />
+
+    <!-- Global Motion Engine (Lenis + GSAP ScrollTrigger) -->
+    <script>
+      import { initMotionEngine } from '../scripts/motion-engine';
+
+      // Initialize Lenis + GSAP ScrollTrigger Motion Engine
+      initMotionEngine();
+    </script>
+  </body>
+</html>

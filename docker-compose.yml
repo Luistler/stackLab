@@ -1,0 +1,28 @@
+services:
+  web:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: stacklab-web:latest
+    container_name: stacklab_web
+    restart: always
+    # Expose port 80 internally on Docker bridge network
+    expose:
+      - "80"
+      - "3000"
+    ports:
+      - "8090:80"
+    networks:
+      stacklab_network:
+        aliases:
+          - stacklab_portal
+          - portal
+          - stacklab_web
+
+
+networks:
+  stacklab_network:
+    external: true
+    # Default to homelab_stacklab_network (created by homelab/docker-compose.yml where cloudflared runs).
+    # Overridable via STACKLAB_NETWORK_NAME environment variable if named explicitly.
+    name: ${STACKLAB_NETWORK_NAME:-homelab_stacklab_network}

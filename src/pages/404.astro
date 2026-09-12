@@ -1,0 +1,62 @@
+---
+/**
+ * src/pages/404.astro
+ * ============================================================================
+ * Página de Error 404 Minimalista - StackLab Atelier
+ * ----------------------------------------------------------------------------
+ * Nginx sirve esta página con código de estado HTTP 404 cuando un usuario
+ * intenta acceder a un recurso inexistente en la plataforma.
+ * ============================================================================
+ */
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+---
+
+<Layout 
+  title="404 // Camino No Encontrado // StackLab Atelier"
+  description="El espacio que buscas no existe o ha retornado a su estado elemental de serenidad."
+>
+  <Navigation />
+
+  <main class="relative min-h-screen bg-[#FBFBFA] flex items-center justify-center px-4 sm:px-6 py-24 overflow-hidden">
+    <!-- Ambient Organic Mist -->
+    <div class="absolute w-[500px] h-[500px] rounded-full bg-[#DCE3DA]/40 blur-[140px] -top-20 -left-20 pointer-events-none -z-10"></div>
+    <div class="absolute w-[450px] h-[450px] rounded-full bg-[#EAE6DF]/60 blur-[130px] -bottom-20 -right-20 pointer-events-none -z-10"></div>
+
+    <div class="max-w-xl mx-auto text-center space-y-6">
+      <span class="zen-badge bg-white text-[#243026]">
+        404 // ESPACIO NO ENCONTRADO
+      </span>
+
+      <h1 class="font-serif text-4xl sm:text-6xl text-[#243026] font-light italic leading-tight">
+        Camino no encontrado<span class="text-[#8A9A86] not-italic">.</span>
+      </h1>
+
+      <p class="font-sans text-xs sm:text-sm text-[#4A5B48] leading-relaxed max-w-md mx-auto">
+        El sendero que buscas no se encuentra en este plano o ha retornado a su estado esencial. Respira con serenidad, haz una pausa y regresa al taller.
+      </p>
+
+      <!-- Balanced Zen Stones Decorative Icon -->
+      <div class="py-6 flex flex-col items-center justify-center gap-1.5 opacity-60">
+        <div class="w-8 h-2 rounded-full bg-[#8A9A86]"></div>
+        <div class="w-14 h-3 rounded-full bg-[#C7C2B6]"></div>
+        <div class="w-20 h-4 rounded-full bg-[#EBE7DF]"></div>
+      </div>
+
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+        <a 
+          href="/" 
+          class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-[#243026] hover:bg-[#344637] text-white font-sans text-xs font-semibold tracking-wide transition-all hover:scale-105 active:scale-95 shadow-md"
+        >
+          Retornar al Atelier
+        </a>
+        <a 
+          href="/#collection" 
+          class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white hover:bg-[#F5F3EF] border border-[#EBE7DF] text-[#243026] font-sans text-xs font-semibold transition-all"
+        >
+          Explorar Colección
+        </a>
+      </div>
+    </div>
+  </main>
+</Layout>

@@ -1,0 +1,358 @@
+---
+// src/pages/checkout.astro - Zen Luxury Checkout Experience
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import CartDrawer from '../components/CartDrawer.astro';
+---
+
+<Layout 
+  title="Checkout Seguro // StackLab Atelier"
+  description="Finaliza tu selección con encriptación de 256 bits y protección Stripe Checkout."
+>
+  <Navigation />
+
+  <main class="relative min-h-screen bg-[#FBFBFA] pt-28 sm:pt-36 pb-24 overflow-hidden">
+    <!-- Ambient Botanical Mist -->
+    <div class="absolute w-[500px] h-[500px] rounded-full bg-[#DCE3DA]/30 blur-[140px] -top-20 -left-20 pointer-events-none -z-10"></div>
+    <div class="absolute w-[500px] h-[500px] rounded-full bg-[#EAE6DF]/60 blur-[130px] -bottom-20 -right-20 pointer-events-none -z-10"></div>
+
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      
+      <!-- Top Title & Secure Telemetry -->
+      <div class="flex flex-col sm:flex-row sm:items-end justify-between pb-8 border-b border-[#EBE7DF] gap-4 mb-10">
+        <div>
+          <a href="/#collection" class="inline-flex items-center gap-2 text-xs font-sans text-[#8A9A86] hover:text-[#243026] mb-3 transition-colors">
+            ← Retornar al Atelier
+          </a>
+          <h1 class="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#243026] font-medium tracking-tight">
+            Finalizar Selección
+          </h1>
+        </div>
+
+        <div class="flex items-center gap-3 text-xs font-sans text-[#4A5B48] bg-white px-4 py-2 rounded-full border border-[#EBE7DF] shadow-sm">
+          <span class="w-2 h-2 rounded-full bg-[#8A9A86] animate-pulse"></span>
+          <span>Cifrado SSL de 256 bits · Stripe Checkout</span>
+        </div>
+      </div>
+
+      <!-- Checkout 2-Column Responsive Layout -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-10 lg:gap-14 items-start">
+        
+        <!-- Left: Shipping Information & Payment Preview -->
+        <div class="lg:col-span-7 space-y-8">
+          
+          <!-- Step 1: Contact Information -->
+          <section class="p-6 sm:p-8 rounded-3xl bg-white border border-[#EBE7DF] shadow-zen-subtle space-y-4">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="w-6 h-6 rounded-full bg-[#243026] text-white text-xs font-bold flex items-center justify-center">1</span>
+              <h2 class="font-serif text-xl font-medium text-[#243026]">Información de Contacto</h2>
+            </div>
+            
+            <div class="space-y-3 font-sans text-xs">
+              <div>
+                <label for="contact-email" class="block font-medium text-[#243026] mb-1">Correo Electrónico (para confirmación de Stripe)</label>
+                <input 
+                  id="contact-email" 
+                  type="email" 
+                  required 
+                  placeholder="ejemplo@atelier.com" 
+                  class="w-full px-4 py-3 rounded-xl bg-[#FBFBFA] border border-[#EBE7DF] text-sm text-[#1C1F1D] focus:outline-none focus:border-[#4A5B48]"
+                />
+              </div>
+              <div>
+                <label for="contact-phone" class="block font-medium text-[#243026] mb-1">Teléfono Móvil (para entrega asegurada)</label>
+                <input 
+                  id="contact-phone" 
+                  type="tel" 
+                  placeholder="+34 600 000 000" 
+                  class="w-full px-4 py-3 rounded-xl bg-[#FBFBFA] border border-[#EBE7DF] text-sm text-[#1C1F1D] focus:outline-none focus:border-[#4A5B48]"
+                />
+              </div>
+            </div>
+          </section>
+
+          <!-- Step 2: Shipping Destination -->
+          <section class="p-6 sm:p-8 rounded-3xl bg-white border border-[#EBE7DF] shadow-zen-subtle space-y-4">
+            <div class="flex items-center gap-2 mb-2">
+              <span class="w-6 h-6 rounded-full bg-[#243026] text-white text-xs font-bold flex items-center justify-center">2</span>
+              <h2 class="font-serif text-xl font-medium text-[#243026]">Destino de Envío</h2>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3.5 font-sans text-xs">
+              <div class="sm:col-span-2">
+                <label for="ship-name" class="block font-medium text-[#243026] mb-1">Nombre y Apellidos</label>
+                <input 
+                  id="ship-name" 
+                  type="text" 
+                  required 
+                  placeholder="Elena Martínez" 
+                  class="w-full px-4 py-3 rounded-xl bg-[#FBFBFA] border border-[#EBE7DF] text-sm text-[#1C1F1D] focus:outline-none focus:border-[#4A5B48]"
+                />
+              </div>
+              <div class="sm:col-span-2">
+                <label for="ship-address" class="block font-medium text-[#243026] mb-1">Dirección de Entrega</label>
+                <input 
+                  id="ship-address" 
+                  type="text" 
+                  required 
+                  placeholder="Calle de la Paz, 14, 3ºB" 
+                  class="w-full px-4 py-3 rounded-xl bg-[#FBFBFA] border border-[#EBE7DF] text-sm text-[#1C1F1D] focus:outline-none focus:border-[#4A5B48]"
+                />
+              </div>
+              <div>
+                <label for="ship-city" class="block font-medium text-[#243026] mb-1">Ciudad</label>
+                <input 
+                  id="ship-city" 
+                  type="text" 
+                  required 
+                  placeholder="Madrid" 
+                  class="w-full px-4 py-3 rounded-xl bg-[#FBFBFA] border border-[#EBE7DF] text-sm text-[#1C1F1D] focus:outline-none focus:border-[#4A5B48]"
+                />
+              </div>
+              <div>
+                <label for="ship-zip" class="block font-medium text-[#243026] mb-1">Código Postal</label>
+                <input 
+                  id="ship-zip" 
+                  type="text" 
+                  required 
+                  placeholder="28001" 
+                  class="w-full px-4 py-3 rounded-xl bg-[#FBFBFA] border border-[#EBE7DF] text-sm text-[#1C1F1D] focus:outline-none focus:border-[#4A5B48]"
+                />
+              </div>
+            </div>
+          </section>
+
+          <!-- Step 3: Protected Payment Gateway Note -->
+          <section class="p-6 sm:p-8 rounded-3xl bg-[#F5F3EF] border border-[#EBE7DF] space-y-4">
+            <div class="flex items-center gap-2">
+              <span class="w-6 h-6 rounded-full bg-[#8A9A86] text-white text-xs font-bold flex items-center justify-center">3</span>
+              <h2 class="font-serif text-xl font-medium text-[#243026]">Pasarela de Pago Segura</h2>
+            </div>
+            <p class="font-sans text-xs text-[#4A5B48] leading-relaxed">
+              Al presionar <strong>"Pagar con Stripe Checkout"</strong>, se abrirá la pasarela segura tokenizada de Stripe. Se admiten tarjetas Visa, Mastercard, American Express, Apple Pay y Google Pay con validación 3D Secure.
+            </p>
+          </section>
+
+        </div>
+
+        <!-- Right: Order Summary & Trigger -->
+        <div class="lg:col-span-5 lg:sticky lg:top-28 space-y-6">
+          <div class="p-6 sm:p-8 rounded-3xl bg-white border border-[#EBE7DF] shadow-zen-card space-y-6">
+            <h2 class="font-serif text-2xl font-medium text-[#243026] pb-4 border-b border-[#EBE7DF]">
+              Resumen de la Selección
+            </h2>
+
+            <!-- Items List Container -->
+            <div id="checkout-items-list" class="space-y-4 max-h-[360px] overflow-y-auto pr-1">
+              <!-- Dynamically populated via client JS -->
+            </div>
+
+            <!-- Empty Cart Fallback -->
+            <div id="checkout-empty-state" class="hidden text-center py-8">
+              <p class="font-sans text-xs text-neutral-500 mb-4">No tienes ningún objeto seleccionado.</p>
+              <a href="/#collection" class="inline-block px-6 py-2.5 rounded-full bg-[#243026] text-white text-xs font-sans font-medium">
+                Ir a la Colección
+              </a>
+            </div>
+
+            <!-- Calculation Lines -->
+            <div id="checkout-calc-block" class="space-y-3 pt-4 border-t border-[#EBE7DF] text-xs font-sans">
+              <div class="flex justify-between text-neutral-600">
+                <span>Subtotal</span>
+                <span id="checkout-subtotal" class="font-bold text-[#243026] text-sm">$0 USD</span>
+              </div>
+              <div class="flex justify-between text-neutral-600">
+                <span>Packaging Biodegradable</span>
+                <span class="text-[#8A9A86] font-medium">Cortesía Atelier</span>
+              </div>
+              <div class="flex justify-between text-neutral-600">
+                <span>Envío Internacional</span>
+                <span id="checkout-shipping-val" class="font-medium text-[#243026]">Calculando...</span>
+              </div>
+              <div class="flex justify-between text-base font-serif font-bold text-[#243026] pt-3 border-t border-[#EBE7DF]">
+                <span>Total Estimado</span>
+                <span id="checkout-total-val">$0 USD</span>
+              </div>
+            </div>
+
+            <!-- Primary Stripe Trigger -->
+            <button 
+              id="checkout-submit-btn"
+              type="button"
+              class="w-full py-4 px-6 rounded-full bg-[#243026] hover:bg-[#344637] text-white font-sans text-sm font-semibold tracking-wide transition-all duration-300 hover:shadow-xl active:scale-[0.98] flex items-center justify-center gap-3 cursor-pointer disabled:opacity-50 disabled:pointer-events-none"
+            >
+              <span id="checkout-btn-text">Pagar con Stripe Checkout</span>
+              <span class="text-xs">🔒</span>
+            </button>
+
+            <!-- Status Feedback Container -->
+            <div id="checkout-status" class="hidden text-center text-xs font-sans font-medium p-2.5 rounded-xl border"></div>
+
+            <div class="pt-2 text-center text-[10px] font-sans text-neutral-400">
+              Certificado PCI DSS Nivel 1 · Garantía de Devolución 30 Días
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </main>
+
+  <CartDrawer />
+</Layout>
+
+<script>
+  /**
+   * Controlador del Cliente para Checkout Seguro
+   * ----------------------------------------------------------------------------
+   * 1. Recupera el estado del carrito desde localStorage (con soporte dual de claves).
+   * 2. Sanitiza cada dato contra vectores de ataque DOM XSS (CWE-79).
+   * 3. Calcula subtotales, umbral de envío gratuito y total final.
+   * 4. Valida campos de contacto antes de invocar Stripe Checkout.
+   */
+  import { formatPrice, FREE_SHIPPING_THRESHOLD, initiateStripeCheckout, type CartItem } from '../lib/stripe';
+
+  const STORAGE_KEY = 'stacklab_atelier_cart_v1';
+
+  /**
+   * escapeHtml():
+   * Codifica entidades HTML críticas para prevenir que cadenas maliciosas
+   * almacenadas en el cliente se interpreten como etiquetas ejecutables.
+   */
+  function escapeHtml(str: unknown): string {
+    if (typeof str !== 'string') return '';
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  /**
+   * sanitizeImageUrl():
+   * Garantiza que las URLs de imágenes utilicen esquemas seguros (HTTPS o rutas relativas).
+   * Bloquea esquemas peligrosos como javascript:, data: no confiable, etc.
+   */
+  function sanitizeImageUrl(url: unknown): string {
+    if (typeof url !== 'string') return '/favicon.svg';
+    const trimmed = url.trim();
+    if (/^(https:\/\/|\/)/i.test(trimmed)) {
+      return escapeHtml(trimmed);
+    }
+    return '/favicon.svg';
+  }
+
+  /**
+   * validateQuantity():
+   * Acota la cantidad a un rango numérico entero válido entre 1 y 99.
+   */
+  function validateQuantity(qty: unknown): number {
+    const num = typeof qty === 'number' ? qty : parseInt(String(qty), 10);
+    if (isNaN(num) || !isFinite(num) || num <= 0) return 1;
+    return Math.min(Math.floor(num), 99);
+  }
+
+  function initCheckoutPage() {
+    // Referencias a los elementos del formulario y resumen de pedido
+    const itemsList = document.getElementById('checkout-items-list');
+    const emptyState = document.getElementById('checkout-empty-state');
+    const calcBlock = document.getElementById('checkout-calc-block');
+    const subtotalEl = document.getElementById('checkout-subtotal');
+    const shippingEl = document.getElementById('checkout-shipping-val');
+    const totalEl = document.getElementById('checkout-total-val');
+    const submitBtn = document.getElementById('checkout-submit-btn');
+    const btnText = document.getElementById('checkout-btn-text');
+    const statusBox = document.getElementById('checkout-status');
+
+    // Carga segura del carrito con sanitización defensiva
+    let cart: CartItem[] = [];
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('stacklab_cart');
+      if (saved) {
+        const raw = JSON.parse(saved);
+        if (Array.isArray(raw)) {
+          cart = raw.map(i => ({
+            id: escapeHtml(i.id),
+            name: escapeHtml(i.name),
+            subtitle: escapeHtml(i.subtitle || ''),
+            price: typeof i.price === 'number' ? i.price : 0,
+            currency: escapeHtml(i.currency || 'USD'),
+            image: sanitizeImageUrl(i.image),
+            quantity: validateQuantity(i.quantity),
+            stripePriceId: typeof i.stripePriceId === 'string' ? escapeHtml(i.stripePriceId) : undefined,
+          })).filter(i => i.id.length > 0 && i.quantity > 0);
+        }
+      }
+    } catch (e) {
+      cart = [];
+    }
+
+    if (cart.length === 0) {
+      itemsList?.classList.add('hidden');
+      calcBlock?.classList.add('hidden');
+      emptyState?.classList.remove('hidden');
+      submitBtn?.setAttribute('disabled', 'true');
+      return;
+    }
+
+    const subtotal = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+    const isFreeShipping = subtotal >= FREE_SHIPPING_THRESHOLD;
+    const shippingCost = isFreeShipping ? 0 : 15;
+    const finalTotal = subtotal + shippingCost;
+
+    if (subtotalEl) subtotalEl.textContent = formatPrice(subtotal);
+    if (shippingEl) shippingEl.textContent = isFreeShipping ? 'Gratis (Cortesía Atelier)' : formatPrice(shippingCost);
+    if (totalEl) totalEl.textContent = formatPrice(finalTotal);
+
+    if (itemsList) {
+      itemsList.innerHTML = cart.map(item => `
+        <div class="flex items-center gap-3 py-2 border-b border-[#EBE7DF] last:border-b-0">
+          <img src="${item.image}" alt="${item.name}" class="w-14 h-14 object-cover rounded-xl border border-[#EBE7DF]" />
+          <div class="flex-1 min-w-0">
+            <h4 class="font-serif text-sm font-medium text-[#243026] truncate">${item.name}</h4>
+            <p class="font-sans text-[11px] text-neutral-400 truncate">Cant: ${item.quantity} × ${formatPrice(item.price)}</p>
+          </div>
+          <span class="font-sans text-xs font-bold text-[#243026]">${formatPrice(item.price * item.quantity)}</span>
+        </div>
+      `).join('');
+    }
+
+    submitBtn?.addEventListener('click', async () => {
+      const emailInput = document.getElementById('contact-email') as HTMLInputElement | null;
+      if (emailInput && !emailInput.value.includes('@')) {
+        emailInput.focus();
+        emailInput.classList.add('border-[#B87D65]');
+        return;
+      }
+
+      if (btnText) btnText.textContent = 'Conectando con Stripe Checkout...';
+      submitBtn.setAttribute('disabled', 'true');
+
+      const res = await initiateStripeCheckout(cart);
+      if (statusBox) {
+        statusBox.textContent = res.message;
+        statusBox.classList.remove('hidden');
+        statusBox.classList.add('bg-[#DCE3DA]/50', 'text-[#243026]', 'border-[#8A9A86]/40');
+      }
+
+      if (res.success && res.url) {
+        setTimeout(() => {
+          window.location.href = res.url || '/orden-confirmada';
+        }, 900);
+      } else {
+        setTimeout(() => {
+          if (btnText) btnText.textContent = 'Pagar con Stripe Checkout';
+          submitBtn.removeAttribute('disabled');
+        }, 2500);
+      }
+    });
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCheckoutPage);
+  } else {
+    initCheckoutPage();
+  }
+</script>

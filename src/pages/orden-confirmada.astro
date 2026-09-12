@@ -1,0 +1,133 @@
+---
+// src/pages/orden-confirmada.astro - Serene Order Confirmation Page
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+---
+
+<Layout 
+  title="Orden Confirmada // StackLab Atelier"
+  description="Tu pedido ha sido recibido en nuestro taller con la mayor serenidad."
+>
+  <Navigation />
+
+  <main class="relative min-h-screen bg-[#FBFBFA] pt-28 sm:pt-36 pb-24 flex items-center justify-center overflow-hidden">
+    <!-- Ambient Botanical Mist -->
+    <div class="absolute w-[600px] h-[600px] rounded-full bg-[#DCE3DA]/35 blur-[140px] -top-24 -left-24 pointer-events-none -z-10"></div>
+    <div class="absolute w-[500px] h-[500px] rounded-full bg-[#EAE6DF]/60 blur-[130px] bottom-0 right-0 pointer-events-none -z-10"></div>
+
+    <div class="max-w-2xl mx-auto px-4 sm:px-6 w-full text-center">
+      
+      <!-- Serene Circular Emblem -->
+      <div class="w-20 h-20 rounded-full bg-[#DCE3DA]/60 border border-[#8A9A86]/40 flex items-center justify-center text-3xl mb-6 mx-auto shadow-sm">
+        🌿
+      </div>
+
+      <span class="zen-badge bg-white text-[#243026] mb-4">
+        PEDIDO RECIBIDO // STACKLAB ATELIER
+      </span>
+
+      <h1 class="font-serif text-3xl sm:text-5xl text-[#243026] font-medium leading-tight mb-4">
+        Gracias por cultivar la calma en tu espacio.
+      </h1>
+
+      <p class="font-sans text-xs sm:text-sm text-[#4A5B48] leading-relaxed max-w-lg mx-auto mb-10">
+        Tu pedido ha sido registrado con éxito. Cada pieza será inspeccionada en nuestro taller, embalada en materiales sostenibles libres de plástico y despachada para su entrega asegurada.
+      </p>
+
+      <!-- Order Telemetry Card -->
+      <div class="bg-white rounded-3xl border border-[#EBE7DF] p-6 sm:p-8 shadow-zen-card text-left space-y-6 mb-8 font-sans text-xs">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 pb-6 border-b border-[#EBE7DF]">
+          <div>
+            <span class="block text-[10px] uppercase tracking-wider text-neutral-400 mb-1">Identificador de Pedido</span>
+            <span id="order-id-val" class="font-bold text-sm text-[#243026]">#STL-2026-ATELIER</span>
+          </div>
+          <div>
+            <span class="block text-[10px] uppercase tracking-wider text-neutral-400 mb-1">Estado en Taller</span>
+            <span class="inline-flex items-center gap-1.5 font-semibold text-[#4A5B48]">
+              <span class="w-2 h-2 rounded-full bg-[#8A9A86] animate-pulse"></span>
+              En preparación artesanal
+            </span>
+          </div>
+        </div>
+
+        <div class="space-y-3 text-neutral-600">
+          <div class="flex justify-between">
+            <span>Estimación de Entrega</span>
+            <strong class="text-[#243026]">3 a 5 días laborables</strong>
+          </div>
+          <div class="flex justify-between">
+            <span>Embalaje</span>
+            <strong class="text-[#243026]">100% Biodegradable & Cero Plásticos</strong>
+          </div>
+          <div class="flex justify-between">
+            <span>Garantía Serena</span>
+            <strong class="text-[#243026]">30 Días de Prueba en tu Hogar</strong>
+          </div>
+        </div>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+        <a 
+          href="/" 
+          class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-[#243026] hover:bg-[#344637] text-white font-sans text-xs font-semibold tracking-wide transition-all hover:scale-105 active:scale-95 shadow-md"
+        >
+          Retornar al Atelier
+        </a>
+        <button 
+          type="button" 
+          onclick="window.print()"
+          class="w-full sm:w-auto px-8 py-3.5 rounded-full bg-white hover:bg-[#F5F3EF] border border-[#EBE7DF] text-[#243026] font-sans text-xs font-semibold transition-all"
+        >
+          Descargar Comprobante
+        </button>
+      </div>
+
+    </div>
+  </main>
+</Layout>
+
+<script>
+  /**
+   * Ciclo de Vida Post-Compra (Orden Confirmada)
+   * ----------------------------------------------------------------------------
+   * 1. Vacía el carrito local tras un pago completado con éxito.
+   * 2. Emite el evento global 'cart-updated' para reiniciar los contadores a 0.
+   * 3. Extrae el identificador de sesión de Stripe ('session_id') de los parámetros
+   *    de la URL para mostrar el identificador auténtico del pedido.
+   */
+  function cleanCartAfterOrder() {
+    try {
+      // Limpieza de claves de almacenamiento local
+      localStorage.removeItem('stacklab_atelier_cart_v1');
+      localStorage.removeItem('stacklab_cart');
+    } catch (e) {
+      // Manejo seguro si localStorage está deshabilitado en modo incógnito estricto
+    }
+
+    // Notifica a Navigation.astro y DockBar.astro para poner el contador en 0
+    window.dispatchEvent(new CustomEvent('cart-updated', {
+      detail: { count: 0, subtotal: 0 }
+    }));
+
+    // Lectura del ID de sesión de Stripe Checkout en la URL (o fallback a ID artesanal)
+    const params = new URLSearchParams(window.location.search);
+    const sessionId = params.get('session_id');
+    const orderIdEl = document.getElementById('order-id-val');
+    if (orderIdEl) {
+      if (sessionId) {
+        orderIdEl.textContent = `#${sessionId.substring(0, 18).toUpperCase()}`;
+      } else {
+        const randomNum = Math.floor(100000 + Math.random() * 900000);
+        orderIdEl.textContent = `#STL-${randomNum}`;
+      }
+    }
+  }
+
+  // Inicialización tras la carga del árbol DOM
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', cleanCartAfterOrder);
+  } else {
+    cleanCartAfterOrder();
+  }
+</script>

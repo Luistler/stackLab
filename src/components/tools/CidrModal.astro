@@ -1,0 +1,503 @@
+---
+// CidrModal.astro - Módulo interactivo client-side para cálculo y visualización CIDR IPv4
+// Dupla Cómputo & Seguridad StackLab.work (backend-developer + security-auditor)
+// 100% Client-Side, Cero Telemetría, Validación Estricta
+---
+
+<div id="modal-cidr" class="modal-overlay fixed inset-0 z-50 bg-black/80 backdrop-blur-2xl flex items-center justify-center p-4 overflow-y-auto opacity-0 pointer-events-none transition-all duration-300">
+  <div class="modal-card bg-[#141414]/95 border border-white/15 rounded-[26px] max-w-3xl w-full p-6 md:p-8 relative shadow-2xl corner-cross text-white transform scale-95 transition-all duration-300 my-8">
+    
+    <!-- Modal Header -->
+    <div class="flex justify-between items-start mb-6 border-b border-white/10 pb-4">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="dymo-label text-[10px]">WIDGET FOCUS // 01</span>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">
+            CLIENT-SIDE COMPUTATION
+          </span>
+        </div>
+        <h3 class="font-ndot text-2xl text-white tracking-wider mt-1">
+          CIDR SUBNET MATRIX<span class="text-[#D71921]">.</span>
+        </h3>
+        <p class="font-mono text-xs text-neutral-400 mt-0.5">
+          Calculadora de subredes y visualizador de 32 bits IPv4 (CCNA Bitwise Decoder)
+        </p>
+      </div>
+      <button 
+        id="cidr-close-btn"
+        type="button"
+        aria-label="Cerrar modal CIDR"
+        class="btn-sound w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white font-mono text-base flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-[#D71921]"
+      >
+        ✕
+      </button>
+    </div>
+
+    <!-- Input & Controls Section -->
+    <div class="space-y-4 font-mono text-xs">
+      <div>
+        <label for="cidr-input" class="text-neutral-300 block mb-1 font-semibold flex justify-between items-center">
+          <span>DIRECCIÓN IP CON PREFIJO CIDR:</span>
+          <span class="text-neutral-500 text-[10px] font-normal">Formato: a.b.c.d/prefix (ej. 192.168.10.0/26)</span>
+        </label>
+        <div class="flex flex-col sm:flex-row gap-2">
+          <div class="relative flex-1">
+            <input 
+              id="cidr-input" 
+              type="text" 
+              value="192.168.10.0/26" 
+              class="w-full bg-black/60 border border-white/15 rounded-xl px-4 py-3 text-white font-mono text-sm focus:border-[#D71921] focus:ring-1 focus:ring-[#D71921] focus:outline-none placeholder-neutral-600 transition-colors" 
+              placeholder="192.168.1.0/24"
+              autocomplete="off"
+              spellcheck="false"
+            />
+          </div>
+          <button 
+            id="cidr-calc-btn"
+            type="button"
+            class="btn-sound bg-white hover:bg-neutral-200 active:scale-95 text-black font-bold px-6 py-3 rounded-xl transition-all flex items-center justify-center gap-2"
+          >
+            <span>_CALCULAR</span>
+            <span class="text-neutral-600">↵</span>
+          </button>
+        </div>
+        <div id="cidr-error" class="hidden text-[#D71921] text-[11px] mt-1.5 flex items-center gap-1 font-mono">
+          <span class="inline-block w-2 h-2 rounded-full bg-[#D71921]"></span>
+          <span id="cidr-error-msg">Entrada inválida</span>
+        </div>
+      </div>
+
+      <!-- 1-Click Presets -->
+      <div>
+        <div class="flex items-center gap-2 mb-2">
+          <span class="text-neutral-500 text-[10px] tracking-wider uppercase">PRESETS DE 1-CLIC:</span>
+        </div>
+        <div class="flex flex-wrap gap-2">
+          <button 
+            type="button"
+            data-preset="10.0.0.0/8" 
+            class="cidr-preset-btn btn-sound text-[11px] px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/15 hover:text-white border border-white/10 text-neutral-300 transition-all active:scale-95"
+          >
+            <span class="text-[#D71921] font-bold">10.0.0.0/8</span> <span class="text-neutral-500">(Clase A · Corp)</span>
+          </button>
+          <button 
+            type="button"
+            data-preset="172.16.0.0/16" 
+            class="cidr-preset-btn btn-sound text-[11px] px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/15 hover:text-white border border-white/10 text-neutral-300 transition-all active:scale-95"
+          >
+            <span class="text-[#D71921] font-bold">172.16.0.0/16</span> <span class="text-neutral-500">(Clase B · VPC)</span>
+          </button>
+          <button 
+            type="button"
+            data-preset="192.168.1.0/24" 
+            class="cidr-preset-btn btn-sound text-[11px] px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/15 hover:text-white border border-white/10 text-neutral-300 transition-all active:scale-95"
+          >
+            <span class="text-[#D71921] font-bold">192.168.1.0/24</span> <span class="text-neutral-500">(Clase C · LAN)</span>
+          </button>
+          <button 
+            type="button"
+            data-preset="100.64.0.0/10" 
+            class="cidr-preset-btn btn-sound text-[11px] px-3 py-1.5 rounded-lg bg-white/5 hover:bg-white/15 hover:text-white border border-white/10 text-neutral-300 transition-all active:scale-95"
+          >
+            <span class="text-emerald-400 font-bold">100.64.0.0/10</span> <span class="text-neutral-500">(CGNAT ISP)</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Results Grid -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-2">
+        <div class="bg-white/[0.03] border border-white/10 rounded-xl p-3 hover:border-white/20 transition-colors">
+          <div class="text-[10px] text-neutral-400 tracking-wider font-semibold">MÁSCARA DE RED</div>
+          <div id="cidr-res-mask" class="text-white font-bold text-sm mt-1 select-all truncate">255.255.255.192</div>
+          <div id="cidr-res-prefix-tag" class="text-[9px] text-neutral-500 mt-0.5">/26 · 26 BITS</div>
+        </div>
+
+        <div class="bg-white/[0.03] border border-white/10 rounded-xl p-3 hover:border-white/20 transition-colors">
+          <div class="text-[10px] text-neutral-400 tracking-wider font-semibold">NETWORK ID</div>
+          <div id="cidr-res-net" class="text-[#D71921] font-bold text-sm mt-1 select-all truncate">192.168.10.0</div>
+          <div class="text-[9px] text-neutral-500 mt-0.5">DIRECCIÓN BASE</div>
+        </div>
+
+        <div class="bg-white/[0.03] border border-white/10 rounded-xl p-3 hover:border-white/20 transition-colors">
+          <div class="text-[10px] text-neutral-400 tracking-wider font-semibold">BROADCAST</div>
+          <div id="cidr-res-broad" class="text-white font-bold text-sm mt-1 select-all truncate">192.168.10.63</div>
+          <div class="text-[9px] text-neutral-500 mt-0.5">DIFUSIÓN TOTAL</div>
+        </div>
+
+        <div class="bg-white/[0.03] border border-white/10 rounded-xl p-3 hover:border-white/20 transition-colors">
+          <div class="text-[10px] text-neutral-400 tracking-wider font-semibold">HOSTS ÚTILES</div>
+          <div id="cidr-res-hosts" class="text-emerald-400 font-bold text-sm mt-1 truncate">62</div>
+          <div id="cidr-res-total-hosts" class="text-[9px] text-neutral-500 mt-0.5">64 TOTALES (2^6)</div>
+        </div>
+
+        <div class="bg-white/[0.03] border border-white/10 rounded-xl p-3 hover:border-white/20 transition-colors">
+          <div class="text-[10px] text-neutral-400 tracking-wider font-semibold">PRIMER HOST ÚTIL</div>
+          <div id="cidr-res-first" class="text-neutral-200 font-bold text-xs mt-1 select-all truncate">192.168.10.1</div>
+          <div class="text-[9px] text-neutral-500 mt-0.5">INICIO RANGO</div>
+        </div>
+
+        <div class="bg-white/[0.03] border border-white/10 rounded-xl p-3 hover:border-white/20 transition-colors">
+          <div class="text-[10px] text-neutral-400 tracking-wider font-semibold">ÚLTIMO HOST ÚTIL</div>
+          <div id="cidr-res-last" class="text-neutral-200 font-bold text-xs mt-1 select-all truncate">192.168.10.62</div>
+          <div class="text-[9px] text-neutral-500 mt-0.5">FIN RANGO</div>
+        </div>
+
+        <div class="bg-white/[0.03] border border-white/10 rounded-xl p-3 hover:border-white/20 transition-colors">
+          <div class="text-[10px] text-neutral-400 tracking-wider font-semibold">MÁSCARA WILDCARD</div>
+          <div id="cidr-res-wildcard" class="text-neutral-200 font-bold text-xs mt-1 select-all truncate">0.0.0.63</div>
+          <div class="text-[9px] text-neutral-500 mt-0.5">CISCO ACL BIT-MASK</div>
+        </div>
+
+        <div class="bg-white/[0.03] border border-white/10 rounded-xl p-3 hover:border-white/20 transition-colors">
+          <div class="text-[10px] text-neutral-400 tracking-wider font-semibold">TIPO DE ÁMBITO</div>
+          <div id="cidr-res-scope" class="text-amber-400 font-bold text-xs mt-1 truncate">RFC 1918 PRIVADA</div>
+          <div id="cidr-res-class" class="text-[9px] text-neutral-500 mt-0.5">CLASE C</div>
+        </div>
+      </div>
+
+      <!-- 32-Bit Binary Visualizer (CCNA Bitwise Breakdown) -->
+      <div class="bg-black/60 border border-white/10 rounded-xl p-4 mt-4">
+        <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-1 mb-3 text-[10px] border-b border-white/5 pb-2">
+          <span class="text-neutral-300 font-bold uppercase tracking-wider">
+            ESTRUCTURA DE 32 BITS (DESGLOSE BINARIO CCNA)
+          </span>
+          <div class="flex items-center gap-3">
+            <span class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-[#D71921]"></span>
+              <span class="text-neutral-400">RED (<span id="cidr-bit-count-net">26</span>b)</span>
+            </span>
+            <span class="flex items-center gap-1.5">
+              <span class="w-2 h-2 rounded-full bg-neutral-500"></span>
+              <span class="text-neutral-400">HOST (<span id="cidr-bit-count-host">6</span>b)</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Binary Rows -->
+        <div class="space-y-2 text-[11px] font-mono leading-relaxed">
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+            <span class="text-neutral-500 text-[10px] w-24">IP INGRESADA:</span>
+            <div id="cidr-bin-ip" class="flex-1 font-mono tracking-wider break-all bg-black/40 px-2 py-1 rounded">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+            <span class="text-neutral-500 text-[10px] w-24">MÁSCARA:</span>
+            <div id="cidr-bin-mask" class="flex-1 font-mono tracking-wider break-all bg-black/40 px-2 py-1 rounded">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+          <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-1">
+            <span class="text-neutral-500 text-[10px] w-24">RED (AND):</span>
+            <div id="cidr-bin-net" class="flex-1 font-mono tracking-wider break-all bg-black/40 px-2 py-1 rounded">
+              <!-- Rendered via JS -->
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Security & Privacy Guarantee Footer -->
+      <div class="flex items-center justify-between pt-2 border-t border-white/5 text-[10px] text-neutral-500">
+        <span class="flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          ZERO TELEMETRY // 100% CLIENT-SIDE
+        </span>
+        <span class="font-mono text-neutral-600">RFC 791 / RFC 4632</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  // @ts-nocheck
+  // Script de Inicialización y Lógica Bitwise para CidrModal
+  (function initCidrModal() {
+    const modal = document.getElementById('modal-cidr');
+    const closeBtn = document.getElementById('cidr-close-btn');
+    const input = document.getElementById('cidr-input');
+    const calcBtn = document.getElementById('cidr-calc-btn');
+    const errorBox = document.getElementById('cidr-error');
+    const errorMsg = document.getElementById('cidr-error-msg');
+    const presetButtons = document.querySelectorAll('.cidr-preset-btn');
+
+    if (!modal || !input) return;
+
+    // Convertidor Entero sin Signo a Formato IPv4 (a.b.c.d)
+    function intToIp(int: number) {
+      return [
+        (int >>> 24) & 255,
+        (int >>> 16) & 255,
+        (int >>> 8) & 255,
+        int & 255
+      ].join('.');
+    }
+
+    // Convertidor IP string a Entero de 32 bits sin signo
+    function ipToInt(ipStr: string) {
+      const octets = ipStr.split('.').map(Number);
+      return (((octets[0] ?? 0) << 24) | ((octets[1] ?? 0) << 16) | ((octets[2] ?? 0) << 8) | (octets[3] ?? 0)) >>> 0;
+    }
+
+    // Clasificación de Scope de Red (RFC 1918, CGNAT, Loopback, etc.)
+    function getScopeAndClass(ipInt: number) {
+      const o1 = (ipInt >>> 24) & 255;
+      const o2 = (ipInt >>> 16) & 255;
+
+      let scope = 'PÚBLICA (INTERNET)';
+      let netClass = 'CLASE ';
+
+      // Clase de dirección
+      if (o1 < 128) netClass += 'A';
+      else if (o1 < 192) netClass += 'B';
+      else if (o1 < 224) netClass += 'C';
+      else if (o1 < 240) netClass += 'D (MULTICAST)';
+      else netClass += 'E (EXPERIMENTAL)';
+
+      // RFCs de Ámbitos Especiales
+      if (o1 === 10) {
+        scope = 'RFC 1918 PRIVADA';
+      } else if (o1 === 172 && o2 >= 16 && o2 <= 31) {
+        scope = 'RFC 1918 PRIVADA';
+      } else if (o1 === 192 && o2 === 168) {
+        scope = 'RFC 1918 PRIVADA';
+      } else if (o1 === 127) {
+        scope = 'RFC 1122 LOOPBACK';
+      } else if (o1 === 169 && o2 === 254) {
+        scope = 'RFC 3927 LINK-LOCAL (APIPA)';
+      } else if (o1 === 100 && o2 >= 64 && o2 <= 127) {
+        scope = 'RFC 6598 CGNAT ISP';
+      } else if (o1 >= 224 && o1 <= 239) {
+        scope = 'RFC 5771 MULTICAST';
+      } else if (o1 === 0) {
+        scope = 'RFC 1122 RED LOCAL "THIS"';
+      }
+
+      return { scope, netClass };
+    }
+
+    // Validación Robusta de Formato CIDR
+    function parseAndValidate(cidrStr: string) {
+      const trimmed = cidrStr.trim();
+      const parts = trimmed.split('/');
+      if (parts.length !== 2) {
+        return { valid: false as const, error: 'Falta prefijo CIDR (ej: 192.168.1.0/24)' };
+      }
+
+      const ipPart = parts[0]?.trim() ?? '';
+      const prefixPart = parts[1]?.trim() ?? '';
+
+      // Validación de prefijo
+      if (!/^\d+$/.test(prefixPart)) {
+        return { valid: false as const, error: 'El prefijo debe ser un número entero' };
+      }
+      const prefix = parseInt(prefixPart, 10);
+      if (prefix < 0 || prefix > 32) {
+        return { valid: false as const, error: 'El prefijo debe estar entre 0 y 32' };
+      }
+
+      // Validación de octetos IP
+      const octetStrs = ipPart.split('.');
+      if (octetStrs.length !== 4) {
+        return { valid: false as const, error: 'La dirección IPv4 debe tener exactamente 4 octetos' };
+      }
+
+      const octets: number[] = [];
+      for (let i = 0; i < 4; i++) {
+        const s = octetStrs[i]?.trim() ?? '';
+        if (!/^\d+$/.test(s)) {
+          return { valid: false as const, error: `Octeto ${i + 1} no numérico: "${s}"` };
+        }
+        if (s.length > 1 && s.startsWith('0')) {
+          return { valid: false as const, error: `Octeto ${i + 1} contiene ceros a la izquierda no permitidos` };
+        }
+        const val = parseInt(s, 10);
+        if (val < 0 || val > 255) {
+          return { valid: false as const, error: `Octeto ${i + 1} fuera de rango (0-255): ${val}` };
+        }
+        octets.push(val);
+      }
+
+      const cleanIp = octets.join('.');
+      return { valid: true as const, ip: cleanIp, prefix, octets };
+    }
+
+    // Generador de formato binario con resaltado visual Red/Host
+    function renderBinaryOctets(intVal: number, prefix: number) {
+      const binStr = (intVal >>> 0).toString(2).padStart(32, '0');
+      let html = '';
+      for (let i = 0; i < 32; i++) {
+        if (i > 0 && i % 8 === 0) {
+          html += '<span class="text-neutral-600 font-bold mx-0.5">.</span>';
+        }
+        const isNet = i < prefix;
+        const bit = binStr[i];
+        if (isNet) {
+          html += `<span class="text-[#D71921] font-bold">${bit}</span>`;
+        } else {
+          html += `<span class="text-neutral-400">${bit}</span>`;
+        }
+      }
+      return html;
+    }
+
+    // Cálculo Principal del Subnetting
+    function computeCidr() {
+      const val = input.value;
+      const res = parseAndValidate(val);
+
+      if (!res.valid) {
+        if (errorBox && errorMsg) {
+          errorMsg.textContent = res.error;
+          errorBox.classList.remove('hidden');
+        }
+        return;
+      }
+
+      if (errorBox) errorBox.classList.add('hidden');
+
+      const prefix = res.prefix;
+      const ipInt = ipToInt(res.ip);
+
+      // Bitwise Mask Calculation
+      const maskInt = prefix === 0 ? 0 : ((~0 << (32 - prefix)) >>> 0);
+      const wildcardInt = (~maskInt) >>> 0;
+      const netInt = (ipInt & maskInt) >>> 0;
+      const broadInt = (netInt | wildcardInt) >>> 0;
+
+      // Cantidad de direcciones
+      const totalAddresses = Math.pow(2, 32 - prefix);
+      let usableHosts = 0;
+      let firstHostInt = 0;
+      let lastHostInt = 0;
+
+      if (prefix === 32) {
+        usableHosts = 1;
+        firstHostInt = netInt;
+        lastHostInt = netInt;
+      } else if (prefix === 31) {
+        // RFC 3021: Point-to-Point Links
+        usableHosts = 2;
+        firstHostInt = netInt;
+        lastHostInt = broadInt;
+      } else if (prefix === 0) {
+        usableHosts = totalAddresses - 2;
+        firstHostInt = (netInt + 1) >>> 0;
+        lastHostInt = (broadInt - 1) >>> 0;
+      } else {
+        usableHosts = Math.max(0, totalAddresses - 2);
+        firstHostInt = (netInt + 1) >>> 0;
+        lastHostInt = (broadInt - 1) >>> 0;
+      }
+
+      const maskStr = intToIp(maskInt);
+      const netStr = intToIp(netInt);
+      const broadStr = intToIp(broadInt);
+      const firstStr = intToIp(firstHostInt);
+      const lastStr = intToIp(lastHostInt);
+      const wildStr = intToIp(wildcardInt);
+      const scopeData = getScopeAndClass(netInt);
+
+      // Inyección segura en el DOM
+      const maskEl = document.getElementById('cidr-res-mask');
+      const prefixEl = document.getElementById('cidr-res-prefix-tag');
+      const netEl = document.getElementById('cidr-res-net');
+      const broadEl = document.getElementById('cidr-res-broad');
+      const hostsEl = document.getElementById('cidr-res-hosts');
+      const totalEl = document.getElementById('cidr-res-total-hosts');
+      const firstEl = document.getElementById('cidr-res-first');
+      const lastEl = document.getElementById('cidr-res-last');
+      const wildEl = document.getElementById('cidr-res-wildcard');
+      const scopeEl = document.getElementById('cidr-res-scope');
+      const classEl = document.getElementById('cidr-res-class');
+      const bitCountNet = document.getElementById('cidr-bit-count-net');
+      const bitCountHost = document.getElementById('cidr-bit-count-host');
+
+      if (maskEl) maskEl.textContent = maskStr;
+      if (prefixEl) prefixEl.textContent = `/${prefix} · ${prefix} BITS DE RED`;
+      if (netEl) netEl.textContent = netStr;
+      if (broadEl) broadEl.textContent = broadStr;
+      if (hostsEl) hostsEl.textContent = usableHosts.toLocaleString('en-US');
+      if (totalEl) totalEl.textContent = `${totalAddresses.toLocaleString('en-US')} TOTALES (2^${32 - prefix})`;
+      if (firstEl) firstEl.textContent = firstStr;
+      if (lastEl) lastEl.textContent = lastStr;
+      if (wildEl) wildEl.textContent = wildStr;
+      if (scopeEl) scopeEl.textContent = scopeData.scope;
+      if (classEl) classEl.textContent = scopeData.netClass;
+      if (bitCountNet) bitCountNet.textContent = String(prefix);
+      if (bitCountHost) bitCountHost.textContent = String(32 - prefix);
+
+      // Renderizado Binario
+      const binIpEl = document.getElementById('cidr-bin-ip');
+      const binMaskEl = document.getElementById('cidr-bin-mask');
+      const binNetEl = document.getElementById('cidr-bin-net');
+
+      if (binIpEl) binIpEl.innerHTML = renderBinaryOctets(ipInt, prefix);
+      if (binMaskEl) binMaskEl.innerHTML = renderBinaryOctets(maskInt, prefix);
+      if (binNetEl) binNetEl.innerHTML = renderBinaryOctets(netInt, prefix);
+    }
+
+    // Listeners
+    calcBtn?.addEventListener('click', computeCidr);
+    input?.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') {
+        e.preventDefault();
+        computeCidr();
+      }
+    });
+
+    input?.addEventListener('input', () => {
+      if (errorBox && !errorBox.classList.contains('hidden')) {
+        errorBox.classList.add('hidden');
+      }
+    });
+
+    presetButtons.forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        const target = e.currentTarget;
+        const preset = target?.getAttribute('data-preset');
+        if (preset && input) {
+          input.value = preset;
+          computeCidr();
+        }
+      });
+    });
+
+    function closeModal() {
+      if (typeof window.closeToolModal === 'function') {
+        window.closeToolModal(modal);
+        return;
+      }
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      modal.classList.remove('active');
+      const card = modal.querySelector('.modal-card');
+      if (card) {
+        card.classList.add('scale-95');
+        card.classList.remove('scale-100');
+      }
+      const anyActive = document.querySelector('.modal-overlay.active');
+      if (!anyActive) {
+        document.body.classList.remove('lenis-stopped');
+        document.body.style.overflow = '';
+        if (window.lenis) {
+          window.lenis.start();
+        }
+      }
+      if (typeof window.playMechanicalClick === 'function') {
+        window.playMechanicalClick(900, 0.02);
+      }
+    }
+
+    closeBtn?.addEventListener('click', closeModal);
+
+    // Cerrar al hacer clic en el backdrop
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeModal();
+      }
+    });
+
+    // Cálculo inicial
+    computeCidr();
+  })();
+</script>

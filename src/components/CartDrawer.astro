@@ -1,0 +1,408 @@
+---
+// CartDrawer.astro - High-End Zen Luxury Slide-Over Cart Drawer
+// Integrated with Stripe Checkout Pipeline, Free Shipping Threshold, and Persistent LocalStorage
+---
+
+<aside 
+  id="cart-drawer-overlay" 
+  class="cart-overlay fixed inset-0 z-50 bg-black/40 backdrop-blur-md flex justify-end opacity-0 pointer-events-none transition-all duration-300"
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="cart-drawer-title"
+>
+  <div class="cart-drawer-panel w-full max-w-md sm:max-w-lg bg-[#FBFBFA] h-full shadow-2xl flex flex-col justify-between border-l border-[#EBE7DF] text-[#1C1F1D] transform translate-x-full transition-transform duration-400 ease-out">
+    
+    <!-- Drawer Header -->
+    <div class="p-6 sm:p-8 border-b border-[#EBE7DF] flex items-center justify-between">
+      <div>
+        <div class="flex items-center gap-2 mb-1">
+          <span class="zen-badge text-[10px] bg-[#DCE3DA]/50 text-[#243026]">ATELIER COMMERCE</span>
+          <span id="cart-item-badge" class="text-[11px] font-sans font-semibold text-[#8A9A86]">[ 0 ARTÍCULOS ]</span>
+        </div>
+        <h2 id="cart-drawer-title" class="font-serif text-2xl sm:text-3xl font-medium tracking-wide text-[#243026]">
+          Tu Selección
+        </h2>
+      </div>
+
+      <button 
+        id="cart-close-btn"
+        type="button"
+        aria-label="Cerrar carrito de compras"
+        class="w-10 h-10 rounded-full border border-[#EBE7DF] hover:border-[#8A9A86] bg-white text-[#1C1F1D] flex items-center justify-center transition-all hover:scale-105 active:scale-95"
+      >
+        ✕
+      </button>
+    </div>
+
+    <!-- Free Shipping Progress Indicator -->
+    <div class="px-6 sm:px-8 py-3.5 bg-[#F5F3EF] border-b border-[#EBE7DF]">
+      <div class="flex justify-between text-xs font-sans mb-1.5">
+        <span id="shipping-progress-text" class="text-[#4A5B48] font-medium">
+          Envío internacional asegurado
+        </span>
+        <span id="shipping-progress-val" class="font-bold text-[#243026]">$150 para envío gratuito</span>
+      </div>
+      <div class="w-full h-1.5 bg-[#EBE7DF] rounded-full overflow-hidden">
+        <div 
+          id="shipping-progress-bar" 
+          class="h-full bg-gradient-to-r from-[#8A9A86] to-[#243026] rounded-full transition-all duration-300" 
+          style="width: 0%;"
+        ></div>
+      </div>
+    </div>
+
+    <!-- Scrollable Items List -->
+    <div id="cart-items-container" class="flex-1 overflow-y-auto p-6 sm:p-8 space-y-4">
+      <!-- Items dynamically populated via client JS -->
+      <div id="cart-empty-state" class="h-full flex flex-col items-center justify-center text-center py-12">
+        <div class="w-16 h-16 rounded-full bg-[#F5F3EF] border border-[#EBE7DF] flex items-center justify-center text-2xl mb-4 text-[#8A9A86]">
+          🌿
+        </div>
+        <h3 class="font-serif text-xl text-[#243026] mb-2 font-medium">Tu cesta está vacía</h3>
+        <p class="font-sans text-xs text-neutral-500 max-w-xs leading-relaxed mb-6">
+          Explora nuestra selección de objetos de artesanía serena para transformar tu espacio cotidiano.
+        </p>
+        <button 
+          id="cart-empty-explore-btn" 
+          type="button"
+          class="px-6 py-2.5 rounded-full bg-[#243026] hover:bg-[#344637] text-white font-sans text-xs font-medium transition-all hover:scale-105 active:scale-95"
+        >
+          Explorar Colección
+        </button>
+      </div>
+
+      <div id="cart-items-list" class="space-y-4 hidden">
+        <!-- Injected via JavaScript -->
+      </div>
+    </div>
+
+    <!-- Drawer Footer & Checkout Action -->
+    <div class="p-6 sm:p-8 bg-[#F5F3EF] border-t border-[#EBE7DF] space-y-4">
+      <!-- Summary Lines -->
+      <div class="space-y-2 text-xs font-sans">
+        <div class="flex justify-between text-neutral-600">
+          <span>Subtotal</span>
+          <span id="cart-subtotal" class="font-bold text-[#243026] text-sm">$0 USD</span>
+        </div>
+        <div class="flex justify-between text-neutral-600">
+          <span>Packaging Sostenible & Certificado</span>
+          <span class="text-[#8A9A86] font-medium">Incluido</span>
+        </div>
+        <div class="flex justify-between text-neutral-600">
+          <span>Envío</span>
+          <span id="cart-shipping-cost" class="font-medium">Calculado al pagar</span>
+        </div>
+      </div>
+
+      <!-- Stripe Checkout Primary Button -->
+      <button 
+        id="stripe-checkout-btn"
+        type="button"
+        class="w-full py-4 px-6 rounded-full bg-[#243026] hover:bg-[#344637] text-white font-sans text-sm font-semibold tracking-wide transition-all duration-300 hover:shadow-xl active:scale-[0.98] flex items-center justify-center gap-3 relative overflow-hidden"
+      >
+        <span id="checkout-btn-text">Proceder al Pago con Stripe</span>
+        <span class="text-xs">🔒</span>
+      </button>
+
+      <!-- Status Message Box -->
+      <div id="checkout-status-msg" class="hidden text-center text-xs font-sans font-medium text-[#4A5B48] py-1 bg-white/60 rounded-lg border border-[#EBE7DF]">
+      </div>
+
+      <!-- Trust Badges & Stripe Guarantee -->
+      <div class="pt-2 border-t border-[#EBE7DF]/80 flex flex-col items-center gap-1.5 text-[10px] text-neutral-500 font-sans">
+        <div class="flex items-center gap-3">
+          <span>✓ Encriptación SSL de 256 bits</span>
+          <span>•</span>
+          <span>✓ Certificado PCI DSS Nivel 1</span>
+        </div>
+        <div class="flex items-center gap-2 text-neutral-400">
+          <span>Stripe Checkout</span>
+          <span>|</span>
+          <span>Garantía de Satisfacción 30 Días</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</aside>
+
+<script>
+  import { formatPrice, FREE_SHIPPING_THRESHOLD, initiateStripeCheckout, type CartItem } from '../lib/stripe';
+
+  const STORAGE_KEY = 'stacklab_atelier_cart_v1';
+
+  function escapeHtml(str: unknown): string {
+    if (typeof str !== 'string') return '';
+    return str
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#039;');
+  }
+
+  function sanitizeImageUrl(url: unknown): string {
+    if (typeof url !== 'string') return '/favicon.svg';
+    const trimmed = url.trim();
+    if (/^(https:\/\/|\/)/i.test(trimmed)) {
+      return escapeHtml(trimmed);
+    }
+    return '/favicon.svg';
+  }
+
+  function validateQuantity(qty: unknown): number {
+    const num = typeof qty === 'number' ? qty : parseInt(String(qty), 10);
+    if (isNaN(num) || !isFinite(num) || num <= 0) return 1;
+    return Math.min(Math.floor(num), 99);
+  }
+
+  function initCartDrawer() {
+    const overlay = document.getElementById('cart-drawer-overlay');
+    const closeBtn = document.getElementById('cart-close-btn');
+    const emptyState = document.getElementById('cart-empty-state');
+    const itemsList = document.getElementById('cart-items-list');
+    const exploreBtn = document.getElementById('cart-empty-explore-btn');
+    const subtotalEl = document.getElementById('cart-subtotal');
+    const itemBadge = document.getElementById('cart-item-badge');
+    const shippingBar = document.getElementById('shipping-progress-bar');
+    const shippingText = document.getElementById('shipping-progress-text');
+    const shippingVal = document.getElementById('shipping-progress-val');
+    const checkoutBtn = document.getElementById('stripe-checkout-btn');
+    const checkoutText = document.getElementById('checkout-btn-text');
+    const checkoutMsg = document.getElementById('checkout-status-msg');
+
+    // Load initial cart from localStorage with key fallback and sanitization
+    let cart: CartItem[] = [];
+    try {
+      const saved = localStorage.getItem(STORAGE_KEY) || localStorage.getItem('stacklab_cart');
+      if (saved) {
+        const raw = JSON.parse(saved);
+        if (Array.isArray(raw)) {
+          cart = raw.map(i => ({
+            id: escapeHtml(i.id),
+            name: escapeHtml(i.name),
+            subtitle: escapeHtml(i.subtitle || ''),
+            price: typeof i.price === 'number' ? i.price : 0,
+            currency: escapeHtml(i.currency || 'USD'),
+            image: sanitizeImageUrl(i.image),
+            quantity: validateQuantity(i.quantity),
+            stripePriceId: typeof i.stripePriceId === 'string' ? escapeHtml(i.stripePriceId) : undefined,
+          })).filter(i => i.id.length > 0 && i.quantity > 0);
+        }
+      }
+    } catch (e) {
+      cart = [];
+    }
+
+    function saveCart() {
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(cart));
+        // Backwards compatibility sync
+        localStorage.setItem('stacklab_cart', JSON.stringify(cart));
+      } catch (e) {}
+      renderCart();
+      dispatchCartUpdate();
+    }
+
+    function dispatchCartUpdate() {
+      const totalCount = cart.reduce((sum, i) => sum + i.quantity, 0);
+      const subtotal = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+      window.dispatchEvent(new CustomEvent('cart-updated', {
+        detail: { count: totalCount, subtotal }
+      }));
+    }
+
+    function openDrawer() {
+      if (window.__lenis) {
+        window.__lenis.stop();
+      }
+      overlay?.classList.add('active');
+      document.body.classList.add('lenis-stopped');
+      document.body.style.overflow = 'hidden';
+      if (typeof window.playMechanicalClick === 'function') {
+        window.playMechanicalClick(1400, 0.02);
+      }
+    }
+
+    function closeDrawer() {
+      overlay?.classList.remove('active');
+      document.body.classList.remove('lenis-stopped');
+      document.body.style.overflow = '';
+      if (window.__lenis) {
+        window.__lenis.start();
+      }
+      if (typeof window.playMechanicalClick === 'function') {
+        window.playMechanicalClick(900, 0.02);
+      }
+    }
+
+    function renderCart() {
+      const totalCount = cart.reduce((sum, i) => sum + i.quantity, 0);
+      const subtotal = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+
+      // Update badge and subtotal
+      if (itemBadge) itemBadge.textContent = `[ ${totalCount} ${totalCount === 1 ? 'ARTÍCULO' : 'ARTÍCULOS'} ]`;
+      if (subtotalEl) subtotalEl.textContent = formatPrice(subtotal);
+
+      // Shipping progress
+      if (shippingBar && shippingText && shippingVal) {
+        const progress = Math.min(100, Math.round((subtotal / FREE_SHIPPING_THRESHOLD) * 100));
+        shippingBar.style.width = `${progress}%`;
+        if (subtotal >= FREE_SHIPPING_THRESHOLD) {
+          shippingText.textContent = '🌿 ¡Calificas para Envío Gratuito!';
+          shippingVal.textContent = 'COMPLIMENTARY';
+        } else {
+          const remaining = FREE_SHIPPING_THRESHOLD - subtotal;
+          shippingText.textContent = `Faltan ${formatPrice(remaining)} para envío gratuito`;
+          shippingVal.textContent = `${progress}%`;
+        }
+      }
+
+      // Empty State vs Items List
+      if (cart.length === 0) {
+        emptyState?.classList.remove('hidden');
+        itemsList?.classList.add('hidden');
+        if (itemsList) itemsList.innerHTML = '';
+        return;
+      }
+
+      emptyState?.classList.add('hidden');
+      itemsList?.classList.remove('hidden');
+
+      if (!itemsList) return;
+      itemsList.innerHTML = cart.map((item, idx) => `
+        <div class="flex items-center gap-4 bg-white p-3.5 sm:p-4 rounded-2xl border border-[#EBE7DF] shadow-sm">
+          <img src="${sanitizeImageUrl(item.image)}" alt="${escapeHtml(item.name)}" class="w-16 h-16 sm:w-20 sm:h-20 object-cover rounded-xl border border-[#EBE7DF]" />
+          <div class="flex-1 min-w-0">
+            <h4 class="font-serif text-base sm:text-lg font-medium text-[#243026] truncate leading-tight">${escapeHtml(item.name)}</h4>
+            <p class="font-sans text-[11px] text-neutral-500 truncate mb-2">${escapeHtml(item.subtitle || '')}</p>
+            <div class="flex items-center justify-between">
+              <span class="font-sans text-xs font-bold text-[#243026]">${formatPrice(item.price)}</span>
+              
+              <!-- Quantity Controls -->
+              <div class="flex items-center gap-2 bg-[#F5F3EF] border border-[#EBE7DF] rounded-full px-2 py-0.5">
+                <button type="button" data-action="dec" data-index="${idx}" class="btn-qty w-5 h-5 flex items-center justify-center text-xs text-neutral-600 hover:text-black font-bold active:scale-95" aria-label="Reducir cantidad">−</button>
+                <span class="text-xs font-sans font-semibold min-w-[16px] text-center">${validateQuantity(item.quantity)}</span>
+                <button type="button" data-action="inc" data-index="${idx}" class="btn-qty w-5 h-5 flex items-center justify-center text-xs text-neutral-600 hover:text-black font-bold active:scale-95" aria-label="Aumentar cantidad">+</button>
+              </div>
+            </div>
+          </div>
+          <button type="button" data-action="del" data-index="${idx}" class="btn-del text-neutral-400 hover:text-[#B87D65] p-1 text-sm transition-colors" title="Eliminar artículo" aria-label="Eliminar artículo">✕</button>
+        </div>
+      `).join('');
+
+      // Attach quantity and delete listeners
+      itemsList.querySelectorAll('.btn-qty').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          const target = e.currentTarget as HTMLElement;
+          const action = target.getAttribute('data-action');
+          const index = parseInt(target.getAttribute('data-index') || '0', 10);
+          const cartItem = cart[index];
+          if (!cartItem) return;
+
+          if (action === 'inc') {
+            cartItem.quantity = Math.min(99, cartItem.quantity + 1);
+          } else if (action === 'dec') {
+            cartItem.quantity -= 1;
+            if (cartItem.quantity <= 0) {
+              cart.splice(index, 1);
+            }
+          }
+          saveCart();
+        });
+      });
+
+      itemsList.querySelectorAll('.btn-del').forEach((btn) => {
+        btn.addEventListener('click', (e) => {
+          const target = e.currentTarget as HTMLElement;
+          const index = parseInt(target.getAttribute('data-index') || '0', 10);
+          cart.splice(index, 1);
+          saveCart();
+        });
+      });
+    }
+
+    // Add item to cart with sanitization
+    function addItem(newItem: CartItem) {
+      const sanitizedItem: CartItem = {
+        id: escapeHtml(newItem.id),
+        name: escapeHtml(newItem.name),
+        subtitle: escapeHtml(newItem.subtitle || ''),
+        price: typeof newItem.price === 'number' ? newItem.price : 0,
+        currency: escapeHtml(newItem.currency || 'USD'),
+        image: sanitizeImageUrl(newItem.image),
+        quantity: validateQuantity(newItem.quantity || 1),
+        stripePriceId: typeof newItem.stripePriceId === 'string' ? escapeHtml(newItem.stripePriceId) : undefined,
+      };
+
+      const existing = cart.find(i => i.id === sanitizedItem.id);
+      if (existing) {
+        existing.quantity = Math.min(99, existing.quantity + sanitizedItem.quantity);
+      } else {
+        cart.push(sanitizedItem);
+      }
+      saveCart();
+      openDrawer();
+    }
+
+    // Event listeners
+    closeBtn?.addEventListener('click', closeDrawer);
+    exploreBtn?.addEventListener('click', () => {
+      closeDrawer();
+      const target = document.querySelector('#collection');
+      if (target && window.__lenis) {
+        window.__lenis.scrollTo(target as HTMLElement);
+      }
+    });
+
+    overlay?.addEventListener('click', (e) => {
+      if (e.target === overlay) {
+        closeDrawer();
+      }
+    });
+
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && overlay?.classList.contains('active')) {
+        closeDrawer();
+      }
+    });
+
+    // Global communication hooks
+    window.addEventListener('open-cart', () => openDrawer());
+    window.addEventListener('close-cart', () => closeDrawer());
+    window.addEventListener('add-to-cart', ((e: CustomEvent<CartItem>) => {
+      if (e.detail) {
+        addItem(e.detail);
+      }
+    }) as EventListener);
+
+    // Stripe Checkout Handler -> Redirects to /checkout or initiates Stripe
+    checkoutBtn?.addEventListener('click', async () => {
+      if (cart.length === 0) return;
+      if (checkoutText) checkoutText.textContent = 'Conectando con Stripe Checkout...';
+      if (checkoutBtn) checkoutBtn.setAttribute('disabled', 'true');
+
+      const res = await initiateStripeCheckout(cart);
+      if (checkoutMsg) {
+        checkoutMsg.textContent = res.message;
+        checkoutMsg.classList.remove('hidden');
+      }
+
+      setTimeout(() => {
+        if (checkoutText) checkoutText.textContent = 'Proceder al Pago con Stripe';
+        if (checkoutBtn) checkoutBtn.removeAttribute('disabled');
+        window.location.href = '/checkout';
+      }, 800);
+    });
+
+    // Initial render
+    renderCart();
+    dispatchCartUpdate();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCartDrawer);
+  } else {
+    initCartDrawer();
+  }
+</script>

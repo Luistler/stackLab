@@ -1,0 +1,76 @@
+---
+// DockBar.astro - Floating Zen Luxury Quick-Action Pill Bar
+---
+
+<aside class="fixed bottom-5 sm:bottom-6 left-1/2 -translate-x-1/2 z-30 pointer-events-auto" aria-label="Acciones rápidas">
+  <div class="flex items-center gap-2 sm:gap-4 bg-[#FBFBFA]/90 backdrop-blur-2xl border border-[#EBE7DF] px-3.5 sm:px-5 py-2 sm:py-2.5 rounded-full shadow-[0_12px_36px_rgba(28,31,29,0.08)] text-xs font-sans text-[#1C1F1D] hover:border-[#8A9A86]/40 transition-all">
+    <!-- Complimentary Shipping Badge -->
+    <div class="flex items-center gap-2 pr-2.5 sm:pr-4 border-r border-[#EBE7DF]">
+      <span class="w-1.5 h-1.5 rounded-full bg-[#8A9A86]"></span>
+      <span class="text-[#4A5B48] text-[11px] sm:text-xs font-medium tracking-wide">
+        <span class="hidden md:inline">Envío cortesía en pedidos &gt;$150</span>
+        <span class="md:hidden">Envío gratis &gt;$150</span>
+      </span>
+    </div>
+
+    <!-- Quick Navigation Links -->
+    <div class="flex items-center gap-3 sm:gap-4 text-[#4A5B48]">
+      <a href="#collection" class="hover:text-[#243026] transition-colors font-medium">Colección</a>
+      <a href="#philosophy" class="hover:text-[#243026] transition-colors font-medium hidden sm:inline">Filosofía</a>
+    </div>
+
+    <!-- Quick Cart Trigger Button -->
+    <button 
+      id="dock-cart-btn"
+      type="button"
+      aria-label="Abrir cesta de compras"
+      class="ml-1 sm:ml-2 flex items-center gap-1.5 sm:gap-2 bg-[#243026] hover:bg-[#1C1F1D] text-[#FBFBFA] px-3.5 sm:px-4 py-1.5 rounded-full font-medium text-xs transition-all hover:scale-[1.02] active:scale-95 shadow-sm cursor-pointer"
+    >
+      <svg class="w-3.5 h-3.5 text-[#DCE3DA]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+      </svg>
+      <span>Cesta</span>
+      <span id="dock-cart-count" class="text-[10px] bg-[#4A5B48] text-[#FBFBFA] px-1.5 py-0.5 rounded-full font-bold">0</span>
+    </button>
+  </div>
+</aside>
+
+<script>
+  function setupDockBar() {
+    const dockBtn = document.getElementById('dock-cart-btn');
+    const dockCount = document.getElementById('dock-cart-count');
+
+    // Initialize from localStorage
+    try {
+      const stored = localStorage.getItem('stacklab_atelier_cart_v1') || localStorage.getItem('stacklab_cart');
+      if (stored) {
+        const parsed = JSON.parse(stored);
+        if (Array.isArray(parsed) && dockCount) {
+          const totalItems = parsed.reduce((sum: number, item: { quantity: number }) => sum + (item.quantity || 0), 0);
+          dockCount.textContent = totalItems.toString();
+        }
+      }
+    } catch (e) {
+      // LocalStorage unavailable
+    }
+
+    // Open Cart Drawer
+    if (dockBtn) {
+      dockBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.dispatchEvent(new CustomEvent('open-cart'));
+      });
+    }
+
+    // Sync count on cart-updated
+    window.addEventListener('cart-updated', (e: Event) => {
+      const customEvent = e as CustomEvent<{ count: number }>;
+      if (dockCount && customEvent.detail) {
+        dockCount.textContent = customEvent.detail.count.toString();
+      }
+    });
+  }
+
+  setupDockBar();
+  document.addEventListener('astro:page-load', setupDockBar);
+</script>

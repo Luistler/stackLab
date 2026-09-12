@@ -1,0 +1,674 @@
+---
+// DockerModal.astro - Parser interactivo client-side de docker run a docker-compose.yml
+// Dupla Cómputo & Seguridad StackLab.work (backend-developer + security-auditor)
+// 100% Client-Side, Cero Telemetría, Tokenizer O(N) Anti-ReDoS, Escapado Seguro HTML
+---
+
+<div id="modal-docker" class="modal-overlay fixed inset-0 z-50 bg-black/80 backdrop-blur-2xl flex items-center justify-center p-4 overflow-y-auto opacity-0 pointer-events-none transition-all duration-300">
+  <div class="modal-card bg-[#141414]/95 border border-white/15 rounded-[26px] max-w-3xl w-full p-6 md:p-8 relative shadow-2xl corner-cross text-white transform scale-95 transition-all duration-300 my-8">
+    
+    <!-- Modal Header -->
+    <div class="flex justify-between items-start mb-6 border-b border-white/10 pb-4">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="dymo-label text-[10px]">WIDGET FOCUS // 02</span>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-cyan-500/10 text-cyan-400 border border-cyan-500/20">
+            SAFE PARSER ENGINE
+          </span>
+        </div>
+        <h3 class="font-ndot text-2xl text-white tracking-wider mt-1">
+          DOCKER TO COMPOSE<span class="text-[#D71921]">.</span>
+        </h3>
+        <p class="font-mono text-xs text-neutral-400 mt-0.5">
+          Conversor de comandos `docker run` a manifiestos `docker-compose.yml` limpios
+        </p>
+      </div>
+      <button 
+        id="docker-close-btn"
+        type="button"
+        aria-label="Cerrar modal Docker to Compose"
+        class="btn-sound w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white font-mono text-base flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-[#D71921]"
+      >
+        ✕
+      </button>
+    </div>
+
+    <!-- Input Section -->
+    <div class="space-y-4 font-mono text-xs">
+      <div>
+        <div class="flex justify-between items-center mb-1.5">
+          <label for="docker-input" class="text-neutral-300 font-semibold flex items-center gap-2">
+            <span>COMANDO DOCKER RUN:</span>
+            <span class="text-[10px] font-normal text-neutral-500">(Soporta multilínea con `\`)</span>
+          </label>
+          <div class="flex items-center gap-2">
+            <span class="text-[10px] text-neutral-500">PRESETS:</span>
+            <button 
+              id="docker-preset-vault"
+              type="button"
+              class="btn-sound text-[10px] text-cyan-400 hover:text-cyan-300 hover:underline"
+            >
+              Vaultwarden
+            </button>
+            <span class="text-neutral-600">·</span>
+            <button 
+              id="docker-preset-postgres"
+              type="button"
+              class="btn-sound text-[10px] text-cyan-400 hover:text-cyan-300 hover:underline"
+            >
+              Postgres
+            </button>
+            <span class="text-neutral-600">·</span>
+            <button 
+              id="docker-preset-nginx"
+              type="button"
+              class="btn-sound text-[10px] text-cyan-400 hover:text-cyan-300 hover:underline"
+            >
+              Nginx
+            </button>
+          </div>
+        </div>
+        <textarea 
+          id="docker-input" 
+          rows="4" 
+          class="w-full bg-black/60 border border-white/15 rounded-xl p-3.5 text-white font-mono text-xs leading-relaxed focus:border-[#D71921] focus:ring-1 focus:ring-[#D71921] focus:outline-none placeholder-neutral-600 transition-colors resize-y"
+          placeholder="docker run -d --name mi_servicio -p 8080:80 -v /data:/app/data --restart unless-stopped nginx:alpine"
+          spellcheck="false"
+        >docker run -d \
+  --name stacklab_vault \
+  -p 8080:80 \
+  -p 3012:3012 \
+  -v /opt/vaultwarden/data:/data \
+  -e WEBSOCKET_ENABLED=true \
+  -e SIGNUPS_ALLOWED=false \
+  --restart unless-stopped \
+  --network stacklab_net \
+  --memory 512m \
+  vaultwarden/server:latest</textarea>
+      </div>
+
+      <!-- Action Buttons & Toggles -->
+      <div class="flex flex-wrap justify-between items-center gap-2">
+        <div class="flex items-center gap-2">
+          <button 
+            id="docker-convert-btn"
+            type="button"
+            class="btn-sound bg-white hover:bg-neutral-200 active:scale-95 text-black font-bold px-5 py-2.5 rounded-xl transition-all flex items-center gap-2"
+          >
+            <span>_COMPILAR A YAML</span>
+            <span class="text-neutral-600">⚡</span>
+          </button>
+          
+          <!-- View Toggle: Compose YAML vs .env -->
+          <div class="flex items-center bg-white/5 border border-white/10 rounded-xl p-1">
+            <button 
+              id="docker-view-yaml-btn"
+              type="button"
+              class="btn-sound px-3 py-1 rounded-lg text-[11px] font-bold bg-white/15 text-white transition-colors"
+            >
+              docker-compose.yml
+            </button>
+            <button 
+              id="docker-view-env-btn"
+              type="button"
+              class="btn-sound px-3 py-1 rounded-lg text-[11px] text-neutral-400 hover:text-white transition-colors"
+            >
+              .env Extract
+            </button>
+          </div>
+        </div>
+
+        <button 
+          id="docker-copy-btn"
+          type="button"
+          class="btn-sound border border-white/20 hover:border-white text-white px-4 py-2.5 rounded-xl transition-all flex items-center gap-2 hover:bg-white/5 active:scale-95"
+        >
+          <span id="docker-copy-icon">📋</span>
+          <span id="docker-copy-text">Copiar Manifiesto</span>
+        </button>
+      </div>
+
+      <!-- Output Display with Syntax Highlighting -->
+      <div class="relative">
+        <div class="flex justify-between items-center text-[10px] text-neutral-400 mb-1 px-1">
+          <span id="docker-output-label" class="font-bold uppercase tracking-wider text-emerald-400">
+            DOCKER-COMPOSE.YML (COMPOSE SPEC v3.8)
+          </span>
+          <span id="docker-parsed-stats" class="text-neutral-500 font-mono">
+            SERVICIOS: 1 · PUERTOS: 2 · VOLÚMENES: 1
+          </span>
+        </div>
+
+        <!-- Code Block Container -->
+        <div class="relative rounded-xl border border-white/10 bg-black/70 overflow-hidden">
+          <div class="flex items-center justify-between px-4 py-2 bg-white/[0.03] border-b border-white/5 text-[10px] text-neutral-500">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-[#D71921]/70 inline-block"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-yellow-500/70 inline-block"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-500/70 inline-block"></span>
+              <span id="docker-filename-tag" class="ml-2 font-mono text-neutral-400">docker-compose.yml</span>
+            </div>
+            <span class="font-mono text-[9px] text-neutral-600">ZERO_NETWORK_EXFILTRATION</span>
+          </div>
+
+          <!-- Code View -->
+          <pre 
+            id="docker-code-output" 
+            class="p-4 overflow-x-auto text-[11px] font-mono leading-relaxed max-h-72 select-all focus:outline-none"
+          ></pre>
+        </div>
+      </div>
+
+      <!-- Security & Privacy Guarantee Footer -->
+      <div class="flex items-center justify-between pt-2 border-t border-white/5 text-[10px] text-neutral-500">
+        <span class="flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-cyan-400"></span>
+          NO EVAL() // SAFE O(N) LINEAR LEXER // RE-DOS RESISTANT
+        </span>
+        <span class="font-mono text-neutral-600">SPEC: OCI / DOCKER COMPOSE</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  // @ts-nocheck
+  // Parser Seguro Docker Run -> Docker Compose
+  (function initDockerModal() {
+    const modal = document.getElementById('modal-docker');
+    const closeBtn = document.getElementById('docker-close-btn');
+    const input = document.getElementById('docker-input');
+    const convertBtn = document.getElementById('docker-convert-btn');
+    const copyBtn = document.getElementById('docker-copy-btn');
+    const copyText = document.getElementById('docker-copy-text');
+    const copyIcon = document.getElementById('docker-copy-icon');
+    const codeOutput = document.getElementById('docker-code-output');
+    const statsEl = document.getElementById('docker-parsed-stats');
+    const filenameTag = document.getElementById('docker-filename-tag');
+    const outputLabel = document.getElementById('docker-output-label');
+    const viewYamlBtn = document.getElementById('docker-view-yaml-btn');
+    const viewEnvBtn = document.getElementById('docker-view-env-btn');
+
+    // Presets
+    const presetVaultBtn = document.getElementById('docker-preset-vault');
+    const presetPostgresBtn = document.getElementById('docker-preset-postgres');
+    const presetNginxBtn = document.getElementById('docker-preset-nginx');
+
+    if (!modal || !input || !codeOutput) return;
+
+    let currentYaml = '';
+    let currentEnv = '';
+    let currentMode = 'yaml'; // 'yaml' | 'env'
+
+    // Tokenizer O(N) lineal sin Regex complejos (Anti-ReDoS & Injection-Safe)
+    function tokenize(rawCmd) {
+      const clean = rawCmd.replace(/\\\r?\n/g, ' ').replace(/\\\n/g, ' ').trim();
+      const tokens = [];
+      let current = '';
+      let inDouble = false;
+      let inSingle = false;
+      let escaped = false;
+
+      for (let i = 0; i < clean.length; i++) {
+        const char = clean[i];
+
+        if (escaped) {
+          current += char;
+          escaped = false;
+          continue;
+        }
+
+        if (char === '\\' && !inSingle) {
+          escaped = true;
+          continue;
+        }
+
+        if (char === '"' && !inSingle) {
+          inDouble = !inDouble;
+          continue;
+        }
+
+        if (char === "'" && !inDouble) {
+          inSingle = !inSingle;
+          continue;
+        }
+
+        if (/\s/.test(char) && !inDouble && !inSingle) {
+          if (current.length > 0) {
+            tokens.push(current);
+            current = '';
+          }
+        } else {
+          current += char;
+        }
+      }
+
+      if (current.length > 0) {
+        tokens.push(current);
+      }
+
+      return tokens;
+    }
+
+    // Parser AST de los tokens de docker run
+    function parseDockerRun(tokens) {
+      const config = {
+        name: 'app',
+        image: 'nginx:alpine',
+        restart: '',
+        network: '',
+        ports: [],
+        volumes: [],
+        environment: [],
+        envFiles: [],
+        command: [],
+        workdir: '',
+        user: '',
+        hostname: '',
+        privileged: false,
+        memory: '',
+        cpus: '',
+        entrypoint: ''
+      };
+
+      let idx = 0;
+
+      // Omitir 'docker' y 'run' iniciales si existen
+      if (tokens[idx] === 'docker') idx++;
+      if (tokens[idx] === 'run') idx++;
+
+      let imageFound = false;
+
+      while (idx < tokens.length) {
+        const token = tokens[idx];
+
+        if (imageFound) {
+          // Todo lo posterior a la imagen corresponde al comando / argumentos
+          config.command.push(token);
+          idx++;
+          continue;
+        }
+
+        if (token === '--name' && idx + 1 < tokens.length) {
+          config.name = tokens[++idx];
+        } else if (token.startsWith('--name=')) {
+          config.name = token.slice(7);
+        } else if ((token === '-p' || token === '--publish') && idx + 1 < tokens.length) {
+          config.ports.push(tokens[++idx]);
+        } else if (token.startsWith('-p=')) {
+          config.ports.push(token.slice(3));
+        } else if (token.startsWith('--publish=')) {
+          config.ports.push(token.slice(10));
+        } else if ((token === '-v' || token === '--volume') && idx + 1 < tokens.length) {
+          config.volumes.push(tokens[++idx]);
+        } else if (token.startsWith('-v=')) {
+          config.volumes.push(token.slice(3));
+        } else if (token.startsWith('--volume=')) {
+          config.volumes.push(token.slice(9));
+        } else if ((token === '-e' || token === '--env') && idx + 1 < tokens.length) {
+          config.environment.push(tokens[++idx]);
+        } else if (token.startsWith('-e=')) {
+          config.environment.push(token.slice(3));
+        } else if (token.startsWith('--env=')) {
+          config.environment.push(token.slice(6));
+        } else if (token === '--env-file' && idx + 1 < tokens.length) {
+          config.envFiles.push(tokens[++idx]);
+        } else if (token.startsWith('--env-file=')) {
+          config.envFiles.push(token.slice(11));
+        } else if (token === '--restart' && idx + 1 < tokens.length) {
+          config.restart = tokens[++idx];
+        } else if (token.startsWith('--restart=')) {
+          config.restart = token.slice(10);
+        } else if ((token === '--network' || token === '--net') && idx + 1 < tokens.length) {
+          config.network = tokens[++idx];
+        } else if (token.startsWith('--network=')) {
+          config.network = token.slice(10);
+        } else if (token.startsWith('--net=')) {
+          config.network = token.slice(6);
+        } else if ((token === '-w' || token === '--workdir') && idx + 1 < tokens.length) {
+          config.workdir = tokens[++idx];
+        } else if ((token === '-u' || token === '--user') && idx + 1 < tokens.length) {
+          config.user = tokens[++idx];
+        } else if ((token === '-h' || token === '--hostname') && idx + 1 < tokens.length) {
+          config.hostname = tokens[++idx];
+        } else if (token === '--privileged') {
+          config.privileged = true;
+        } else if ((token === '-m' || token === '--memory') && idx + 1 < tokens.length) {
+          config.memory = tokens[++idx];
+        } else if (token === '--cpus' && idx + 1 < tokens.length) {
+          config.cpus = tokens[++idx];
+        } else if (token === '--entrypoint' && idx + 1 < tokens.length) {
+          config.entrypoint = tokens[++idx];
+        } else if (
+          token === '-d' || 
+          token === '--detach' || 
+          token === '--rm' || 
+          token === '-it' || 
+          token === '-i' || 
+          token === '-t'
+        ) {
+          // Flags conocidos de CLI sin argumento en Compose
+        } else if (!token.startsWith('-')) {
+          // Primer token sin guión que no es argumento de otro flag es la Imagen
+          config.image = token;
+          imageFound = true;
+        }
+
+        idx++;
+      }
+
+      return config;
+    }
+
+    // Generador de Compose YAML
+    function generateYaml(config) {
+      const serviceName = config.name.replace(/[^a-zA-Z0-9_-]/g, '_').toLowerCase() || 'app';
+      const lines = [];
+
+      lines.push("version: '3.8'");
+      lines.push("");
+      lines.push("services:");
+      lines.push(`  ${serviceName}:`);
+      lines.push(`    image: ${config.image}`);
+      lines.push(`    container_name: ${config.name}`);
+
+      if (config.restart) {
+        lines.push(`    restart: ${config.restart}`);
+      }
+
+      if (config.hostname) {
+        lines.push(`    hostname: ${config.hostname}`);
+      }
+
+      if (config.workdir) {
+        lines.push(`    working_dir: ${config.workdir}`);
+      }
+
+      if (config.user) {
+        lines.push(`    user: "${config.user}"`);
+      }
+
+      if (config.privileged) {
+        lines.push(`    privileged: true`);
+      }
+
+      if (config.entrypoint) {
+        lines.push(`    entrypoint: ${config.entrypoint}`);
+      }
+
+      if (config.command.length > 0) {
+        if (config.command.length === 1) {
+          lines.push(`    command: ${config.command[0]}`);
+        } else {
+          lines.push(`    command:`);
+          config.command.forEach(arg => {
+            lines.push(`      - "${arg}"`);
+          });
+        }
+      }
+
+      if (config.network) {
+        lines.push(`    networks:`);
+        lines.push(`      - ${config.network}`);
+      }
+
+      if (config.ports.length > 0) {
+        lines.push(`    ports:`);
+        config.ports.forEach(p => {
+          lines.push(`      - "${p}"`);
+        });
+      }
+
+      if (config.environment.length > 0) {
+        lines.push(`    environment:`);
+        config.environment.forEach(e => {
+          lines.push(`      - ${e}`);
+        });
+      }
+
+      if (config.envFiles.length > 0) {
+        lines.push(`    env_file:`);
+        config.envFiles.forEach(f => {
+          lines.push(`      - ${f}`);
+        });
+      }
+
+      if (config.volumes.length > 0) {
+        lines.push(`    volumes:`);
+        config.volumes.forEach(v => {
+          lines.push(`      - ${v}`);
+        });
+      }
+
+      if (config.memory || config.cpus) {
+        lines.push(`    deploy:`);
+        lines.push(`      resources:`);
+        lines.push(`        limits:`);
+        if (config.cpus) lines.push(`          cpus: '${config.cpus}'`);
+        if (config.memory) lines.push(`          memory: ${config.memory}`);
+      }
+
+      if (config.network) {
+        lines.push("");
+        lines.push("networks:");
+        lines.push(`  ${config.network}:`);
+        lines.push(`    external: true`);
+      }
+
+      return lines.join('\n');
+    }
+
+    // Extracción de variables .env
+    function generateEnvFile(config) {
+      if (!config.environment || config.environment.length === 0) {
+        return `# No se especificaron variables de entorno con -e o --env en el comando.\n# Puedes añadir tus variables aquí:\n# KEY=value`;
+      }
+      const lines = [
+        `# Variables de entorno extraídas de docker run para ${config.name}:`,
+        `# Generado por StackLab Docker-to-Compose`,
+        ""
+      ];
+      config.environment.forEach(item => {
+        lines.push(item);
+      });
+      return lines.join('\n');
+    }
+
+    // Resaltador de sintaxis seguro con Nothing Palette (Escapado HTML estricto)
+    function escapeHtml(str) {
+      return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;');
+    }
+
+    function highlightYaml(yamlText) {
+      const lines = yamlText.split('\n');
+      return lines.map(line => {
+        // Comentarios
+        if (line.trim().startsWith('#')) {
+          return `<span class="text-neutral-500 italic">${escapeHtml(line)}</span>`;
+        }
+
+        // Key: Value
+        const match = line.match(/^(\s*)([a-zA-Z0-9_-]+):(\s*)(.*)$/);
+        if (match) {
+          const indent = match[1] ?? '';
+          const key = match[2] ?? '';
+          const colonSpace = ':' + (match[3] ?? '');
+          const rawVal = match[4] ?? '';
+
+          let highlightedVal = escapeHtml(rawVal);
+          if (rawVal.startsWith('"') || rawVal.startsWith("'")) {
+            highlightedVal = `<span class="text-cyan-300">${escapeHtml(rawVal)}</span>`;
+          } else if (rawVal === 'true' || rawVal === 'false') {
+            highlightedVal = `<span class="text-[#D71921] font-bold">${rawVal}</span>`;
+          } else if (/^\d+$/.test(rawVal)) {
+            highlightedVal = `<span class="text-purple-400">${rawVal}</span>`;
+          }
+
+          return `${indent}<span class="text-emerald-400 font-bold">${escapeHtml(key)}</span>${colonSpace}${highlightedVal}`;
+        }
+
+        // Elementos de lista (- "80:80")
+        const listMatch = line.match(/^(\s*-\s*)(.*)$/);
+        if (listMatch) {
+          const dash = listMatch[1] ?? '';
+          const val = listMatch[2] ?? '';
+          return `${dash}<span class="text-neutral-200">${escapeHtml(val)}</span>`;
+        }
+
+        return escapeHtml(line);
+      }).join('\n');
+    }
+
+    // Renderizado según modo
+    function renderOutput() {
+      const rawCmd = input.value;
+      const tokens = tokenize(rawCmd);
+      const config = parseDockerRun(tokens);
+
+      currentYaml = generateYaml(config);
+      currentEnv = generateEnvFile(config);
+
+      if (statsEl) {
+        statsEl.textContent = `SERVICIOS: 1 · PUERTOS: ${config.ports.length} · VOLS: ${config.volumes.length} · ENVS: ${config.environment.length}`;
+      }
+
+      if (currentMode === 'yaml') {
+        codeOutput.innerHTML = highlightYaml(currentYaml);
+        if (filenameTag) filenameTag.textContent = 'docker-compose.yml';
+        if (outputLabel) outputLabel.textContent = 'DOCKER-COMPOSE.YML (COMPOSE SPEC v3.8)';
+      } else {
+        codeOutput.innerHTML = highlightYaml(currentEnv);
+        if (filenameTag) filenameTag.textContent = '.env';
+        if (outputLabel) outputLabel.textContent = 'ENVIRONMENT VARIABLES (.ENV)';
+      }
+    }
+
+    // Copiar al portapapeles con feedback visual
+    function copyOutput() {
+      const textToCopy = currentMode === 'yaml' ? currentYaml : currentEnv;
+      if (!textToCopy) return;
+
+      navigator.clipboard.writeText(textToCopy).then(() => {
+        if (copyText && copyIcon) {
+          copyIcon.textContent = '✓';
+          copyText.textContent = '¡Copiado!';
+          copyBtn?.classList.add('border-emerald-400', 'text-emerald-400');
+          setTimeout(() => {
+            copyIcon.textContent = '📋';
+            copyText.textContent = currentMode === 'yaml' ? 'Copiar Manifiesto' : 'Copiar .env';
+            copyBtn?.classList.remove('border-emerald-400', 'text-emerald-400');
+          }, 1800);
+        }
+      });
+    }
+
+    // Toggle entre YAML y .env
+    viewYamlBtn?.addEventListener('click', () => {
+      currentMode = 'yaml';
+      viewYamlBtn.classList.add('bg-white/15', 'text-white');
+      viewYamlBtn.classList.remove('text-neutral-400');
+      viewEnvBtn?.classList.remove('bg-white/15', 'text-white');
+      viewEnvBtn?.classList.add('text-neutral-400');
+      if (copyText) copyText.textContent = 'Copiar Manifiesto';
+      renderOutput();
+    });
+
+    viewEnvBtn?.addEventListener('click', () => {
+      currentMode = 'env';
+      viewEnvBtn.classList.add('bg-white/15', 'text-white');
+      viewEnvBtn.classList.remove('text-neutral-400');
+      viewYamlBtn?.classList.remove('bg-white/15', 'text-white');
+      viewYamlBtn?.classList.add('text-neutral-400');
+      if (copyText) copyText.textContent = 'Copiar .env';
+      renderOutput();
+    });
+
+    // Presets Handlers
+    presetVaultBtn?.addEventListener('click', () => {
+      input.value = `docker run -d \\
+  --name stacklab_vault \\
+  -p 8080:80 \\
+  -p 3012:3012 \\
+  -v /opt/vaultwarden/data:/data \\
+  -e WEBSOCKET_ENABLED=true \\
+  -e SIGNUPS_ALLOWED=false \\
+  --restart unless-stopped \\
+  --network stacklab_net \\
+  --memory 512m \\
+  vaultwarden/server:latest`;
+      renderOutput();
+    });
+
+    presetPostgresBtn?.addEventListener('click', () => {
+      input.value = `docker run -d \\
+  --name stacklab_db \\
+  -p 5432:5432 \\
+  -v pgdata:/var/lib/postgresql/data \\
+  -e POSTGRES_USER=admin \\
+  -e POSTGRES_PASSWORD=UltraSecretVaultPassword2026! \\
+  -e POSTGRES_DB=stacklab_production \\
+  --restart always \\
+  --network stacklab_net \\
+  --shm-size 256m \\
+  postgres:16-alpine`;
+      renderOutput();
+    });
+
+    presetNginxBtn?.addEventListener('click', () => {
+      input.value = `docker run -d \\
+  --name stacklab_proxy \\
+  -p 80:80 \\
+  -p 443:443 \\
+  -v /etc/nginx/conf.d:/etc/nginx/conf.d:ro \\
+  -v /etc/ssl/certs:/etc/ssl/certs:ro \\
+  --restart unless-stopped \\
+  nginx:alpine`;
+      renderOutput();
+    });
+
+    convertBtn?.addEventListener('click', renderOutput);
+    copyBtn?.addEventListener('click', copyOutput);
+    input?.addEventListener('input', renderOutput);
+
+    function closeDockerModal() {
+      if (typeof window.closeToolModal === 'function') {
+        window.closeToolModal(modal);
+        return;
+      }
+      modal.classList.remove('active');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      const card = modal.querySelector('.modal-card');
+      if (card) {
+        card.classList.remove('scale-100');
+        card.classList.add('scale-95');
+      }
+      const anyActive = document.querySelector('.modal-overlay.active');
+      if (!anyActive) {
+        document.body.classList.remove('lenis-stopped');
+        document.body.style.overflow = '';
+        if (window.lenis) {
+          window.lenis.start();
+        }
+      }
+      if (typeof window.playMechanicalClick === 'function') {
+        window.playMechanicalClick(900, 0.02);
+      }
+    }
+
+    closeBtn?.addEventListener('click', closeDockerModal);
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeDockerModal();
+      }
+    });
+
+    // Parseo inicial
+    renderOutput();
+  })();
+</script>

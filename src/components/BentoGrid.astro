@@ -1,0 +1,312 @@
+---
+// BentoGrid.astro - Grilla de tarjetas Bento e integración de modales interactivos
+// Dupla Cómputo & Seguridad StackLab.work (backend-developer + security-auditor)
+// Interacción client-side, efecto cristal esmerilado suave (frosted glass), accesible y zero-telemetry
+
+import CidrModal from './tools/CidrModal.astro';
+import DockerModal from './tools/DockerModal.astro';
+import CryptoModal from './tools/CryptoModal.astro';
+---
+
+<section id="capabilities" class="py-24 px-6 bg-[#0B0B0B] relative z-20 border-t border-white/10">
+  <div class="max-w-6xl mx-auto">
+    
+    <!-- Section Header -->
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-16 gap-4">
+      <div>
+        <div class="flex items-center gap-3 mb-3">
+          <span class="dymo-label">SUITE // BENTO</span>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-white/5 text-neutral-400 border border-white/10">
+            LOCAL-FIRST ARTIFACTS
+          </span>
+        </div>
+        <h2 class="font-ndot text-3xl md:text-5xl text-white tracking-widest uppercase mt-1">
+          FUNCTIONAL ARTIFACTS<span class="text-[#D71921]">.</span>
+        </h2>
+      </div>
+      <p class="font-mono text-xs text-neutral-400 max-w-md leading-relaxed">
+        Micro-herramientas modulares de ingeniería, cómputo y seguridad. Cero peticiones salientes, 100% ejecutadas en el navegador del cliente.
+      </p>
+    </div>
+
+    <!-- Bento Grid (3 Columnas) -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      
+      <!-- Bento Card 1: CIDR Matrix -->
+      <div 
+        role="button"
+        tabindex="0"
+        data-modal-target="modal-cidr"
+        aria-haspopup="dialog"
+        aria-label="Abrir calculadora CIDR Subnet Matrix"
+        class="bento-card btn-sound bg-[#141414]/90 backdrop-blur-2xl border border-white/10 hover:border-white/30 rounded-[26px] p-8 transition-all duration-300 hover:-translate-y-1.5 group relative corner-cross cursor-pointer shadow-xl focus:outline-none focus:ring-2 focus:ring-[#D71921]"
+      >
+        <div class="flex justify-between items-start mb-6">
+          <div class="font-ndot text-xs text-[#D71921] tracking-widest">01 // NETWORKING</div>
+          <span class="font-mono text-[10px] px-2 py-0.5 rounded-full bg-white/5 text-neutral-400 border border-white/5 group-hover:border-white/20 transition-colors">
+            CLICK TO OPEN
+          </span>
+        </div>
+
+        <h3 class="font-ndot text-xl text-white tracking-wide mb-3 group-hover:text-[#D71921] transition-colors">
+          CIDR SUBNET MATRIX
+        </h3>
+
+        <p class="font-mono text-xs text-neutral-400 leading-relaxed mb-6">
+          Calculadora y visualizador interactivo de 32 bits para subredes IPv4. Máscaras, broadcast y rangos utilizables al instante con desglose binario CCNA.
+        </p>
+
+        <div class="font-mono text-[11px] text-neutral-500 border-t border-white/5 pt-4 flex justify-between items-center">
+          <span class="text-neutral-400 group-hover:text-white transition-colors">> _calculate(ip/cidr)</span>
+          <span class="text-emerald-400 font-bold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+            LAUNCH ↗
+          </span>
+        </div>
+      </div>
+
+      <!-- Bento Card 2: Docker to Compose -->
+      <div 
+        role="button"
+        tabindex="0"
+        data-modal-target="modal-docker"
+        aria-haspopup="dialog"
+        aria-label="Abrir convertidor Docker to Compose"
+        class="bento-card btn-sound bg-[#141414]/90 backdrop-blur-2xl border border-white/10 hover:border-white/30 rounded-[26px] p-8 transition-all duration-300 hover:-translate-y-1.5 group relative corner-cross cursor-pointer shadow-xl focus:outline-none focus:ring-2 focus:ring-[#D71921]"
+      >
+        <div class="flex justify-between items-start mb-6">
+          <div class="font-ndot text-xs text-[#D71921] tracking-widest">02 // DEVOPS</div>
+          <span class="font-mono text-[10px] px-2 py-0.5 rounded-full bg-white/5 text-neutral-400 border border-white/5 group-hover:border-white/20 transition-colors">
+            CLICK TO OPEN
+          </span>
+        </div>
+
+        <h3 class="font-ndot text-xl text-white tracking-wide mb-3 group-hover:text-[#D71921] transition-colors">
+          DOCKER TO COMPOSE
+        </h3>
+
+        <p class="font-mono text-xs text-neutral-400 leading-relaxed mb-6">
+          Convierte comandos docker run de una sola línea en manifiestos docker-compose.yml limpios con extracción de variables .env y coloreado sintáctico.
+        </p>
+
+        <div class="font-mono text-[11px] text-neutral-500 border-t border-white/5 pt-4 flex justify-between items-center">
+          <span class="text-neutral-400 group-hover:text-white transition-colors">> _parse(docker_run)</span>
+          <span class="text-cyan-400 font-bold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+            LAUNCH ↗
+          </span>
+        </div>
+      </div>
+
+      <!-- Bento Card 3: Shannon Vault -->
+      <div 
+        role="button"
+        tabindex="0"
+        data-modal-target="modal-crypto"
+        aria-haspopup="dialog"
+        aria-label="Abrir Shannon Vault Cryptographic Tools"
+        class="bento-card btn-sound bg-[#141414]/90 backdrop-blur-2xl border border-white/10 hover:border-white/30 rounded-[26px] p-8 transition-all duration-300 hover:-translate-y-1.5 group relative corner-cross cursor-pointer shadow-xl focus:outline-none focus:ring-2 focus:ring-[#D71921]"
+      >
+        <div class="flex justify-between items-start mb-6">
+          <div class="font-ndot text-xs text-[#D71921] tracking-widest">03 // CRYPTO</div>
+          <span class="font-mono text-[10px] px-2 py-0.5 rounded-full bg-white/5 text-neutral-400 border border-white/5 group-hover:border-white/20 transition-colors">
+            CLICK TO OPEN
+          </span>
+        </div>
+
+        <h3 class="font-ndot text-xl text-white tracking-wide mb-3 group-hover:text-[#D71921] transition-colors">
+          SHANNON VAULT
+        </h3>
+
+        <p class="font-mono text-xs text-neutral-400 leading-relaxed mb-6">
+          Generador de contraseñas de alta entropía (CSPRNG) y calculadora de hashes SHA-256 en tiempo real sin que ninguna cadena viaje a través de la red.
+        </p>
+
+        <div class="font-mono text-[11px] text-neutral-500 border-t border-white/5 pt-4 flex justify-between items-center">
+          <span class="text-neutral-400 group-hover:text-white transition-colors">> _entropy(bits)</span>
+          <span class="text-[#D71921] font-bold group-hover:translate-x-1 transition-transform inline-flex items-center gap-1">
+            LAUNCH ↗
+          </span>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Renderizado de Modales de Herramientas -->
+  <CidrModal />
+  <DockerModal />
+  <CryptoModal />
+</section>
+
+<style is:global>
+  /* Dymo Embossed Industrial Tape Label */
+  .dymo-label {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.2rem 0.6rem;
+    background: linear-gradient(180deg, #242424 0%, #111111 100%);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+    border-radius: 4px;
+    color: #FFFFFF;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.7);
+    text-shadow: 0 1px 0 rgba(0, 0, 0, 0.9), 0 -1px 0 rgba(255, 255, 255, 0.25);
+    user-select: none;
+  }
+
+  /* Corner crosshairs industrial Nothing design */
+  .corner-cross::before {
+    content: '+';
+    position: absolute;
+    top: 10px;
+    left: 14px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: #545458;
+    pointer-events: none;
+  }
+  .corner-cross::after {
+    content: '+';
+    position: absolute;
+    top: 10px;
+    right: 14px;
+    font-family: 'Space Mono', monospace;
+    font-size: 10px;
+    color: #545458;
+    pointer-events: none;
+  }
+
+  /* Modals frosted glass overlay */
+  .modal-overlay {
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+  }
+
+  .modal-overlay.active {
+    opacity: 1 !important;
+    pointer-events: auto !important;
+  }
+
+  .modal-overlay.active .modal-card {
+    transform: scale(1) translateY(0) !important;
+  }
+</style>
+
+<script>
+  // @ts-nocheck
+  // Controlador de Integración BentoGrid & Modales con Efecto Cristal Esmerilado
+  (function initBentoGrid() {
+    // Sintetizador Web Audio API: Micro-clicks mecánicos táctiles
+    let audioCtx: AudioContext | null = null;
+    function playClickSound(freq = 1300, duration = 0.02) {
+      try {
+        if (!audioCtx) {
+          const AudioContextClass = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+          if (AudioContextClass) {
+            audioCtx = new AudioContextClass();
+          }
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(120, audioCtx.currentTime + duration);
+
+        gain.gain.setValueAtTime(0.2, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + duration);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + duration);
+      } catch (e) {
+        // Fallback silencioso si el navegador restringe audio sin interacción
+      }
+    }
+
+    function openModal(modalId: string) {
+      playClickSound(1400, 0.03);
+      const modal = document.getElementById(modalId);
+      if (!modal) return;
+
+      modal.classList.add('active');
+      modal.classList.remove('opacity-0', 'pointer-events-none');
+      const card = modal.querySelector('.modal-card');
+      if (card) {
+        card.classList.remove('scale-95');
+        card.classList.add('scale-100');
+      }
+
+      // Bloquear scroll de fondo
+      document.body.style.overflow = 'hidden';
+
+      // Focus al primer input interactivo
+      setTimeout(() => {
+        const firstInput = modal.querySelector('input, textarea, button') as HTMLElement | null;
+        firstInput?.focus();
+      }, 50);
+    }
+
+    function closeModal(modal: HTMLElement) {
+      playClickSound(900, 0.02);
+      modal.classList.remove('active');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      const card = modal.querySelector('.modal-card');
+      if (card) {
+        card.classList.remove('scale-100');
+        card.classList.add('scale-95');
+      }
+
+      // Restaurar scroll si no hay otros modales abiertos
+      const anyActive = document.querySelector('.modal-overlay.active');
+      if (!anyActive) {
+        document.body.style.overflow = '';
+      }
+    }
+
+    // Vinculación de clic en las Bento Cards
+    const bentoCards = document.querySelectorAll('.bento-card');
+    bentoCards.forEach((card) => {
+      const targetModalId = card.getAttribute('data-modal-target');
+      if (!targetModalId) return;
+
+      const triggerOpen = () => openModal(targetModalId);
+
+      card.addEventListener('click', triggerOpen);
+      card.addEventListener('keydown', (e: Event) => {
+        const keyEvent = e as KeyboardEvent;
+        if (keyEvent.key === 'Enter' || keyEvent.key === ' ') {
+          keyEvent.preventDefault();
+          triggerOpen();
+        }
+      });
+    });
+
+    // Delegación global para botones de cierre y backdrop
+    document.querySelectorAll('.modal-overlay').forEach((modalOverlay) => {
+      const el = modalOverlay as HTMLElement;
+      // Cerrar al hacer clic en fondo
+      el.addEventListener('click', (e) => {
+        if (e.target === el) {
+          closeModal(el);
+        }
+      });
+    });
+
+    // Cerrar con tecla Escape
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        const activeModals = document.querySelectorAll('.modal-overlay.active');
+        activeModals.forEach((m) => closeModal(m as HTMLElement));
+      }
+    });
+  })();
+</script>

@@ -1,0 +1,133 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Hero from '../components/Hero.astro';
+import StickyScrollytelling from '../components/StickyScrollytelling.astro';
+import ArtifactReel from '../components/ArtifactReel.astro';
+import DockBar from '../components/DockBar.astro';
+import CartDrawer from '../components/CartDrawer.astro';
+---
+
+<Layout 
+  title="StackLab Atelier // Mindful Objects & Serene Living"
+  description="Colección curada de objetos artesanales, cerámica atemporal y piezas de bienestar diseñadas para elevar la serenidad del espacio cotidiano."
+>
+  <!-- Main Glassmorphic Navigation -->
+  <Navigation />
+
+  <!-- Core Scrollytelling Experience -->
+  <main>
+    <Hero />
+    <StickyScrollytelling />
+    <ArtifactReel />
+  </main>
+
+  <!-- Interactive Slide-Over Cart Drawer -->
+  <CartDrawer />
+
+  <!-- Floating Quick-Action Zen Dock -->
+  <DockBar />
+  
+  <!-- Zen Atelier Editorial Footer -->
+  <footer class="bg-[#F5F3EF] border-t border-[#EBE7DF] text-[#1C1F1D] relative z-20 pt-20 pb-28 sm:pb-24">
+    <div class="max-w-6xl mx-auto px-6 sm:px-8">
+      
+      <!-- Newsletter & Intentional Living Statement -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 pb-16 border-b border-[#EBE7DF]">
+        <div class="lg:col-span-6 space-y-4">
+          <span class="inline-flex items-center gap-2 text-xs uppercase tracking-widest font-sans font-semibold text-[#4A5B48]">
+            <span class="w-1.5 h-1.5 rounded-full bg-[#8A9A86]"></span>
+            Correspondencia Privada
+          </span>
+          <h2 class="font-serif text-3xl sm:text-4xl text-[#243026] leading-tight">
+            Vivir con intención, rodearse de serenidad.
+          </h2>
+          <p class="text-sm text-[#4A5B48] leading-relaxed max-w-md">
+            Suscríbete a nuestra correspondencia mensual para recibir notas de estudio, descubrimientos sobre artesanía pausada y acceso prioritario a ediciones limitadas.
+          </p>
+        </div>
+
+        <div class="lg:col-span-6 flex flex-col justify-center">
+          <form id="newsletter-form" class="flex flex-col sm:flex-row gap-3 w-full max-w-md">
+            <label for="newsletter-email" class="sr-only">Correo electrónico</label>
+            <input 
+              id="newsletter-email"
+              type="email" 
+              required
+              placeholder="tu@correo.com" 
+              class="flex-1 px-4 py-3 rounded-full bg-[#FBFBFA] border border-[#EBE7DF] text-sm text-[#1C1F1D] placeholder-[#8A9A86] focus:outline-none focus:border-[#4A5B48] transition-colors"
+            />
+            <button 
+              type="submit"
+              class="px-6 py-3 rounded-full bg-[#243026] hover:bg-[#1C1F1D] text-[#FBFBFA] text-xs uppercase tracking-widest font-medium transition-all hover:scale-[1.02] active:scale-95 cursor-pointer"
+            >
+              Suscribirse
+            </button>
+          </form>
+          <p class="text-[11px] text-[#8A9A86] mt-2">Cero publicidad intrusiva. Solo cartas reflexivas y lanzamientos selectos.</p>
+        </div>
+      </div>
+
+      <!-- Guarantees & Pillars Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 py-12 border-b border-[#EBE7DF] text-xs text-[#4A5B48]">
+        <div class="flex items-start gap-3.5">
+          <div class="w-8 h-8 rounded-full bg-[#EBE7DF] flex items-center justify-center shrink-0 text-[#243026]">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 8h14M5 8a2 2 0 110-4h14a2 2 0 110 4M5 8v10a2 2 0 002 2h10a2 2 0 002-2V8m-9 4h4" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-bold text-[#243026] mb-1">Embalaje Sostenible</h3>
+            <p class="leading-relaxed">Envío libre de plásticos en cajas recicladas con sellado de papel kraft y protección biodegradable.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3.5">
+          <div class="w-8 h-8 rounded-full bg-[#EBE7DF] flex items-center justify-center shrink-0 text-[#243026]">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-bold text-[#243026] mb-1">Checkout Seguro Stripe</h3>
+            <p class="leading-relaxed">Transacciones cifradas bajo estándares PCI DSS Nivel 1. Métodos de pago globales y protección total.</p>
+          </div>
+        </div>
+
+        <div class="flex items-start gap-3.5">
+          <div class="w-8 h-8 rounded-full bg-[#EBE7DF] flex items-center justify-center shrink-0 text-[#243026]">
+            <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </div>
+          <div>
+            <h3 class="font-bold text-[#243026] mb-1">Garantía de Origen</h3>
+            <p class="leading-relaxed">Cada objeto incluye certificado numerado de taller con trazabilidad de materias primas naturales.</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Footer Bottom Navigation & Copyright -->
+      <div class="pt-10 flex flex-col md:flex-row justify-between items-center gap-6 text-xs text-[#717E6F]">
+        <div class="flex items-center gap-3">
+          <span class="font-serif tracking-wider font-bold text-[#243026] text-sm">STACKLAB ATELIER</span>
+          <span>//</span>
+          <span>Mindful Objects & Serene Living</span>
+        </div>
+
+        <div class="flex items-center gap-6">
+          <a href="#collection" class="hover:text-[#243026] transition-colors">Colección</a>
+          <a href="#philosophy" class="hover:text-[#243026] transition-colors">Filosofía</a>
+          <a href="#craft" class="hover:text-[#243026] transition-colors">Artesanía</a>
+          <a href="#" class="hover:text-[#243026] transition-colors">Cuidados</a>
+          <a href="#" class="hover:text-[#243026] transition-colors">Privacidad</a>
+        </div>
+
+        <p class="text-[11px]">
+          © {new Date().getFullYear()} StackLab Atelier. Inspirado en el estándar de movimiento ERA Residence.
+        </p>
+      </div>
+
+    </div>
+  </footer>
+</Layout>

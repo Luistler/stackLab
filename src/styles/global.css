@@ -1,0 +1,271 @@
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,400;1,500&family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-bg: #FBFBFA;
+    --color-surface: #F5F3EF;
+    --color-accent: #8A9A86;
+    --color-matcha: #4A5B48;
+    --color-forest: #243026;
+    --color-charcoal: #1C1F1D;
+    --color-sand: #EBE7DF;
+  }
+
+  html {
+    background-color: #FBFBFA;
+    color: #1C1F1D;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: #FBFBFA;
+    color: #1C1F1D;
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  ::selection {
+    background-color: #8A9A86;
+    color: #FFFFFF;
+  }
+}
+
+/* ==========================================================================
+   Lenis Smooth Scroll Engine CSS
+   ========================================================================== */
+html.lenis, html.lenis body {
+  height: auto;
+}
+
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+.lenis.lenis-scrolling iframe {
+  pointer-events: none;
+}
+
+/* Zen Texture Subtle Canvas */
+.bg-zen-canvas {
+  background-color: #FBFBFA;
+  background-image: radial-gradient(rgba(45, 71, 54, 0.04) 1px, transparent 1px);
+  background-size: 28px 28px;
+}
+
+/* Zen Tactile Pill Badge */
+.zen-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  background-color: #F5F3EF;
+  border: 1px solid #EBE7DF;
+  border-radius: 9999px;
+  color: #4A5B48;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  user-select: none;
+}
+
+/* Zen Architectural Card */
+.zen-card {
+  background: #F5F3EF;
+  border: 1px solid #EBE7DF;
+  border-radius: 24px;
+  box-shadow: 0 20px 45px -15px rgba(28, 31, 29, 0.06), 0 0 1px 1px rgba(235, 231, 223, 0.6);
+  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.zen-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 30px 60px -20px rgba(36, 48, 38, 0.12), 0 0 1px 1px rgba(138, 154, 134, 0.3);
+}
+
+/* ==========================================================================
+   Editorial Typography & Architectural Clip-Path Utilities
+   ========================================================================== */
+.editorial-mask {
+  overflow: hidden;
+  display: block;
+}
+
+.clip-polygon-panel {
+  clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
+  will-change: clip-path, transform;
+}
+
+.clip-inset-reveal {
+  clip-path: inset(0% 0% 0% 0% round 24px);
+  will-change: clip-path, transform;
+}
+
+/* Scrollytelling Container & Visual Elements (Engineered for 60 FPS) */
+.story-container {
+  position: relative;
+  height: 350dvh;
+}
+
+.sticky-visual {
+  position: sticky;
+  top: 0;
+  height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.visual-step {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+  transform: scale(0.96);
+  will-change: opacity, transform, clip-path;
+}
+
+.visual-step.active {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.story-text-container {
+  position: relative;
+  z-index: 10;
+  margin-top: -100dvh;
+  pointer-events: none;
+}
+
+.story-step {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+
+.story-card {
+  background: rgba(251, 251, 250, 0.94);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid #EBE7DF;
+  box-shadow: 0 25px 50px -12px rgba(28, 31, 29, 0.08), 0 0 1px 1px rgba(235, 231, 223, 0.6);
+  border-radius: 24px;
+  max-width: 520px;
+  pointer-events: auto;
+  opacity: 0;
+  transform: translateY(32px);
+  transition: all 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+  will-change: opacity, transform;
+  position: relative;
+}
+
+.story-step.in-view .story-card {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ==========================================================================
+   Cart Drawer Transitions
+   ========================================================================== */
+.cart-overlay {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.cart-overlay.active {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+.cart-drawer-panel {
+  transform: translateX(100%);
+  transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.cart-overlay.active .cart-drawer-panel {
+  transform: translateX(0) !important;
+}
+
+/* ==========================================================================
+   Prefers-Reduced-Motion Fallbacks (WCAG 2.1 AA Compliance)
+   ========================================================================== */
+@media (prefers-reduced-motion: reduce) {
+  *, ::before, ::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .clip-polygon-panel,
+  .clip-inset-reveal {
+    clip-path: none !important;
+    transform: none !important;
+  }
+
+  .visual-step {
+    opacity: 1 !important;
+    transform: none !important;
+    position: relative !important;
+  }
+
+  .story-card {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .story-container {
+    height: auto !important;
+  }
+
+  .sticky-visual {
+    position: relative !important;
+    height: auto !important;
+  }
+
+  .story-text-container {
+    margin-top: 0 !important;
+  }
+
+  .story-step {
+    min-height: auto !important;
+    padding: 2rem 1rem !important;
+  }
+
+  .horizontal-track {
+    transform: none !important;
+    flex-direction: column !important;
+    width: 100% !important;
+  }
+
+  .horizontal-reel-container {
+    height: auto !important;
+  }
+}

@@ -1,0 +1,466 @@
+---
+// CryptoModal.astro - Generador de contraseñas de alta entropía (CSPRNG) y calculadora SHA-256 en tiempo real
+// Dupla Cómputo & Seguridad StackLab.work (backend-developer + security-auditor)
+// 100% Client-Side, WebCrypto API Nativa, Shannon Entropy Calculator, Cero Telemetría
+---
+
+<div id="modal-crypto" class="modal-overlay fixed inset-0 z-50 bg-black/80 backdrop-blur-2xl flex items-center justify-center p-4 overflow-y-auto opacity-0 pointer-events-none transition-all duration-300">
+  <div class="modal-card bg-[#141414]/95 border border-white/15 rounded-[26px] max-w-3xl w-full p-6 md:p-8 relative shadow-2xl corner-cross text-white transform scale-95 transition-all duration-300 my-8">
+    
+    <!-- Modal Header -->
+    <div class="flex justify-between items-start mb-6 border-b border-white/10 pb-4">
+      <div>
+        <div class="flex items-center gap-2">
+          <span class="dymo-label text-[10px]">WIDGET FOCUS // 03</span>
+          <span class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-red-500/10 text-[#D71921] border border-red-500/20 font-bold">
+            WEBCRYPTO CSPRNG
+          </span>
+        </div>
+        <h3 class="font-ndot text-2xl text-white tracking-wider mt-1">
+          SHANNON VAULT<span class="text-[#D71921]">.</span>
+        </h3>
+        <p class="font-mono text-xs text-neutral-400 mt-0.5">
+          Generador de contraseñas de alta entropía y hashing SHA-256 en memoria volátil local
+        </p>
+      </div>
+      <button 
+        id="crypto-close-btn"
+        type="button"
+        aria-label="Cerrar modal Shannon Vault"
+        class="btn-sound w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 text-white font-mono text-base flex items-center justify-center transition-colors focus:outline-none focus:ring-2 focus:ring-[#D71921]"
+      >
+        ✕
+      </button>
+    </div>
+
+    <!-- Main Container -->
+    <div class="space-y-6 font-mono text-xs">
+
+      <!-- SECTION 1: High Entropy Password Generator -->
+      <div class="bg-black/50 border border-white/10 rounded-2xl p-4 sm:p-5">
+        <div class="flex justify-between items-center mb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+            <span class="text-neutral-300 font-bold tracking-wider uppercase text-[11px]">
+              GENERADOR DE CONTRASEÑA CRIPTOGRÁFICA
+            </span>
+          </div>
+          <span id="crypto-entropy-badge" class="px-2.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-bold">
+            157.3 BITS · PARANOID LEVEL
+          </span>
+        </div>
+
+        <!-- Output Password Box -->
+        <div class="flex flex-col sm:flex-row gap-2 mb-4">
+          <div class="relative flex-1">
+            <input 
+              id="crypto-pass-output" 
+              type="text" 
+              readonly 
+              class="w-full bg-black/80 border border-white/15 rounded-xl px-4 py-3 text-emerald-400 font-mono text-sm tracking-wider focus:border-emerald-400 focus:outline-none select-all shadow-inner"
+              value="Generando contraseña..."
+            />
+          </div>
+          <div class="flex gap-2">
+            <button 
+              id="crypto-regen-btn"
+              type="button"
+              class="btn-sound bg-white hover:bg-neutral-200 active:scale-95 text-black font-bold px-4 py-3 rounded-xl transition-all flex items-center gap-2"
+              title="Generar nueva contraseña con entropía criptográfica"
+            >
+              <span>_REGENERAR</span>
+              <span class="text-neutral-600">↻</span>
+            </button>
+            <button 
+              id="crypto-copy-pass-btn"
+              type="button"
+              class="btn-sound border border-white/20 hover:border-white text-white px-4 py-3 rounded-xl transition-all flex items-center gap-2 hover:bg-white/5 active:scale-95"
+              title="Copiar contraseña al portapapeles"
+            >
+              <span id="crypto-pass-copy-icon">📋</span>
+              <span id="crypto-pass-copy-text">Copiar</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Entropy Progress Bar -->
+        <div class="mb-4">
+          <div class="flex justify-between text-[10px] text-neutral-400 mb-1">
+            <span>ENTROPÍA DE SHANNON ($H = L \cdot \log_2 N$)</span>
+            <span id="crypto-entropy-text" class="text-emerald-400 font-bold">157.3 bits</span>
+          </div>
+          <div class="w-full h-1.5 bg-white/10 rounded-full overflow-hidden">
+            <div 
+              id="crypto-entropy-bar" 
+              class="h-full bg-gradient-to-r from-yellow-500 via-emerald-400 to-cyan-400 transition-all duration-300 rounded-full" 
+              style="width: 95%;"
+            ></div>
+          </div>
+        </div>
+
+        <!-- Controls: Length Slider & Toggles -->
+        <div class="space-y-3 pt-2 border-t border-white/5">
+          <!-- Slider -->
+          <div class="flex items-center justify-between gap-4">
+            <label for="crypto-length-slider" class="text-neutral-400 text-[11px] whitespace-nowrap">
+              LONGITUD: <span id="crypto-length-val" class="text-white font-bold ml-1">24</span> CARACTERES
+            </label>
+            <input 
+              id="crypto-length-slider" 
+              type="range" 
+              min="8" 
+              max="64" 
+              value="24" 
+              class="w-full max-w-xs accent-[#D71921] bg-white/10 h-1.5 rounded-lg appearance-none cursor-pointer"
+            />
+          </div>
+
+          <!-- Character Set Toggles -->
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1">
+            <label class="flex items-center gap-2 p-2 rounded-lg bg-white/[0.02] border border-white/5 hover:border-white/15 cursor-pointer transition-colors">
+              <input type="checkbox" id="crypto-opt-upper" checked class="accent-[#D71921] rounded" />
+              <span class="text-neutral-300 text-[11px]">Mayúsculas (A-Z)</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded-lg bg-white/[0.02] border border-white/5 hover:border-white/15 cursor-pointer transition-colors">
+              <input type="checkbox" id="crypto-opt-lower" checked class="accent-[#D71921] rounded" />
+              <span class="text-neutral-300 text-[11px]">Minúsculas (a-z)</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded-lg bg-white/[0.02] border border-white/5 hover:border-white/15 cursor-pointer transition-colors">
+              <input type="checkbox" id="crypto-opt-num" checked class="accent-[#D71921] rounded" />
+              <span class="text-neutral-300 text-[11px]">Números (0-9)</span>
+            </label>
+            <label class="flex items-center gap-2 p-2 rounded-lg bg-white/[0.02] border border-white/5 hover:border-white/15 cursor-pointer transition-colors">
+              <input type="checkbox" id="crypto-opt-sym" checked class="accent-[#D71921] rounded" />
+              <span class="text-neutral-300 text-[11px]">Símbolos (!@#$)</span>
+            </label>
+          </div>
+
+          <!-- Avoid Ambiguous -->
+          <div class="flex items-center justify-between pt-1">
+            <label class="flex items-center gap-2 cursor-pointer text-neutral-400 hover:text-neutral-200 transition-colors">
+              <input type="checkbox" id="crypto-opt-no-ambig" class="accent-[#D71921] rounded" />
+              <span class="text-[10px]">Excluir caracteres ambiguos (0, O, l, 1, I)</span>
+            </label>
+            <span class="text-[9px] text-neutral-600">CSPRNG: window.crypto.getRandomValues</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SECTION 2: Real-time SHA-256 Hash Calculator -->
+      <div class="bg-black/50 border border-white/10 rounded-2xl p-4 sm:p-5">
+        <div class="flex justify-between items-center mb-3">
+          <div class="flex items-center gap-2">
+            <span class="w-2 h-2 rounded-full bg-[#D71921]"></span>
+            <span class="text-neutral-300 font-bold tracking-wider uppercase text-[11px]">
+              CALCULADORA DE HASH SHA-256 (TIEMPO REAL)
+            </span>
+          </div>
+          <div class="flex items-center gap-2">
+            <span id="crypto-hash-stats" class="text-[10px] text-neutral-500 font-mono">
+              BYTES: 30 · CARACTERES: 30
+            </span>
+          </div>
+        </div>
+
+        <div class="space-y-3">
+          <div>
+            <label for="crypto-hash-input" class="text-neutral-400 block mb-1 text-[10px]">
+              TEXTO DE ENTRADA (Cálculo instantáneo por hardware con SubtleCrypto):
+            </label>
+            <input 
+              id="crypto-hash-input" 
+              type="text" 
+              value="StackLab.work//Nothing.Edition" 
+              class="w-full bg-black/80 border border-white/15 rounded-xl px-4 py-2.5 text-white font-mono text-xs focus:border-[#D71921] focus:ring-1 focus:ring-[#D71921] focus:outline-none placeholder-neutral-600 transition-colors" 
+              placeholder="Ingresa cualquier texto o token..."
+              spellcheck="false"
+            />
+          </div>
+
+          <!-- Hash Output Display -->
+          <div class="bg-black/70 border border-white/10 rounded-xl p-3 relative group">
+            <div class="flex justify-between items-center mb-1 text-[10px] text-neutral-500">
+              <span class="flex items-center gap-1">
+                <span class="text-[#D71921] font-bold">DIGEST SHA-256</span>
+                <span>(256 bits · 64 caracteres Hex)</span>
+              </span>
+              <button 
+                id="crypto-copy-hash-btn"
+                type="button"
+                class="btn-sound text-[10px] text-neutral-400 hover:text-white flex items-center gap-1 transition-colors"
+              >
+                <span id="crypto-hash-copy-icon">📋</span>
+                <span id="crypto-hash-copy-text">Copiar Hash</span>
+              </button>
+            </div>
+            <div 
+              id="crypto-hash-output" 
+              class="text-white font-mono text-xs tracking-wider break-all select-all pt-1 text-emerald-400"
+            >
+              Calculando...
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Security & Privacy Guarantee Footer -->
+      <div class="flex items-center justify-between pt-1 border-t border-white/5 text-[10px] text-neutral-500">
+        <span class="flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-400"></span>
+          ZERO NETWORK CALLS // VOLATILE CLIENT MEMORY ONLY // NO LOCALSTORAGE
+        </span>
+        <span class="font-mono text-neutral-600">NIST SP 800-63B / FIPS 180-4</span>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+  // @ts-nocheck
+  // Motor Criptográfico Shannon Vault (WebCrypto API CSPRNG + SHA-256)
+  (function initCryptoModal() {
+    const modal = document.getElementById('modal-crypto');
+    const closeBtn = document.getElementById('crypto-close-btn');
+
+    // Elementos Contraseña
+    const passOutput = document.getElementById('crypto-pass-output');
+    const regenBtn = document.getElementById('crypto-regen-btn');
+    const copyPassBtn = document.getElementById('crypto-copy-pass-btn');
+    const passCopyIcon = document.getElementById('crypto-pass-copy-icon');
+    const passCopyText = document.getElementById('crypto-pass-copy-text');
+    const lengthSlider = document.getElementById('crypto-length-slider');
+    const lengthVal = document.getElementById('crypto-length-val');
+    const entropyBadge = document.getElementById('crypto-entropy-badge');
+    const entropyText = document.getElementById('crypto-entropy-text');
+    const entropyBar = document.getElementById('crypto-entropy-bar');
+
+    // Toggles
+    const optUpper = document.getElementById('crypto-opt-upper');
+    const optLower = document.getElementById('crypto-opt-lower');
+    const optNum = document.getElementById('crypto-opt-num');
+    const optSym = document.getElementById('crypto-opt-sym');
+    const optNoAmbig = document.getElementById('crypto-opt-no-ambig');
+
+    // Elementos Hash
+    const hashInput = document.getElementById('crypto-hash-input');
+    const hashOutput = document.getElementById('crypto-hash-output');
+    const hashStats = document.getElementById('crypto-hash-stats');
+    const copyHashBtn = document.getElementById('crypto-copy-hash-btn');
+    const hashCopyIcon = document.getElementById('crypto-hash-copy-icon');
+    const hashCopyText = document.getElementById('crypto-hash-copy-text');
+
+    if (!modal || !passOutput || !hashInput || !hashOutput) return;
+
+    // Conjuntos de caracteres
+    const CHARS = {
+      upper: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
+      lower: 'abcdefghijklmnopqrstuvwxyz',
+      num: '0123456789',
+      sym: '!@#$%^&*()_+-=[]{}|;:,.<>?'
+    };
+
+    const AMBIGUOUS = /[0Ol1I|]/g;
+
+    // Generador de Contraseña Criptográfica sin sesgo de módulo (Rejection Sampling CSPRNG)
+    function generateSecurePassword() {
+      let pool = '';
+      let poolUpper = optUpper?.checked ? CHARS.upper : '';
+      let poolLower = optLower?.checked ? CHARS.lower : '';
+      let poolNum = optNum?.checked ? CHARS.num : '';
+      let poolSym = optSym?.checked ? CHARS.sym : '';
+
+      if (optNoAmbig?.checked) {
+        poolUpper = poolUpper.replace(AMBIGUOUS, '');
+        poolLower = poolLower.replace(AMBIGUOUS, '');
+        poolNum = poolNum.replace(AMBIGUOUS, '');
+        poolSym = poolSym.replace(AMBIGUOUS, '');
+      }
+
+      const activeCategories = [];
+      if (poolUpper) { pool += poolUpper; activeCategories.push(poolUpper); }
+      if (poolLower) { pool += poolLower; activeCategories.push(poolLower); }
+      if (poolNum) { pool += poolNum; activeCategories.push(poolNum); }
+      if (poolSym) { pool += poolSym; activeCategories.push(poolSym); }
+
+      // Fallback si el usuario desmarca todas las casillas
+      if (pool.length === 0) {
+        pool = CHARS.lower + CHARS.num;
+        activeCategories.push(CHARS.lower, CHARS.num);
+      }
+
+      const length = parseInt(lengthSlider?.value || '24', 10);
+      const poolLen = pool.length;
+
+      // Rejection sampling para evitar modulo bias
+      const maxRange = Math.floor(0xFFFFFFFF / poolLen) * poolLen;
+      const passChars: string[] = [];
+
+      // Garantizar al menos un caracter de cada categoría activa
+      activeCategories.forEach(cat => {
+        const catMaxRange = Math.floor(0xFFFFFFFF / cat.length) * cat.length;
+        let randomVal: number;
+        do {
+          const buf = new Uint32Array(1);
+          window.crypto.getRandomValues(buf);
+          randomVal = buf[0] ?? 0;
+        } while (randomVal >= catMaxRange);
+        passChars.push(cat[randomVal % cat.length] ?? '');
+      });
+
+      // Rellenar el resto de la longitud deseada
+      while (passChars.length < length) {
+        const buf = new Uint32Array(1);
+        window.crypto.getRandomValues(buf);
+        const randomVal = buf[0] ?? 0;
+        if (randomVal < maxRange) {
+          passChars.push(pool[randomVal % poolLen] ?? '');
+        }
+      }
+
+      // Mezcla Fisher-Yates criptográfica de los caracteres para evitar orden predecible
+      for (let i = passChars.length - 1; i > 0; i--) {
+        const buf = new Uint32Array(1);
+        window.crypto.getRandomValues(buf);
+        const j = (buf[0] ?? 0) % (i + 1);
+        const temp = passChars[i] ?? '';
+        passChars[i] = passChars[j] ?? '';
+        passChars[j] = temp;
+      }
+
+      const finalPass = passChars.slice(0, length).join('');
+      passOutput.value = finalPass;
+
+      // Cálculo de Entropía de Shannon: H = L * log2(N)
+      const entropy = length * Math.log2(poolLen);
+      updateEntropyMetrics(entropy);
+    }
+
+    // Actualización de Métricas de Entropía
+    function updateEntropyMetrics(entropy) {
+      const rounded = entropy.toFixed(1);
+      if (entropyText) entropyText.textContent = `${rounded} bits`;
+
+      let ratingText = '';
+      let badgeClass = '';
+      let percent = Math.min(100, Math.max(10, Math.round((entropy / 160) * 100)));
+
+      if (entropy < 40) {
+        ratingText = `${rounded} BITS · CRÍTICA / DÉBIL`;
+        badgeClass = 'bg-red-500/10 text-[#D71921] border border-red-500/20';
+      } else if (entropy < 65) {
+        ratingText = `${rounded} BITS · MODERADA`;
+        badgeClass = 'bg-yellow-500/10 text-yellow-400 border border-yellow-500/20';
+      } else if (entropy < 100) {
+        ratingText = `${rounded} BITS · FUERTE (NIST STD)`;
+        badgeClass = 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20';
+      } else {
+        ratingText = `${rounded} BITS · SHANNON VAULT PARANOID`;
+        badgeClass = 'bg-cyan-500/10 text-cyan-300 border border-cyan-500/20 shadow-[0_0_8px_rgba(6,182,212,0.3)]';
+      }
+
+      if (entropyBadge) {
+        entropyBadge.textContent = ratingText;
+        entropyBadge.className = `px-2.5 py-0.5 rounded-full text-[10px] font-bold ${badgeClass}`;
+      }
+
+      if (entropyBar) {
+        entropyBar.style.width = `${percent}%`;
+      }
+    }
+
+    // Calculadora de Hash SHA-256 en tiempo real con WebCrypto API
+    async function calculateSha256() {
+      const text = hashInput.value;
+      const encoder = new TextEncoder();
+      const data = encoder.encode(text);
+
+      if (hashStats) {
+        hashStats.textContent = `BYTES: ${data.length} · CARACTERES: ${text.length}`;
+      }
+
+      try {
+        const hashBuffer = await window.crypto.subtle.digest('SHA-256', data);
+        const hashArray = Array.from(new Uint8Array(hashBuffer));
+        const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+        hashOutput.textContent = hashHex;
+      } catch (err) {
+        hashOutput.textContent = 'Error al calcular hash en WebCrypto';
+      }
+    }
+
+    // Copiado seguro
+    function setupCopy(btn: HTMLElement | null, icon: HTMLElement | null, textEl: HTMLElement | null, getValue: () => string, defaultText: string) {
+      btn?.addEventListener('click', () => {
+        const val = getValue();
+        if (!val) return;
+        navigator.clipboard.writeText(val).then(() => {
+          if (icon && textEl) {
+            icon.textContent = '✓';
+            textEl.textContent = '¡Copiado!';
+            btn.classList.add('border-emerald-400', 'text-emerald-400');
+            setTimeout(() => {
+              icon.textContent = '📋';
+              textEl.textContent = defaultText;
+              btn.classList.remove('border-emerald-400', 'text-emerald-400');
+            }, 1800);
+          }
+        });
+      });
+    }
+
+    setupCopy(copyPassBtn, passCopyIcon, passCopyText, () => passOutput.value, 'Copiar');
+    setupCopy(copyHashBtn, hashCopyIcon, hashCopyText, () => hashOutput.textContent || '', 'Copiar Hash');
+
+    // Listeners
+    regenBtn?.addEventListener('click', generateSecurePassword);
+
+    lengthSlider?.addEventListener('input', () => {
+      if (lengthVal) lengthVal.textContent = lengthSlider.value;
+      generateSecurePassword();
+    });
+
+    [optUpper, optLower, optNum, optSym, optNoAmbig].forEach(el => {
+      el?.addEventListener('change', generateSecurePassword);
+    });
+
+    hashInput?.addEventListener('input', calculateSha256);
+
+    function closeCryptoModal() {
+      if (typeof window.closeToolModal === 'function') {
+        window.closeToolModal(modal);
+        return;
+      }
+      modal.classList.remove('active');
+      modal.classList.add('opacity-0', 'pointer-events-none');
+      const card = modal.querySelector('.modal-card');
+      if (card) {
+        card.classList.remove('scale-100');
+        card.classList.add('scale-95');
+      }
+      const anyActive = document.querySelector('.modal-overlay.active');
+      if (!anyActive) {
+        document.body.classList.remove('lenis-stopped');
+        document.body.style.overflow = '';
+        if (window.lenis) {
+          window.lenis.start();
+        }
+      }
+      if (typeof window.playMechanicalClick === 'function') {
+        window.playMechanicalClick(900, 0.02);
+      }
+    }
+
+    closeBtn?.addEventListener('click', closeCryptoModal);
+
+    modal.addEventListener('click', (e) => {
+      if (e.target === modal) {
+        closeCryptoModal();
+      }
+    });
+
+    // Inicialización al cargar
+    generateSecurePassword();
+    calculateSha256();
+  })();
+</script>

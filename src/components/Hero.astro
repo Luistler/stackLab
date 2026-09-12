@@ -1,0 +1,126 @@
+---
+// Hero.astro - Serene Zen Architectural Entrance (StackLab Atelier)
+// Cormorant Garamond Editorial Typography, Natural Light Imagery, and GSAP Depth Scrub
+---
+
+<header id="hero-container" class="relative w-full h-[100dvh] flex flex-col justify-between items-center text-center px-4 sm:px-6 py-12 md:py-16 overflow-hidden z-10 bg-[#FBFBFA]">
+  
+  <!-- Layer 0: Ambient Organic Watercolor Mist & Natural Light Bloom -->
+  <div class="hero-ambient-mist absolute inset-0 pointer-events-none -z-20 overflow-hidden transform-gpu will-change-transform will-change-opacity">
+    <div class="absolute w-[600px] h-[600px] rounded-full bg-[#DCE3DA]/50 blur-[140px] -top-24 -left-24"></div>
+    <div class="absolute w-[550px] h-[550px] rounded-full bg-[#EBE7DF]/70 blur-[130px] -bottom-24 -right-24"></div>
+    <div class="absolute w-[450px] h-[450px] rounded-full bg-[#8A9A86]/20 blur-[120px] top-1/3 right-1/3"></div>
+  </div>
+
+  <!-- Layer 1: High-Resolution Serene Living Visual Backdrop -->
+  <div class="hero-bg-visual absolute inset-0 -z-10 pointer-events-none transform-gpu will-change-transform will-change-opacity flex items-center justify-center opacity-85">
+    <div class="w-full h-full relative overflow-hidden">
+      <img 
+        src="https://images.unsplash.com/photo-1618221195710-dd6b41faaea6?auto=format&fit=crop&w=2000&q=85" 
+        alt="Serene Minimalist Living Atelier" 
+        class="w-full h-full object-cover object-center filter brightness-[0.98] contrast-[0.96]"
+      />
+      <!-- Gentle Cream Gradient Vignette to Blend Seamlessly -->
+      <div class="absolute inset-0 bg-gradient-to-b from-[#FBFBFA]/90 via-[#FBFBFA]/60 to-[#FBFBFA]"></div>
+    </div>
+  </div>
+
+  <!-- Top Atelier Meta Pill -->
+  <div class="hero-meta-pill pt-12 sm:pt-16 transform-gpu will-change-transform z-10">
+    <div class="zen-badge flex items-center gap-2.5 px-4 py-1.5 shadow-sm bg-white/80 backdrop-blur-md">
+      <span class="w-1.5 h-1.5 rounded-full bg-[#8A9A86]"></span>
+      <span class="tracking-widest text-[#243026]">STACKLAB ATELIER // COLECCIÓN 2026</span>
+    </div>
+  </div>
+
+  <!-- Center Editorial Headline & Subtitle -->
+  <div class="max-w-4xl mx-auto my-auto px-2 z-10">
+    <div class="editorial-mask mb-4 sm:mb-6">
+      <h1 class="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] tracking-tight text-[#243026] leading-[1.05] select-none">
+        <span class="hero-title-line-1 block transform-gpu will-change-transform italic font-light">
+          Vivir con Intención.
+        </span>
+        <span class="hero-title-line-2 block mt-1 sm:mt-2 transform-gpu will-change-transform font-normal tracking-wide text-[#1C1F1D]">
+          OBJETOS PARA LA CALMA<span class="text-[#8A9A86]">.</span>
+        </span>
+      </h1>
+    </div>
+
+    <!-- Editorial Subtitle -->
+    <p class="hero-subtitle max-w-xl mx-auto text-[#4A5B48] font-sans text-xs sm:text-sm md:text-base leading-relaxed mb-8 px-4 font-normal transform-gpu will-change-transform">
+      Una cuidada selección de mobiliario esencial, vasijas acústicas y textiles de lino orgánico diseñados para inspirar presencia, calidez y belleza silenciosa.
+    </p>
+
+    <!-- Action CTAs -->
+    <div class="hero-cta flex flex-wrap items-center justify-center gap-4 transform-gpu will-change-transform">
+      <a
+        href="#collection"
+        class="px-8 py-3.5 rounded-full bg-[#243026] hover:bg-[#344637] text-white font-sans text-xs sm:text-sm font-medium tracking-wider transition-all duration-300 hover:shadow-xl hover:scale-105 active:scale-95 flex items-center gap-2"
+      >
+        <span>Explorar Colección</span>
+        <span class="text-xs">↓</span>
+      </a>
+      <a
+        href="#philosophy"
+        class="px-7 py-3.5 rounded-full bg-white/80 hover:bg-white border border-[#EBE7DF] hover:border-[#8A9A86] text-[#243026] font-sans text-xs sm:text-sm font-medium tracking-wide transition-all duration-300 shadow-sm hover:scale-105 active:scale-95"
+      >
+        Filosofía de Artesanía
+      </a>
+    </div>
+  </div>
+
+  <!-- Bottom Scroll Cue -->
+  <div class="hero-scroll-cue flex flex-col items-center gap-2 text-[#4A5B48] font-sans text-[11px] tracking-widest uppercase select-none pointer-events-none pb-4 z-10">
+    <span class="text-[10px] tracking-[0.2em] font-medium text-neutral-500">DESCUBRE LA SERENIDAD</span>
+    <div class="w-4 h-7 rounded-full border border-[#8A9A86]/40 flex justify-center pt-1.5 bg-white/40">
+      <div class="w-1 h-2 rounded-full bg-[#8A9A86] animate-bounce"></div>
+    </div>
+  </div>
+</header>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  function initHeroAnimation() {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (prefersReducedMotion) return;
+
+    const heroContainer = document.querySelector('#hero-container') as HTMLElement | null;
+    if (!heroContainer) return;
+
+    const heroTimeline = gsap.timeline({
+      scrollTrigger: {
+        trigger: heroContainer,
+        start: 'top top',
+        end: '+=100%',
+        pin: true,
+        scrub: 0.8,
+        anticipatePin: 1,
+      }
+    });
+
+    heroTimeline
+      // Gentle depth expansion of serene interior visual
+      .to('.hero-bg-visual img', { scale: 1.12, ease: 'power1.out' }, 0)
+      .to('.hero-ambient-mist', { opacity: 0.4, ease: 'power1.out' }, 0)
+      
+      // Editorial typography graceful drift
+      .to('.hero-title-line-1', { yPercent: -35, opacity: 0.2, ease: 'power1.inOut' }, 0)
+      .to('.hero-title-line-2', { yPercent: -60, opacity: 0.1, ease: 'power1.inOut' }, 0.05)
+      .to('.hero-subtitle', { yPercent: -40, opacity: 0, ease: 'power1.in' }, 0.03)
+      .to('.hero-meta-pill', { yPercent: -30, opacity: 0, ease: 'power1.in' }, 0)
+      
+      // Immediate controls fade
+      .to('.hero-cta', { yPercent: -20, opacity: 0, duration: 0.35 }, 0)
+      .to('.hero-scroll-cue', { opacity: 0, duration: 0.2 }, 0);
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initHeroAnimation);
+  } else {
+    initHeroAnimation();
+  }
+</script>

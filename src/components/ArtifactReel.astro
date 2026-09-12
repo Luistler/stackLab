@@ -1,0 +1,287 @@
+---
+// ArtifactReel.astro - Pinned Horizontal Product Showcase Reel (StackLab Atelier)
+// Showcasing 4 Curated Zen Luxury Living Objects with Quick Add to Cart & Real-Time Scrubber
+import { products, type Product } from '../data/products';
+import { formatPrice } from '../lib/stripe';
+---
+
+<section id="collection" class="horizontal-reel-container relative bg-[#F5F3EF] border-t border-[#EBE7DF] z-20 overflow-hidden">
+  <!-- Anchor alias for backwards compatibility -->
+  <div id="capabilities" class="absolute -top-20"></div>
+
+  <!-- Ambient Botanical Mist -->
+  <div class="absolute w-[500px] h-[500px] rounded-full bg-[#DCE3DA]/40 blur-[140px] -top-20 -left-20 pointer-events-none"></div>
+  <div class="absolute w-[500px] h-[500px] rounded-full bg-[#EAE6DF]/60 blur-[130px] -bottom-20 -right-20 pointer-events-none"></div>
+
+  <!-- Viewport Stage -->
+  <div class="reel-viewport-stage min-h-[100dvh] flex flex-col justify-between py-12 md:py-16 px-4 sm:px-8 lg:px-16 max-w-[1600px] mx-auto w-full relative z-10">
+    
+    <!-- Reel Header & Telemetry Bar -->
+    <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-6 border-b border-[#EBE7DF]">
+      <div>
+        <div class="flex items-center gap-3 mb-2">
+          <span class="zen-badge bg-white text-[#243026]">COLECCIÓN PERMANENTE</span>
+          <span class="text-[11px] font-sans font-semibold text-[#8A9A86] hidden sm:inline-block">
+            EDICIÓN ARTESANAL LIMITADA
+          </span>
+        </div>
+        <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl text-[#243026] tracking-tight font-medium">
+          Objetos para la Serenidad<span class="text-[#8A9A86]">.</span>
+        </h2>
+      </div>
+
+      <!-- Telemetry Scrubber & Slide Index Indicator -->
+      <div class="flex items-center gap-6">
+        <p class="font-sans text-xs text-neutral-500 max-w-sm hidden xl:block leading-relaxed">
+          Cada pieza está concebida para durar generaciones, fabricada en lotes pequeños con materias primas sostenibles.
+        </p>
+
+        <div class="flex items-center gap-4 bg-white px-5 py-2.5 rounded-full border border-[#EBE7DF] shadow-sm font-sans text-xs">
+          <!-- Slide Counter -->
+          <span class="text-neutral-500 font-medium">
+            [ <span id="reel-counter-current" class="text-[#243026] font-bold">01</span> / 04 ]
+          </span>
+
+          <!-- Smooth Gradient Scrubber Bar -->
+          <div class="w-24 sm:w-36 h-1.5 bg-[#EBE7DF] rounded-full overflow-hidden">
+            <div 
+              id="reel-progress-fill" 
+              class="h-full bg-gradient-to-r from-[#8A9A86] via-[#4A5B48] to-[#243026] w-full origin-left transform scale-x-0 transition-transform duration-75 rounded-full"
+            ></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Horizontal Track Container (Mobile Snap Carousel + Desktop GSAP Pin) -->
+    <div id="reel-track-wrapper" class="reel-track-wrapper overflow-x-auto md:overflow-visible my-auto py-6 sm:py-8 snap-x snap-mandatory md:snap-none scroll-smooth">
+      <div class="horizontal-track flex flex-row items-stretch gap-5 sm:gap-8 will-change-transform min-w-max md:min-w-0 px-2 md:px-0">
+        
+        {products.map((product: Product, idx: number) => (
+          <article 
+            class="product-card w-[86vw] sm:w-[460px] md:w-[500px] lg:w-[560px] shrink-0 snap-center bg-white rounded-[24px] border border-[#EBE7DF] overflow-hidden shadow-[0_20px_45px_-15px_rgba(28,31,29,0.06)] hover:shadow-[0_25px_50px_-12px_rgba(36,48,38,0.12)] hover:border-[#8A9A86]/50 transition-all duration-400 flex flex-col justify-between group"
+          >
+            <!-- Product High-Resolution Image Container (Linked to Product Page) -->
+            <a 
+              href={`/producto/${product.id}`}
+              class="block w-full h-64 sm:h-72 lg:h-80 overflow-hidden relative bg-[#F5F3EF]"
+              aria-label={`Ver detalles de ${product.name}`}
+            >
+              <img 
+                src={product.image} 
+                alt={product.name}
+                class="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out filter brightness-[0.98]"
+                loading="lazy"
+              />
+              <div class="absolute top-4 left-4 flex gap-2">
+                <span class="zen-badge bg-white/90 backdrop-blur-md text-[9px] text-[#243026]">
+                  0{idx + 1} // {product.category}
+                </span>
+              </div>
+              <div class="absolute top-4 right-4">
+                <span class="px-2.5 py-1 rounded-full bg-[#243026]/80 text-white text-[10px] font-sans font-medium backdrop-blur-md">
+                  {formatPrice(product.price)}
+                </span>
+              </div>
+            </a>
+
+            <!-- Product Meta & Actions -->
+            <div class="p-6 sm:p-8 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between mb-1 text-[11px] font-sans text-neutral-400">
+                  <span>{product.origin}</span>
+                  <span class="text-[#8A9A86] font-medium">★ {product.rating} ({product.reviewsCount})</span>
+                </div>
+
+                <a href={`/producto/${product.id}`} class="block group/title">
+                  <h3 class="font-serif text-2xl sm:text-3xl font-medium text-[#243026] group-hover/title:text-[#4A5B48] transition-colors leading-tight mb-2">
+                    {product.name}
+                  </h3>
+                </a>
+
+                <p class="font-sans text-xs sm:text-sm text-neutral-500 line-clamp-2 leading-relaxed mb-4">
+                  {product.description}
+                </p>
+
+                <!-- Materials & Dimensions Tags -->
+                <div class="flex flex-wrap gap-2 text-[10px] font-sans text-neutral-600 mb-6">
+                  <span class="px-2.5 py-1 rounded-lg bg-[#F5F3EF] border border-[#EBE7DF]">
+                    {product.materials}
+                  </span>
+                  <span class="px-2.5 py-1 rounded-lg bg-[#F5F3EF] border border-[#EBE7DF]">
+                    {product.dimensions}
+                  </span>
+                </div>
+              </div>
+
+              <!-- Action Bar -->
+              <div class="pt-4 border-t border-[#EBE7DF] flex items-center justify-between gap-4">
+                <div>
+                  <div class="font-sans text-[10px] text-neutral-400">PRECIO TOTAL</div>
+                  <div class="font-serif text-xl sm:text-2xl font-bold text-[#243026]">
+                    {formatPrice(product.price)}
+                  </div>
+                </div>
+
+                <div class="flex items-center gap-3">
+                  <a 
+                    href={`/producto/${product.id}`}
+                    class="hidden sm:inline-flex items-center text-xs font-sans font-medium text-[#4A5B48] hover:text-[#243026] transition-colors"
+                  >
+                    Detalles →
+                  </a>
+                  <button 
+                    type="button"
+                    data-product={JSON.stringify(product)}
+                    class="btn-add-cart px-6 py-3 rounded-full bg-[#243026] hover:bg-[#344637] text-white font-sans text-xs font-semibold tracking-wide transition-all hover:scale-105 active:scale-95 shadow-md flex items-center gap-2"
+                  >
+                    <span>Añadir</span>
+                    <span class="text-xs">+</span>
+                  </button>
+                </div>
+              </div>
+            </div>
+
+          </article>
+        ))}
+
+      </div>
+    </div>
+
+    <!-- Bottom Navigation Hint Bar -->
+    <div class="flex justify-between items-center text-xs font-sans text-neutral-500 pt-4 border-t border-[#EBE7DF]">
+      <span class="flex items-center gap-2 text-[#4A5B48] font-medium">
+        <span class="w-2 h-2 rounded-full bg-[#8A9A86] animate-pulse"></span>
+        <span>ATELIER DISPONIBLE // ENVÍO INTERNACIONAL ASEGURADO</span>
+      </span>
+      <div class="flex items-center gap-4">
+        <span class="hidden sm:inline-block">DESLIZA O USA FLECHAS TECLADO</span>
+        <span class="text-neutral-300">|</span>
+        <span class="text-[#243026] font-semibold">4 / 4 PIEZAS EN CATÁLOGO</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<script>
+  import { gsap } from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  function initArtifactReel() {
+    gsap.registerPlugin(ScrollTrigger);
+
+    const reelSection = document.querySelector('#collection') as HTMLElement | null;
+    const reelTrack = document.querySelector('.horizontal-track') as HTMLElement | null;
+    const progressFill = document.querySelector('#reel-progress-fill') as HTMLElement | null;
+    const counterCurrent = document.querySelector('#reel-counter-current') as HTMLElement | null;
+    const reelWrapper = document.querySelector('#reel-track-wrapper') as HTMLElement | null;
+
+    if (!reelSection || !reelTrack) return;
+
+    // Attach "Add to Cart" button listeners
+    document.querySelectorAll('.btn-add-cart').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        const target = e.currentTarget as HTMLElement;
+        const dataRaw = target.getAttribute('data-product');
+        if (!dataRaw) return;
+        try {
+          const product = JSON.parse(dataRaw);
+          window.dispatchEvent(new CustomEvent('add-to-cart', {
+            detail: {
+              id: product.id,
+              name: product.name,
+              subtitle: product.subtitle,
+              price: product.price,
+              currency: product.currency,
+              image: product.image,
+              quantity: 1,
+              stripePriceId: product.stripePriceId,
+            }
+          }));
+        } catch (err) {}
+      });
+    });
+
+    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const isDesktop = window.innerWidth >= 768;
+
+    // Mobile swipe listener
+    if (!isDesktop && reelWrapper) {
+      const updateMobileProgress = () => {
+        const maxScroll = reelWrapper.scrollWidth - reelWrapper.clientWidth;
+        if (maxScroll <= 0) return;
+        const progress = Math.max(0, Math.min(1, reelWrapper.scrollLeft / maxScroll));
+        if (progressFill) {
+          progressFill.style.transform = `scaleX(${progress})`;
+        }
+        if (counterCurrent) {
+          const slideIndex = Math.min(4, Math.max(1, Math.round(progress * 3) + 1));
+          counterCurrent.textContent = `0${slideIndex}`;
+        }
+      };
+
+      reelWrapper.addEventListener('scroll', updateMobileProgress, { passive: true });
+      updateMobileProgress();
+    }
+
+    // Desktop GSAP Pin & Scrub
+    if (!prefersReducedMotion && isDesktop) {
+      const getScrollDistance = () => {
+        return reelTrack.scrollWidth - window.innerWidth + 140;
+      };
+
+      const reelTimeline = gsap.timeline({
+        scrollTrigger: {
+          id: 'collection-trigger',
+          trigger: reelSection,
+          pin: true,
+          scrub: 1,
+          start: 'top top',
+          end: () => `+=${getScrollDistance()}`,
+          invalidateOnRefresh: true,
+          anticipatePin: 1,
+          onUpdate: (self) => {
+            if (progressFill) {
+              progressFill.style.transform = `scaleX(${self.progress})`;
+            }
+            if (counterCurrent) {
+              const slideIndex = Math.min(4, Math.max(1, Math.floor(self.progress * 4) + 1));
+              counterCurrent.textContent = `0${slideIndex}`;
+            }
+          }
+        }
+      });
+
+      reelTimeline.to(reelTrack, {
+        x: () => -getScrollDistance(),
+        ease: 'none',
+      });
+
+      // Keyboard navigation with Arrow Left / Arrow Right
+      window.addEventListener('keydown', (e: KeyboardEvent) => {
+        const cartActive = document.querySelector('.cart-overlay.active');
+        if (cartActive) return;
+
+        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+          const st = ScrollTrigger.getById('collection-trigger') || ScrollTrigger.getAll().find(s => s.trigger === reelSection);
+          if (st) {
+            const stepDelta = 0.25;
+            let targetProgress = st.progress + (e.key === 'ArrowRight' ? stepDelta : -stepDelta);
+            targetProgress = Math.max(0, Math.min(1, targetProgress));
+            if (window.__lenis) {
+              const targetScroll = st.start + targetProgress * (st.end - st.start);
+              window.__lenis.scrollTo(targetScroll);
+            }
+          }
+        }
+      });
+    }
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initArtifactReel);
+  } else {
+    initArtifactReel();
+  }
+</script>
