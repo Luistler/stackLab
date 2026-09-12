@@ -227,9 +227,6 @@ html.lenis, html.lenis body {
   transform: translateX(0) !important;
 }
 
-/* ==========================================================================
-   Prefers-Reduced-Motion Fallbacks (WCAG 2.1 AA Compliance)
-   ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
   *, ::before, ::after {
     animation-duration: 0.01ms !important;
@@ -237,24 +234,12 @@ html.lenis, html.lenis body {
     transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
   }
+}
 
-  .clip-polygon-panel,
-  .clip-inset-reveal {
-    clip-path: none !important;
-    transform: none !important;
-  }
-
-  .visual-step {
-    opacity: 1 !important;
-    transform: none !important;
-    position: relative !important;
-  }
-
-  .story-card {
-    opacity: 1 !important;
-    transform: none !important;
-  }
-
+/* ==========================================================================
+   Mobile Responsive Fallbacks (< 768px)
+   ========================================================================== */
+@media (max-width: 767px) {
   .story-container {
     height: auto !important;
   }
@@ -262,20 +247,28 @@ html.lenis, html.lenis body {
   .sticky-visual {
     position: relative !important;
     height: auto !important;
+    padding-top: 2rem !important;
+    display: none !important; /* Hide background sticky stack on mobile to prevent overlapping */
   }
 
   .story-text-container {
+    position: relative !important;
     margin-top: 0 !important;
+    pointer-events: auto !important;
   }
 
   .story-step {
     min-height: auto !important;
-    padding: 2rem 1rem !important;
+    padding: 3rem 1rem !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
   }
 
-  .horizontal-track {
+  .story-card {
+    opacity: 1 !important;
     transform: none !important;
-    flex-direction: column !important;
+    margin: 0 auto !important;
     width: 100% !important;
   }
 
