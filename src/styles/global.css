@@ -188,6 +188,20 @@ html.lenis, html.lenis body {
   transform: translateY(0);
 }
 
+/* Artifact Reel Card 3D & 60 FPS Acceleration */
+.product-card {
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.product-card-media {
+  transform-style: preserve-3d;
+}
+
+.product-card-img {
+  will-change: transform;
+}
+
 /* ==========================================================================
    Cart Drawer Transitions
    ========================================================================== */
