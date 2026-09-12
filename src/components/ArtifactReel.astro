@@ -19,7 +19,7 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
   <div class="absolute w-[500px] h-[500px] rounded-full bg-[#EAE6DF]/60 blur-[130px] -bottom-20 -right-20 pointer-events-none transform-gpu will-change-transform"></div>
 
   <!-- Viewport Stage -->
-  <div class="reel-viewport-stage min-h-[100dvh] flex flex-col justify-between py-12 md:py-16 px-4 sm:px-8 lg:px-16 max-w-[1600px] mx-auto w-full relative z-10">
+  <div class="reel-viewport-stage min-h-[100dvh] flex flex-col justify-between pt-8 pb-24 md:pt-10 md:pb-28 px-4 sm:px-8 lg:px-16 max-w-[1600px] mx-auto w-full relative z-10">
     
     <!-- Reel Header & Telemetry Bar -->
     <div class="flex flex-col lg:flex-row lg:items-end justify-between gap-6 pb-6 border-b border-[#EBE7DF]">
@@ -64,27 +64,27 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
         
         {products.map((product: Product, idx: number) => (
           <article 
-            class="product-card w-[86vw] sm:w-[460px] md:w-[500px] lg:w-[560px] shrink-0 snap-center bg-white rounded-[24px] border border-[#EBE7DF] overflow-hidden shadow-[0_20px_45px_-15px_rgba(28,31,29,0.06)] hover:shadow-[0_25px_50px_-12px_rgba(36,48,38,0.12)] hover:border-[#8A9A86]/50 transition-shadow duration-400 flex flex-col justify-between group transform-gpu will-change-transform"
+            class="product-card w-[86vw] sm:w-[420px] md:w-[440px] lg:w-[480px] shrink-0 snap-center bg-white rounded-[24px] border border-[#EBE7DF] overflow-hidden shadow-[0_16px_36px_-12px_rgba(28,31,29,0.06)] hover:shadow-[0_20px_40px_-10px_rgba(36,48,38,0.10)] hover:border-[#8A9A86]/50 transition-shadow duration-300 flex flex-col justify-between group transform-gpu will-change-transform"
             data-index={idx}
           >
             <!-- Product High-Resolution Image Container (Linked to Product Page) -->
             <a 
               href={`/producto/${product.id}`}
-              class="product-card-media block w-full h-64 sm:h-72 lg:h-80 overflow-hidden relative bg-[#F5F3EF] transform-gpu will-change-transform"
+              class="product-card-media block w-full h-48 sm:h-52 lg:h-56 overflow-hidden relative bg-[#F5F3EF] transform-gpu will-change-transform"
               aria-label={`Ver detalles de ${product.name}`}
             >
               <img 
                 src={product.image} 
                 alt={product.name}
-                class="product-card-img w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out filter brightness-[0.98] transform-gpu will-change-transform scale-110"
+                class="product-card-img w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out filter brightness-[0.98] transform-gpu will-change-transform scale-105"
                 loading="lazy"
               />
-              <div class="absolute top-4 left-4 flex gap-2 pointer-events-none">
-                <span class="zen-badge bg-white/90 backdrop-blur-md text-[9px] text-[#243026]">
+              <div class="absolute top-3 left-3 flex gap-2 pointer-events-none">
+                <span class="zen-badge bg-white/90 backdrop-blur-md text-[9px] text-[#243026] py-1 px-2.5">
                   {String(idx + 1).padStart(2, '0')} // {product.category}
                 </span>
               </div>
-              <div class="absolute top-4 right-4 pointer-events-none">
+              <div class="absolute top-3 right-3 pointer-events-none">
                 <span class="px-2.5 py-1 rounded-full bg-[#243026]/80 text-white text-[10px] font-sans font-medium backdrop-blur-md">
                   {formatPrice(product.price)}
                 </span>
@@ -92,7 +92,7 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
             </a>
 
             <!-- Product Meta & Actions -->
-            <div class="p-6 sm:p-8 flex-1 flex flex-col justify-between">
+            <div class="p-5 sm:p-6 flex-1 flex flex-col justify-between">
               <div>
                 <div class="flex items-center justify-between mb-1 text-[11px] font-sans text-neutral-400">
                   <span>{product.origin}</span>
@@ -100,31 +100,31 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
                 </div>
 
                 <a href={`/producto/${product.id}`} class="block group/title">
-                  <h3 class="font-serif text-2xl sm:text-3xl font-medium text-[#243026] group-hover/title:text-[#4A5B48] transition-colors leading-tight mb-2">
+                  <h3 class="font-serif text-xl sm:text-2xl font-medium text-[#243026] group-hover/title:text-[#4A5B48] transition-colors leading-snug mb-1.5">
                     {product.name}
                   </h3>
                 </a>
 
-                <p class="font-sans text-xs sm:text-sm text-neutral-500 line-clamp-2 leading-relaxed mb-4">
+                <p class="font-sans text-xs sm:text-[13px] text-neutral-600 leading-relaxed mb-3 line-clamp-3">
                   {product.description}
                 </p>
 
                 <!-- Materials & Dimensions Tags -->
-                <div class="flex flex-wrap gap-2 text-[10px] font-sans text-neutral-600 mb-6">
-                  <span class="px-2.5 py-1 rounded-lg bg-[#F5F3EF] border border-[#EBE7DF]">
+                <div class="flex flex-wrap gap-1.5 text-[10px] font-sans text-neutral-600 mb-4">
+                  <span class="px-2.5 py-0.5 rounded-lg bg-[#F5F3EF] border border-[#EBE7DF]">
                     {product.materials}
                   </span>
-                  <span class="px-2.5 py-1 rounded-lg bg-[#F5F3EF] border border-[#EBE7DF]">
+                  <span class="px-2.5 py-0.5 rounded-lg bg-[#F5F3EF] border border-[#EBE7DF]">
                     {product.dimensions}
                   </span>
                 </div>
               </div>
 
               <!-- Action Bar -->
-              <div class="pt-4 border-t border-[#EBE7DF] flex items-center justify-between gap-4">
+              <div class="pt-3 border-t border-[#EBE7DF] flex items-center justify-between gap-3">
                 <div>
-                  <div class="font-sans text-[10px] text-neutral-400">PRECIO TOTAL</div>
-                  <div class="font-serif text-xl sm:text-2xl font-bold text-[#243026]">
+                  <div class="font-sans text-[9px] text-neutral-400 uppercase tracking-wider">Precio</div>
+                  <div class="font-serif text-lg sm:text-xl font-bold text-[#243026]">
                     {formatPrice(product.price)}
                   </div>
                 </div>
@@ -331,14 +331,14 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
           const xPercent = (mouseX / cardWidth - 0.5) * 2;
           const yPercent = (mouseY / cardHeight - 0.5) * 2;
 
-          // Subtle elegant 3D tilt: max 5 deg rotation
-          setCardRotateX(-yPercent * 4.5);
-          setCardRotateY(xPercent * 5.5);
+          // Very subtle calm 3D tilt: max 1.5 deg rotation (smooth and grounded)
+          setCardRotateX(-yPercent * 1.5);
+          setCardRotateY(xPercent * 1.8);
 
           // Subtle internal image counter-parallax
           if (setImgX && setImgY) {
-            setImgX(xPercent * 8);
-            setImgY(yPercent * 6);
+            setImgX(xPercent * 3);
+            setImgY(yPercent * 2);
           }
         };
 
