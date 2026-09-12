@@ -1,6 +1,6 @@
 ---
-// AuthModal.astro - Zen Luxury Supabase Auth Modal
-// Allows seamless account login / register + quick Supabase project credential linking directly from UI.
+// AuthModal.astro - Zen Luxury Atelier Account Modal
+// Seamless account login / registration via Supabase Auth
 ---
 
 <aside
@@ -38,26 +38,25 @@
       </p>
     </div>
 
-    <!-- Mode Selector Tabs -->
+    <!-- Mode Selector Tabs: Iniciar Sesión vs Registro -->
     <div class="flex rounded-full bg-[#F5F3EF] p-1 border border-[#EBE7DF] mb-6 text-xs font-sans">
       <button
         id="tab-auth-login"
         type="button"
         class="flex-1 py-1.5 rounded-full font-medium transition-all bg-white text-[#243026] shadow-sm cursor-pointer"
       >
-        Ingresar
+        Iniciar Sesión
       </button>
       <button
-        id="tab-auth-config"
+        id="tab-auth-register"
         type="button"
-        class="flex-1 py-1.5 rounded-full font-medium text-[#4A5B48] hover:text-[#243026] transition-all cursor-pointer flex items-center justify-center gap-1"
+        class="flex-1 py-1.5 rounded-full font-medium text-[#4A5B48] hover:text-[#243026] transition-all cursor-pointer"
       >
-        <span>Conectar Supabase</span>
-        <span class="text-[9px] bg-[#8A9A86]/20 text-[#4A5B48] px-1.5 rounded-full">API</span>
+        Crear Cuenta
       </button>
     </div>
 
-    <!-- Panel 1: Login / Magic Link / Email Form -->
+    <!-- Login / Register Form -->
     <form id="auth-login-form" class="space-y-4">
       <div>
         <label
@@ -76,12 +75,21 @@
       </div>
 
       <div>
-        <label
-          for="auth-password"
-          class="block font-sans text-[11px] uppercase tracking-wider font-semibold text-[#243026] mb-1.5"
-        >
-          Contraseña (o dejar vacío para Magic Link)
-        </label>
+        <div class="flex items-center justify-between mb-1.5">
+          <label
+            for="auth-password"
+            class="block font-sans text-[11px] uppercase tracking-wider font-semibold text-[#243026]"
+          >
+            Contraseña
+          </label>
+          <button
+            id="auth-magic-toggle"
+            type="button"
+            class="text-[10px] text-[#4A5B48] hover:text-[#243026] underline cursor-pointer"
+          >
+            O usar Enlace Mágico
+          </button>
+        </div>
         <input
           id="auth-password"
           type="password"
@@ -95,68 +103,21 @@
         type="submit"
         class="w-full py-3 rounded-full bg-[#243026] hover:bg-[#1C1F1D] text-[#FBFBFA] font-sans text-xs uppercase tracking-widest font-semibold transition-all hover:scale-[1.02] active:scale-95 shadow-md flex items-center justify-center gap-2 cursor-pointer mt-2"
       >
-        <span>Acceder con Supabase</span>
+        <span id="auth-submit-label">Iniciar Sesión</span>
         <span class="text-[10px]">→</span>
       </button>
 
-      <div id="auth-status-msg" class="hidden text-[11px] font-sans text-center py-1 rounded-lg"></div>
+      <div id="auth-status-msg" class="hidden text-[11px] font-sans text-center py-2 px-3 rounded-lg leading-relaxed"></div>
     </form>
 
-    <!-- Panel 2: Quick Supabase Credentials Connector -->
-    <div id="auth-config-panel" class="hidden space-y-4">
-      <div class="p-3 rounded-xl bg-[#F5F3EF] border border-[#EBE7DF] text-[11px] font-sans text-[#4A5B48] leading-relaxed">
-        Pega la URL de tu proyecto y tu anon key pública de Supabase para conectar tu base de datos y autenticación
-        instantáneamente.
-      </div>
-
-      <div>
-        <label
-          for="config-supa-url"
-          class="block font-sans text-[10px] uppercase tracking-wider font-semibold text-[#243026] mb-1"
-        >
-          Supabase Project URL
-        </label>
-        <input
-          id="config-supa-url"
-          type="url"
-          placeholder="https://xyzproject.supabase.co"
-          class="w-full px-3 py-2 rounded-xl bg-white border border-[#EBE7DF] text-xs font-sans text-[#1C1F1D] focus:outline-none focus:border-[#4A5B48]"
-        />
-      </div>
-
-      <div>
-        <label
-          for="config-supa-key"
-          class="block font-sans text-[10px] uppercase tracking-wider font-semibold text-[#243026] mb-1"
-        >
-          Supabase Anon / Public Key
-        </label>
-        <input
-          id="config-supa-key"
-          type="password"
-          placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-          class="w-full px-3 py-2 rounded-xl bg-white border border-[#EBE7DF] text-xs font-sans text-[#1C1F1D] focus:outline-none focus:border-[#4A5B48]"
-        />
-      </div>
-
-      <button
-        id="config-save-btn"
-        type="button"
-        class="w-full py-2.5 rounded-full bg-[#4A5B48] hover:bg-[#243026] text-white font-sans text-xs font-medium tracking-wider transition-all hover:scale-[1.02] active:scale-95 cursor-pointer shadow-sm"
-      >
-        Guardar y Reconectar
-      </button>
-      <div id="config-status-msg" class="hidden text-[11px] font-sans text-center py-1 text-[#4A5B48]"></div>
-    </div>
-
-    <!-- Active User State (When already logged in) -->
+    <!-- Active User State (When logged in) -->
     <div id="auth-logged-in-panel" class="hidden space-y-4 text-center py-2">
-      <div class="w-14 h-14 rounded-full bg-[#DCE3DA] text-[#243026] flex items-center justify-center font-serif text-xl font-bold mx-auto">
+      <div class="w-14 h-14 rounded-full bg-[#DCE3DA] text-[#243026] flex items-center justify-center font-serif text-xl font-bold mx-auto shadow-inner">
         <span id="user-avatar-initial">L</span>
       </div>
       <div>
         <h4 id="user-email-display" class="font-serif text-lg text-[#243026] font-medium"></h4>
-        <span class="text-[11px] text-[#8A9A86] font-sans">Sesión activa en Supabase Auth</span>
+        <span class="text-[11px] text-[#8A9A86] font-sans">Sesión activa Atelier</span>
       </div>
       <button
         id="auth-logout-btn"
@@ -178,60 +139,61 @@
     const panel = document.getElementById('auth-modal-panel');
     const closeBtn = document.getElementById('auth-close-btn');
     const tabLogin = document.getElementById('tab-auth-login');
-    const tabConfig = document.getElementById('tab-auth-config');
+    const tabRegister = document.getElementById('tab-auth-register');
     const loginForm = document.getElementById('auth-login-form');
-    const configPanel = document.getElementById('auth-config-panel');
     const loggedInPanel = document.getElementById('auth-logged-in-panel');
-    const configSaveBtn = document.getElementById('config-save-btn');
-    const configUrl = document.getElementById('config-supa-url') as HTMLInputElement;
-    const configKey = document.getElementById('config-supa-key') as HTMLInputElement;
     const logoutBtn = document.getElementById('auth-logout-btn');
+    const submitBtn = document.getElementById('auth-submit-btn');
+    const submitLabel = document.getElementById('auth-submit-label');
+    const statusMsg = document.getElementById('auth-status-msg');
+    const passInput = document.getElementById('auth-password') as HTMLInputElement;
+    const magicToggle = document.getElementById('auth-magic-toggle');
 
     if (!modal || !panel || !closeBtn) return;
 
-    // Prefill saved credentials in config inputs
-    if (configUrl && configKey && typeof localStorage !== 'undefined') {
-      configUrl.value = localStorage.getItem('stacklab_supabase_url') || '';
-      configKey.value = localStorage.getItem('stacklab_supabase_anon_key') || '';
-    }
+    let isRegisterMode = false;
+    let isMagicLinkMode = false;
 
-    // Tab switching
+    // Mode Switch: Iniciar Sesión vs Crear Cuenta
     tabLogin?.addEventListener('click', () => {
+      isRegisterMode = false;
       tabLogin.classList.add('bg-white', 'text-[#243026]', 'shadow-sm');
       tabLogin.classList.remove('text-[#4A5B48]');
-      tabConfig?.classList.remove('bg-white', 'text-[#243026]', 'shadow-sm');
-      tabConfig?.classList.add('text-[#4A5B48]');
-      loginForm?.classList.remove('hidden');
-      configPanel?.classList.add('hidden');
+      tabRegister?.classList.remove('bg-white', 'text-[#243026]', 'shadow-sm');
+      tabRegister?.classList.add('text-[#4A5B48]');
+      if (submitLabel) submitLabel.textContent = isMagicLinkMode ? 'Enviar Enlace Mágico' : 'Iniciar Sesión';
+      if (statusMsg) statusMsg.classList.add('hidden');
     });
 
-    tabConfig?.addEventListener('click', () => {
-      tabConfig.classList.add('bg-white', 'text-[#243026]', 'shadow-sm');
-      tabConfig.classList.remove('text-[#4A5B48]');
+    tabRegister?.addEventListener('click', () => {
+      isRegisterMode = true;
+      tabRegister.classList.add('bg-white', 'text-[#243026]', 'shadow-sm');
+      tabRegister.classList.remove('text-[#4A5B48]');
       tabLogin?.classList.remove('bg-white', 'text-[#243026]', 'shadow-sm');
       tabLogin?.classList.add('text-[#4A5B48]');
-      configPanel?.classList.remove('hidden');
-      loginForm?.classList.add('hidden');
+      if (submitLabel) submitLabel.textContent = 'Crear Cuenta';
+      if (statusMsg) statusMsg.classList.add('hidden');
     });
 
-    // Save Supabase credentials directly from popup
-    configSaveBtn?.addEventListener('click', () => {
-      const urlVal = configUrl?.value.trim();
-      const keyVal = configKey?.value.trim();
-      if (!urlVal || !keyVal) return;
-
-      localStorage.setItem('stacklab_supabase_url', urlVal);
-      localStorage.setItem('stacklab_supabase_anon_key', keyVal);
-
-      const msg = document.getElementById('config-status-msg');
-      if (msg) {
-        msg.textContent = '✓ Credenciales enlazadas. Recargando conexión...';
-        msg.classList.remove('hidden');
+    // Magic link toggle
+    magicToggle?.addEventListener('click', () => {
+      isMagicLinkMode = !isMagicLinkMode;
+      if (isMagicLinkMode) {
+        if (passInput) {
+          passInput.disabled = true;
+          passInput.placeholder = '(No requerida para Enlace Mágico)';
+          passInput.value = '';
+        }
+        if (magicToggle) magicToggle.textContent = 'Usar contraseña normal';
+        if (submitLabel) submitLabel.textContent = 'Enviar Enlace Mágico';
+      } else {
+        if (passInput) {
+          passInput.disabled = false;
+          passInput.placeholder = '••••••••';
+        }
+        if (magicToggle) magicToggle.textContent = 'O usar Enlace Mágico';
+        if (submitLabel) submitLabel.textContent = isRegisterMode ? 'Crear Cuenta' : 'Iniciar Sesión';
       }
-      soundEngine.playTap(700, 0.04);
-      setTimeout(() => {
-        window.location.reload();
-      }, 900);
     });
 
     const checkSession = async () => {
@@ -242,7 +204,7 @@
         } = await client.auth.getSession();
         if (session && session.user) {
           loginForm?.classList.add('hidden');
-          configPanel?.classList.add('hidden');
+          document.querySelector('#auth-modal .flex.rounded-full')?.classList.add('hidden');
           loggedInPanel?.classList.remove('hidden');
           const emailDisp = document.getElementById('user-email-display');
           const initial = document.getElementById('user-avatar-initial');
@@ -287,60 +249,70 @@
     // Form submit
     loginForm?.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const email = (document.getElementById('auth-email') as HTMLInputElement).value;
-      const pass = (document.getElementById('auth-password') as HTMLInputElement).value;
-      const msg = document.getElementById('auth-status-msg');
-      const submitBtn = document.getElementById('auth-submit-btn');
+      const email = (document.getElementById('auth-email') as HTMLInputElement)?.value.trim();
+      const pass = passInput?.value.trim();
 
       if (!email) return;
+      const client = getSupabaseClient();
+
+      if (submitLabel) submitLabel.textContent = 'Procesando...';
+      if (statusMsg) statusMsg.classList.add('hidden');
 
       try {
-        const client = getSupabaseClient();
-        if (submitBtn) submitBtn.textContent = 'Conectando...';
-
-        if (pass) {
-          // Password sign in or up
+        if (isMagicLinkMode) {
+          const { error } = await client.auth.signInWithOtp({ email });
+          if (error) throw error;
+          if (statusMsg) {
+            statusMsg.textContent = '✉ Enlace de acceso enviado a tu correo.';
+            statusMsg.className = 'text-[11px] font-sans text-center py-2 px-3 text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg';
+            statusMsg.classList.remove('hidden');
+          }
+        } else if (isRegisterMode) {
+          if (!pass) {
+            throw new Error('Por favor ingresa una contraseña para tu cuenta.');
+          }
+          const { data, error } = await client.auth.signUp({
+            email,
+            password: pass,
+          });
+          if (error) throw error;
+          if (statusMsg) {
+            statusMsg.textContent = '✓ Cuenta creada con éxito. Revisa tu correo o inicia sesión.';
+            statusMsg.className = 'text-[11px] font-sans text-center py-2 px-3 text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg';
+            statusMsg.classList.remove('hidden');
+          }
+        } else {
+          // Login
+          if (!pass) {
+            throw new Error('Por favor ingresa tu contraseña o usa Enlace Mágico.');
+          }
           const { data, error } = await client.auth.signInWithPassword({
             email,
             password: pass,
           });
-          if (error) {
-            // Attempt sign up if user doesn't exist
-            const signUpRes = await client.auth.signUp({
-              email,
-              password: pass,
-            });
-            if (signUpRes.error) throw signUpRes.error;
-            if (msg) {
-              msg.textContent = '✓ Cuenta creada con éxito. Verificando...';
-              msg.className = 'text-[11px] font-sans text-center py-1 text-emerald-700 bg-emerald-50 rounded-lg';
-            }
-          } else {
-            if (msg) {
-              msg.textContent = '✓ Sesión iniciada.';
-              msg.className = 'text-[11px] font-sans text-center py-1 text-emerald-700 bg-emerald-50 rounded-lg';
-            }
-          }
-        } else {
-          // Magic link fallback
-          const { error } = await client.auth.signInWithOtp({ email });
           if (error) throw error;
-          if (msg) {
-            msg.textContent = '✉ Enlace mágico enviado a tu correo.';
-            msg.className = 'text-[11px] font-sans text-center py-1 text-emerald-700 bg-emerald-50 rounded-lg';
+          if (statusMsg) {
+            statusMsg.textContent = '✓ Sesión iniciada con éxito.';
+            statusMsg.className = 'text-[11px] font-sans text-center py-2 px-3 text-emerald-800 bg-emerald-50 border border-emerald-200 rounded-lg';
+            statusMsg.classList.remove('hidden');
           }
+          setTimeout(() => {
+            checkSession();
+            closeModal();
+          }, 800);
         }
-
-        setTimeout(() => {
-          checkSession();
-        }, 1000);
       } catch (err: any) {
-        if (msg) {
-          msg.textContent = err.message || 'Error al conectar con Supabase.';
-          msg.className = 'text-[11px] font-sans text-center py-1 text-amber-800 bg-amber-50 rounded-lg';
+        if (statusMsg) {
+          statusMsg.textContent = err.message || 'Error al autenticar.';
+          statusMsg.className = 'text-[11px] font-sans text-center py-2 px-3 text-amber-900 bg-amber-50 border border-amber-200 rounded-lg';
+          statusMsg.classList.remove('hidden');
         }
       } finally {
-        if (submitBtn) submitBtn.textContent = 'Acceder con Supabase →';
+        if (submitLabel) {
+          if (isMagicLinkMode) submitLabel.textContent = 'Enviar Enlace Mágico';
+          else if (isRegisterMode) submitLabel.textContent = 'Crear Cuenta';
+          else submitLabel.textContent = 'Iniciar Sesión';
+        }
       }
     });
 
@@ -350,6 +322,7 @@
         await client.auth.signOut();
         loggedInPanel?.classList.add('hidden');
         loginForm?.classList.remove('hidden');
+        document.querySelector('#auth-modal .flex.rounded-full')?.classList.remove('hidden');
         window.location.reload();
       } catch (e) {}
     });
