@@ -31,19 +31,39 @@ export function initMotionEngine() {
     window.__lenis = lenis;
     (window as any).lenis = lenis;
 
-    // Smooth anchor navigation
-    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
+    // Smooth anchor navigation for both '#' and '/#' links when on home page
+    const isHomePage = window.location.pathname === '/' || window.location.pathname === '';
+
+    document.querySelectorAll('a[href^="#"], a[href^="/#"]').forEach((anchor) => {
       anchor.addEventListener('click', (e) => {
-        const href = anchor.getAttribute('href');
-        if (href && href !== '#' && href.startsWith('#')) {
-          const target = document.querySelector(href);
+        const rawHref = anchor.getAttribute('href');
+        if (!rawHref || rawHref === '#' || rawHref === '/#') return;
+
+        // Extract anchor hash (e.g. #collection from /#collection)
+        const hash = rawHref.startsWith('/#') ? rawHref.substring(1) : rawHref;
+
+        // If on the home page, intercept and scroll smoothly
+        if (isHomePage) {
+          const target = document.querySelector(hash);
           if (target) {
             e.preventDefault();
             lenis?.scrollTo(target as HTMLElement, { offset: -30 });
+            history.pushState(null, '', hash);
           }
         }
+        // If on another page (e.g. /checkout), allow natural browser navigation to /#collection
       });
     });
+
+    // On page load, if arriving with a hash, smooth scroll to it
+    if (window.location.hash) {
+      setTimeout(() => {
+        const target = document.querySelector(window.location.hash);
+        if (target && lenis) {
+          lenis.scrollTo(target as HTMLElement, { offset: -30 });
+        }
+      }, 300);
+    }
   }
 
   // Modal open / close global helper hooks to pause / resume Lenis
