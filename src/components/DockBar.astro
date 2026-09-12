@@ -1,5 +1,7 @@
 ---
 // DockBar.astro - Floating Zen Luxury Quick-Action Pill Bar
+import { AnimatedCartIcon } from './icons/AnimatedIcons';
+import { AnimatedSoundToggle } from './icons/AnimatedSoundToggle';
 ---
 
 <aside
@@ -26,18 +28,8 @@
       </a>
     </div>
 
-    <!-- Sound Toggle Button -->
-    <button
-      id="dock-sound-btn"
-      type="button"
-      aria-label="Alternar micro-acústica háptica"
-      title="Micro-acústica háptica"
-      class="p-1.5 rounded-full border border-[#EBE7DF] hover:border-[#243026] text-[#4A5B48] hover:text-[#243026] transition-colors cursor-pointer flex items-center justify-center"
-    >
-      <span id="dock-sound-icon" class="text-xs">
-        🔊
-      </span>
-    </button>
+    <!-- Sound Toggle Button with Animated Icon -->
+    <AnimatedSoundToggle client:only="react" />
 
     <!-- Quick Cart Trigger Button -->
     <button
@@ -46,9 +38,7 @@
       aria-label="Abrir cesta de compras"
       class="ml-1 sm:ml-2 flex items-center gap-1.5 sm:gap-2 bg-[#243026] hover:bg-[#1C1F1D] text-[#FBFBFA] px-3.5 sm:px-4 py-1.5 rounded-full font-medium text-xs transition-all hover:scale-[1.02] active:scale-95 shadow-sm cursor-pointer"
     >
-      <svg class="w-3.5 h-3.5 text-[#DCE3DA]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
-        <path stroke-linecap="round" stroke-linejoin="round" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-      </svg>
+      <AnimatedCartIcon client:only="react" size={14} color="#DCE3DA" />
       <span>Cesta</span>
       <span id="dock-cart-count" class="text-[10px] bg-[#4A5B48] text-[#FBFBFA] px-1.5 py-0.5 rounded-full font-bold">
         0
@@ -58,26 +48,9 @@
 </aside>
 
 <script>
-  import { soundEngine } from '../scripts/sound-engine';
-
   function setupDockBar() {
     const dockBtn = document.getElementById('dock-cart-btn');
     const dockCount = document.getElementById('dock-cart-count');
-    const soundBtn = document.getElementById('dock-sound-btn');
-    const soundIcon = document.getElementById('dock-sound-icon');
-
-    // Setup sound toggle state
-    if (soundIcon) {
-      soundIcon.textContent = soundEngine.getMuted() ? '🔇' : '🔊';
-    }
-    if (soundBtn) {
-      soundBtn.addEventListener('click', () => {
-        const isMuted = soundEngine.toggleMute();
-        if (soundIcon) {
-          soundIcon.textContent = isMuted ? '🔇' : '🔊';
-        }
-      });
-    }
 
     // Initialize from localStorage
     try {

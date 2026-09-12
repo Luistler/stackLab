@@ -1,6 +1,7 @@
 ---
 // QuickInspectModal.astro - Seamless In-Place Artifact Inspection
 // Allows visitors to examine details, provenance and materials without leaving the main scrollytelling path.
+import { AnimatedCloseIcon, AnimatedCartIcon } from './icons/AnimatedIcons';
 ---
 
 <aside
@@ -21,7 +22,7 @@
       aria-label="Cerrar vista de inspección"
       class="absolute top-4 right-4 z-20 w-9 h-9 rounded-full bg-white/90 border border-[#EBE7DF] hover:border-[#243026] text-[#1C1F1D] flex items-center justify-center transition-transform hover:scale-105 active:scale-95 cursor-pointer shadow-sm"
     >
-      ✕
+      <AnimatedCloseIcon client:only="react" size={15} color="currentColor" />
     </button>
 
     <!-- Product Visual Column -->
@@ -81,8 +82,8 @@
           type="button"
           class="flex-1 py-3 px-6 rounded-full bg-[#243026] hover:bg-[#1C1F1D] text-[#FBFBFA] font-sans text-xs uppercase tracking-widest font-semibold transition-all hover:scale-[1.02] active:scale-95 shadow-md flex items-center justify-center gap-2 cursor-pointer"
         >
+          <AnimatedCartIcon client:only="react" size={14} color="#FBFBFA" />
           <span>Añadir al Carrito</span>
-          <span class="text-[10px] opacity-70">✦</span>
         </button>
       </div>
     </div>
