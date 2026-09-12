@@ -1,5 +1,5 @@
 import type { Product } from '../products';
-import { inMemoryProductAdapter } from '../adapters/in-memory-product.adapter';
+import { supabaseProductAdapter } from '../adapters/supabase-product.adapter';
 
 export interface ProductDataSource {
   getAll(): Promise<Product[]> | Product[];
@@ -10,7 +10,7 @@ export interface ProductDataSource {
 export class ProductRepository {
   private adapter: ProductDataSource;
 
-  constructor(adapter: ProductDataSource = inMemoryProductAdapter) {
+  constructor(adapter: ProductDataSource = supabaseProductAdapter) {
     this.adapter = adapter;
   }
 
@@ -23,5 +23,5 @@ export class ProductRepository {
   }
 }
 
-// Default singleton repository instance
+// Default singleton repository instance powered by Supabase with graceful fallback
 export const productRepository = new ProductRepository();

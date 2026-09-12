@@ -24,8 +24,23 @@
     <a href="/#craft" class="hover:text-[#243026] transition-colors">Artesanía</a>
   </div>
 
-  <!-- Cart Trigger Button -->
-  <div class="pointer-events-auto">
+  <!-- Right Actions: Account & Cart -->
+  <div class="pointer-events-auto flex items-center gap-2 sm:gap-3">
+    <!-- User Account Button -->
+    <button 
+      id="nav-auth-btn"
+      type="button"
+      aria-label="Cuenta y sesión"
+      class="flex items-center gap-2 bg-[#FBFBFA]/90 hover:bg-[#F5F3EF] backdrop-blur-xl border border-[#EBE7DF] hover:border-[#8A9A86] px-3.5 py-2 rounded-full text-xs font-sans font-medium text-[#243026] shadow-[0_4px_20px_rgba(28,31,29,0.06)] transition-all active:scale-95 cursor-pointer"
+      title="Cuenta de usuario"
+    >
+      <span id="nav-user-avatar" class="w-4 h-4 rounded-full bg-[#8A9A86]/30 flex items-center justify-center text-[9px] text-[#243026] font-bold">
+        👤
+      </span>
+      <span id="nav-user-label" class="hidden sm:inline text-xs tracking-wider uppercase font-semibold">Cuenta</span>
+    </button>
+
+    <!-- Cart Trigger Button -->
     <button
       id="nav-cart-btn"
       type="button"
@@ -64,6 +79,30 @@
     } catch (e) {
       // LocalStorage unavailable
     }
+
+    // Open auth modal on account button click
+    const navAuthBtn = document.getElementById('nav-auth-btn');
+    const navUserLabel = document.getElementById('nav-user-label');
+    const navUserAvatar = document.getElementById('nav-user-avatar');
+
+    if (navAuthBtn) {
+      navAuthBtn.addEventListener('click', (e) => {
+        e.preventDefault();
+        window.dispatchEvent(new CustomEvent('open-auth-modal'));
+      });
+    }
+
+    // React to user auth state change
+    window.addEventListener('auth-state-changed', (e: Event) => {
+      const detail = (e as CustomEvent).detail;
+      if (detail && detail.user && detail.user.email) {
+        if (navUserLabel) navUserLabel.textContent = detail.user.email.split('@')[0];
+        if (navUserAvatar) {
+          navUserAvatar.textContent = detail.user.email[0].toUpperCase();
+          navUserAvatar.className = 'w-4 h-4 rounded-full bg-[#243026] text-[#FBFBFA] flex items-center justify-center text-[9px] font-bold';
+        }
+      }
+    });
 
     // Open cart drawer on button click
     if (navCartBtn) {
