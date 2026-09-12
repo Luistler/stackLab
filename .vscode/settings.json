@@ -7,6 +7,7 @@
   "files.associations": {
     "*.astro": "astro"
   },
+  "workbench.iconTheme": "material-icon-theme",
   "editor.wordWrap": "off",
   "editor.formatOnSave": true,
   "editor.defaultFormatter": "esbenp.prettier-vscode",
