@@ -5,7 +5,7 @@
 
 <header
   id="hero-container"
-  class="relative w-full h-[100dvh] flex flex-col justify-between items-center text-center px-4 sm:px-6 py-12 md:py-16 overflow-hidden z-10 bg-[#FBFBFA]"
+  class="relative w-full h-[100dvh] min-h-[540px] flex flex-col justify-between items-center text-center px-4 sm:px-6 py-6 sm:py-10 md:py-14 short:py-4 overflow-hidden z-10 bg-[#FBFBFA]"
 >
   <!-- Layer 0: Ambient Organic Watercolor Mist & Natural Light Bloom -->
   <div class="hero-ambient-mist absolute inset-0 pointer-events-none -z-20 overflow-hidden transform-gpu will-change-transform opacity-90">
@@ -28,7 +28,7 @@
   </div>
 
   <!-- Top Atelier Meta Pill -->
-  <div class="hero-meta-pill pt-12 sm:pt-16 transform-gpu will-change-transform z-10">
+  <div class="hero-meta-pill pt-8 sm:pt-12 md:pt-14 short:pt-6 transform-gpu will-change-transform z-10">
     <div class="zen-badge flex items-center gap-2.5 px-4 py-1.5 shadow-sm bg-white/80 backdrop-blur-md">
       <span class="w-1.5 h-1.5 rounded-full bg-[#8A9A86] animate-pulse"></span>
       <span class="tracking-widest text-[#243026]">STACKLAB ATELIER // COLECCIÓN 2026</span>
@@ -37,35 +37,35 @@
 
   <!-- Center Editorial Headline & Subtitle -->
   <div class="hero-content-wrapper max-w-4xl mx-auto my-auto px-2 z-10 transform-gpu will-change-transform">
-    <div class="editorial-mask mb-4 sm:mb-6 overflow-hidden">
-      <h1 class="font-serif text-4xl sm:text-6xl md:text-7xl lg:text-[5.5rem] tracking-tight text-[#243026] leading-[1.05] select-none">
+    <div class="editorial-mask mb-3 sm:mb-5 short:mb-2 overflow-hidden">
+      <h1 class="font-serif text-3xl sm:text-5xl md:text-6xl lg:text-7xl xl:text-[5.25rem] short:text-3xl tracking-tight text-[#243026] leading-[1.06] select-none">
         <span class="hero-title-line-1 block transform-gpu will-change-transform italic font-light">
           Vivir con Intención.
         </span>
-        <span class="hero-title-line-2 block mt-1 sm:mt-2 transform-gpu will-change-transform font-normal tracking-wide text-[#1C1F1D]">
+        <span class="hero-title-line-2 block mt-1 sm:mt-1.5 transform-gpu will-change-transform font-normal tracking-wide text-[#1C1F1D]">
           OBJETOS PARA LA CALMA<span class="text-[#8A9A86]">.</span>
         </span>
       </h1>
     </div>
 
     <!-- Editorial Subtitle -->
-    <p class="hero-subtitle max-w-xl mx-auto text-[#4A5B48] font-sans text-xs sm:text-sm md:text-base leading-relaxed mb-8 px-4 font-normal transform-gpu will-change-transform">
+    <p class="hero-subtitle max-w-xl mx-auto text-[#4A5B48] font-sans text-xs sm:text-sm md:text-base short:text-xs leading-relaxed mb-6 sm:mb-8 short:mb-3 px-4 font-normal transform-gpu will-change-transform">
       Una cuidada selección de mobiliario esencial, vasijas acústicas y textiles de lino orgánico diseñados para
       inspirar presencia, calidez y belleza silenciosa.
     </p>
 
     <!-- Action CTAs -->
-    <div class="hero-cta flex flex-wrap items-center justify-center gap-4 transform-gpu will-change-transform">
+    <div class="hero-cta flex flex-wrap items-center justify-center gap-3 sm:gap-4 transform-gpu will-change-transform">
       <a
         href="#collection"
-        class="px-8 py-3.5 rounded-full bg-[#243026] hover:bg-[#344637] text-white font-sans text-xs sm:text-sm font-medium tracking-wider transition-all duration-300 hover:shadow-xl hover:scale-105 active:scale-95 flex items-center gap-2"
+        class="px-6 sm:px-8 py-2.5 sm:py-3.5 rounded-full bg-[#243026] hover:bg-[#344637] text-white font-sans text-xs sm:text-sm font-medium tracking-wider transition-all duration-300 hover:shadow-xl hover:scale-105 active:scale-95 flex items-center gap-2"
       >
         <span>Explorar Colección</span>
         <span class="text-xs">↓</span>
       </a>
       <a
         href="#philosophy"
-        class="px-7 py-3.5 rounded-full bg-white/80 hover:bg-white border border-[#EBE7DF] hover:border-[#8A9A86] text-[#243026] font-sans text-xs sm:text-sm font-medium tracking-wide transition-all duration-300 shadow-sm hover:scale-105 active:scale-95"
+        class="px-5 sm:px-7 py-2.5 sm:py-3.5 rounded-full bg-white/80 hover:bg-white border border-[#EBE7DF] hover:border-[#8A9A86] text-[#243026] font-sans text-xs sm:text-sm font-medium tracking-wide transition-all duration-300 shadow-sm hover:scale-105 active:scale-95"
       >
         Filosofía de Artesanía
       </a>
@@ -73,7 +73,7 @@
   </div>
 
   <!-- Bottom Scroll Cue -->
-  <div class="hero-scroll-cue flex flex-col items-center gap-2 text-[#4A5B48] font-sans text-[11px] tracking-widest uppercase select-none pointer-events-none pb-4 z-10">
+  <div class="hero-scroll-cue flex flex-col items-center gap-2 text-[#4A5B48] font-sans text-[11px] tracking-widest uppercase select-none pointer-events-none pb-3 short:hidden z-10">
     <span class="text-[10px] tracking-[0.2em] font-medium text-neutral-500">DESCUBRE LA SERENIDAD</span>
     <div class="w-4 h-7 rounded-full border border-[#8A9A86]/40 flex justify-center pt-1.5 bg-white/40">
       <div class="w-1 h-2 rounded-full bg-[#8A9A86] animate-bounce"></div>

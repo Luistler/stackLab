@@ -14,11 +14,11 @@ export function initMotionEngine() {
 
   if (!prefersReducedMotion) {
     lenis = new Lenis({
-      duration: 1.0,
+      duration: 0.9,
       easing: (t: number) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
       smoothWheel: true,
       wheelMultiplier: 1.0,
-      touchMultiplier: 1.5,
+      touchMultiplier: 1.2,
       infinite: false,
     });
 
@@ -31,7 +31,8 @@ export function initMotionEngine() {
     };
 
     gsap.ticker.add(updateTicker);
-    gsap.ticker.lagSmoothing(500, 33);
+    // 120ms max hitch threshold capped to 33ms prevents teleporting jumps while preserving smooth momentum
+    gsap.ticker.lagSmoothing(120, 33);
     window.__lenis = lenis;
     (window as any).lenis = lenis;
 

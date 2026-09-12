@@ -236,14 +236,41 @@ html.lenis body {
   transform: translateX(0) !important;
 }
 
+/* ==========================================================================
+   Reduced Motion Graceful Fallback
+   ========================================================================== */
 @media (prefers-reduced-motion: reduce) {
+  /* Suppress disorienting continuous or rapid movement without breaking UI states */
   *,
   ::before,
   ::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
     scroll-behavior: auto !important;
+  }
+
+  /* Guarantee immediate visibility of narrative elements when motion is reduced */
+  .story-card,
+  .hero-meta-pill,
+  .hero-content-wrapper,
+  .hero-title-line-1,
+  .hero-title-line-2,
+  .hero-subtitle,
+  .hero-cta,
+  .hero-scroll-cue {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: opacity 0.2s ease-out !important;
+  }
+
+  .visual-step.active {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  .reel-track-wrapper {
+    overflow-x: auto !important;
+    scroll-snap-type: x mandatory !important;
   }
 }
 

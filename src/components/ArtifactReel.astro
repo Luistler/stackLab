@@ -69,24 +69,24 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
     <!-- Horizontal Track Container (Mobile Snap Carousel + Desktop GSAP Pin) -->
     <div
       id="reel-track-wrapper"
-      class="reel-track-wrapper overflow-x-auto md:overflow-visible my-auto py-6 sm:py-8 snap-x snap-mandatory md:snap-none scroll-smooth"
+      class="reel-track-wrapper overflow-x-auto lg:overflow-visible my-auto py-4 sm:py-6 lg:py-8 snap-x snap-mandatory lg:snap-none scroll-smooth"
     >
-      <div class="horizontal-track flex flex-row items-stretch gap-5 sm:gap-8 will-change-transform min-w-max md:min-w-0 px-2 md:px-0 [perspective:1000px]">
+      <div class="horizontal-track flex flex-row items-stretch gap-4 sm:gap-6 lg:gap-8 will-change-transform min-w-max lg:min-w-0 px-2 lg:px-0 [perspective:1000px]">
         {products.map((product: Product, idx: number) => (
           <article
-            class="product-card w-[86vw] sm:w-[420px] md:w-[440px] lg:w-[480px] shrink-0 snap-center bg-white rounded-[24px] border border-[#EBE7DF] overflow-hidden shadow-[0_16px_36px_-12px_rgba(28,31,29,0.06)] hover:shadow-[0_20px_40px_-10px_rgba(36,48,38,0.10)] hover:border-[#8A9A86]/50 transition-shadow duration-300 flex flex-col justify-between group transform-gpu will-change-transform"
+            class="product-card w-[82vw] sm:w-[360px] lg:w-[400px] xl:w-[440px] shrink-0 snap-center bg-white rounded-[24px] border border-[#EBE7DF] overflow-hidden shadow-[0_16px_36px_-12px_rgba(28,31,29,0.06)] hover:shadow-[0_20px_40px_-10px_rgba(36,48,38,0.10)] hover:border-[#8A9A86]/50 transition-shadow duration-300 flex flex-col justify-between group transform-gpu"
             data-index={idx}
           >
             <!-- Product High-Resolution Image Container (Linked to Product Page) -->
             <a
               href={`/producto/${product.id}`}
-              class="product-card-media block w-full h-40 sm:h-44 lg:h-48 max-h-[25vh] overflow-hidden relative bg-[#F5F3EF] transform-gpu will-change-transform"
+              class="product-card-media block w-full h-36 sm:h-40 lg:h-44 short:h-32 max-h-[22vh] overflow-hidden relative bg-[#F5F3EF]"
               aria-label={`Ver detalles de ${product.name}`}
             >
               <img
                 src={product.image}
                 alt={product.name}
-                class="product-card-img w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out filter brightness-[0.98] transform-gpu will-change-transform scale-105"
+                class="product-card-img w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-700 ease-out filter brightness-[0.98] scale-105"
                 loading="lazy"
               />
               <div class="absolute top-3 left-3 flex gap-2 pointer-events-none">
@@ -144,16 +144,18 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
                     class="btn-inspect px-3.5 py-2 rounded-full border border-[#EBE7DF] hover:border-[#243026] text-xs font-sans font-medium text-[#4A5B48] hover:text-[#243026] transition-colors cursor-pointer bg-white/70 shadow-sm flex items-center gap-1.5"
                     title="Inspección rápida"
                   >
-                    <AnimatedEyeIcon client:only="react" size={13} color="currentColor" />
-                    <span>Ver</span>
+                    <AnimatedEyeIcon client:load size={13} color="#4A5B48" />
+                    <span class="hidden sm:inline">Detalles</span>
                   </button>
+
                   <button
                     type="button"
                     data-product={JSON.stringify(product)}
-                    class="btn-add-cart px-4 sm:px-5 py-2 rounded-full bg-[#243026] hover:bg-[#344637] text-white font-sans text-xs font-semibold tracking-wide transition-all hover:scale-105 active:scale-95 shadow-md flex items-center gap-1.5 cursor-pointer"
+                    class="btn-add-cart px-4 py-2 rounded-full bg-[#243026] hover:bg-[#344637] text-white text-xs font-sans font-medium transition-all duration-300 hover:shadow-md hover:scale-105 active:scale-95 flex items-center gap-1.5 cursor-pointer"
+                    title="Añadir a la cesta"
                   >
+                    <AnimatedPlusIcon client:load size={13} color="#FFFFFF" />
                     <span>Añadir</span>
-                    <AnimatedPlusIcon client:only="react" size={12} color="#FBFBFA" />
                   </button>
                 </div>
               </div>
@@ -163,9 +165,9 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
       </div>
     </div>
 
-    <!-- Bottom Navigation Hint Bar (Subtle & elevated for dock clearance) -->
-    <div class="hidden md:flex justify-between items-center text-[11px] font-sans text-neutral-500 pt-3 border-t border-[#EBE7DF] mb-2">
-      <span class="flex items-center gap-2 text-[#4A5B48] font-medium">
+    <!-- Bottom Telemetry Indicator -->
+    <div class="hidden md:flex justify-between items-center text-[11px] font-sans text-neutral-500 pt-3 border-t border-[#EBE7DF] mb-2 short:hidden">
+      <span class="flex items-center gap-2">
         <span class="w-1.5 h-1.5 rounded-full bg-[#8A9A86] animate-pulse"></span>
         <span>ATELIER DISPONIBLE // ENVÍO INTERNACIONAL ASEGURADO</span>
       </span>
@@ -197,6 +199,7 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
     if (!reelSection || !reelTrack) return;
 
     const totalSlides = productCards.length || 1;
+    let lastRenderedIndex = -1;
 
     // Attach "Add to Cart" button listeners
     document.querySelectorAll('.btn-add-cart').forEach((btn) => {
@@ -241,162 +244,170 @@ const totalCountFormatted = String(totalCount).padStart(2, '0');
       });
     });
 
-    const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-    const isDesktop = window.innerWidth >= 768;
+    // Use gsap.matchMedia for dynamic responsive switching and clean memory management
+    const mm = gsap.matchMedia();
 
-    // Mobile snap swipe listener
-    if (!isDesktop && reelWrapper) {
-      const updateMobileProgress = () => {
-        const maxScroll = reelWrapper.scrollWidth - reelWrapper.clientWidth;
-        if (maxScroll <= 0) return;
-        const progress = Math.max(0, Math.min(1, reelWrapper.scrollLeft / maxScroll));
-        if (progressFill) {
-          progressFill.style.transform = `scaleX(${progress})`;
-        }
-        if (counterCurrent) {
-          const slideIndex = Math.min(totalSlides, Math.max(1, Math.round(progress * (totalSlides - 1)) + 1));
-          counterCurrent.textContent = String(slideIndex).padStart(2, '0');
-        }
-      };
+    // 1. DESKTOP WITH FULL MOTION (>= 1024px and no reduced motion)
+    mm.add(
+      {
+        isDesktop: '(min-width: 1024px)',
+        noReducedMotion: '(prefers-reduced-motion: no-preference)',
+      },
+      (context) => {
+        const { isDesktop, noReducedMotion } = context.conditions as {
+          isDesktop: boolean;
+          noReducedMotion: boolean;
+        };
 
-      reelWrapper.addEventListener('scroll', updateMobileProgress, {
-        passive: true,
-      });
-      updateMobileProgress();
-    }
+        if (isDesktop && noReducedMotion) {
+          const getScrollDistance = () => {
+            return reelTrack.scrollWidth - window.innerWidth + 140;
+          };
 
-    // Desktop GSAP Pin, Smooth Horizontal Scrub, and Micro-Interaction Tilt
-    if (!prefersReducedMotion && isDesktop) {
-      const getScrollDistance = () => {
-        return reelTrack.scrollWidth - window.innerWidth + 140;
-      };
+          const reelTimeline = gsap.timeline({
+            scrollTrigger: {
+              id: 'collection-trigger',
+              trigger: reelSection,
+              pin: true,
+              scrub: 1.2,
+              start: 'top top',
+              end: () => `+=${getScrollDistance()}`,
+              invalidateOnRefresh: true,
+              anticipatePin: 1,
+              onUpdate: (self) => {
+                if (progressFill) {
+                  progressFill.style.transform = `scaleX(${self.progress})`;
+                }
+                const slideIndex = Math.min(
+                  totalSlides,
+                  Math.max(1, Math.floor(self.progress * (totalSlides - 0.05)) + 1)
+                );
+                if (slideIndex !== lastRenderedIndex && counterCurrent) {
+                  lastRenderedIndex = slideIndex;
+                  counterCurrent.textContent = String(slideIndex).padStart(2, '0');
+                }
+              },
+            },
+          });
 
-      // 1. Horizontal Scroll Pinning with Lenis + ScrollTrigger
-      const reelTimeline = gsap.timeline({
-        scrollTrigger: {
-          id: 'collection-trigger',
-          trigger: reelSection,
-          pin: true,
-          scrub: 1.2, // Smooth scrub integration with Lenis
-          start: 'top top',
-          end: () => `+=${getScrollDistance()}`,
-          invalidateOnRefresh: true,
-          anticipatePin: 1,
-          onUpdate: (self) => {
-            if (progressFill) {
-              progressFill.style.transform = `scaleX(${self.progress})`;
+          // Linear translation ensures 1:1 scroll alignment
+          reelTimeline.to(reelTrack, {
+            x: () => -getScrollDistance(),
+            ease: 'none',
+          });
+
+          // 2. Desktop Micro-Interaction: 3D Subtle Tilt only for precise mouse pointer
+          const hasFinePointer = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+
+          if (hasFinePointer) {
+            productCards.forEach((card) => {
+              const img = card.querySelector<HTMLElement>('.product-card-img');
+
+              const setCardRotateX = gsap.quickTo(card, 'rotationX', { duration: 0.4, ease: 'power2.out' });
+              const setCardRotateY = gsap.quickTo(card, 'rotationY', { duration: 0.4, ease: 'power2.out' });
+              const setCardZ = gsap.quickTo(card, 'z', { duration: 0.4, ease: 'power2.out' });
+
+              let rect: DOMRect | null = null;
+
+              const onMouseEnter = () => {
+                rect = card.getBoundingClientRect();
+                setCardZ(8);
+              };
+
+              const onMouseMove = (e: MouseEvent) => {
+                if (!rect) rect = card.getBoundingClientRect();
+                const cardWidth = rect.width;
+                const cardHeight = rect.height;
+                const mouseX = e.clientX - rect.left;
+                const mouseY = e.clientY - rect.top;
+
+                const xPercent = (mouseX / cardWidth - 0.5) * 2;
+                const yPercent = (mouseY / cardHeight - 0.5) * 2;
+
+                setCardRotateX(-yPercent * 1.5);
+                setCardRotateY(xPercent * 1.8);
+              };
+
+              const onMouseLeave = () => {
+                rect = null;
+                setCardRotateX(0);
+                setCardRotateY(0);
+                setCardZ(0);
+              };
+
+              card.addEventListener('mouseenter', onMouseEnter, { passive: true });
+              card.addEventListener('mousemove', onMouseMove, { passive: true });
+              card.addEventListener('mouseleave', onMouseLeave, { passive: true });
+            });
+          }
+
+          // Keyboard navigation with Arrow Left / Arrow Right
+          const onKeydown = (e: KeyboardEvent) => {
+            const cartActive = document.querySelector('.cart-overlay.active');
+            if (cartActive) return;
+
+            if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
+              const st =
+                ScrollTrigger.getById('collection-trigger') ||
+                ScrollTrigger.getAll().find((s) => s.trigger === reelSection);
+              if (st) {
+                const stepDelta = 1 / Math.max(1, totalSlides - 1);
+                let targetProgress = st.progress + (e.key === 'ArrowRight' ? stepDelta : -stepDelta);
+                targetProgress = Math.max(0, Math.min(1, targetProgress));
+                if (window.__lenis) {
+                  const targetScroll = st.start + targetProgress * (st.end - st.start);
+                  window.__lenis.scrollTo(targetScroll);
+                }
+              }
             }
-            if (counterCurrent) {
-              const slideIndex = Math.min(
-                totalSlides,
-                Math.max(1, Math.floor(self.progress * (totalSlides - 0.05)) + 1)
-              );
+          };
+
+          window.addEventListener('keydown', onKeydown);
+
+          return () => {
+            window.removeEventListener('keydown', onKeydown);
+            gsap.set([reelTrack, ...productCards], { clearProps: 'all' });
+          };
+        }
+      }
+    );
+
+    // 2. MOBILE, SPLIT-SCREEN, OR REDUCED MOTION (Native smooth touch/wheel scrolling)
+    mm.add(
+      {
+        isNarrow: '(max-width: 1023px)',
+        isReducedMotion: '(prefers-reduced-motion: reduce)',
+      },
+      (context) => {
+        const { isNarrow, isReducedMotion } = context.conditions as {
+          isNarrow: boolean;
+          isReducedMotion: boolean;
+        };
+
+        if ((isNarrow || isReducedMotion) && reelWrapper) {
+          const updateMobileProgress = () => {
+            const maxScroll = reelWrapper.scrollWidth - reelWrapper.clientWidth;
+            if (maxScroll <= 0) return;
+            const progress = Math.max(0, Math.min(1, reelWrapper.scrollLeft / maxScroll));
+            if (progressFill) {
+              progressFill.style.transform = `scaleX(${progress})`;
+            }
+            const slideIndex = Math.min(totalSlides, Math.max(1, Math.round(progress * (totalSlides - 1)) + 1));
+            if (slideIndex !== lastRenderedIndex && counterCurrent) {
+              lastRenderedIndex = slideIndex;
               counterCurrent.textContent = String(slideIndex).padStart(2, '0');
             }
-          },
-        },
-      });
+          };
 
-      // Linear translation ensures 1:1 scroll alignment
-      reelTimeline.to(reelTrack, {
-        x: () => -getScrollDistance(),
-        ease: 'none',
-      });
+          reelWrapper.addEventListener('scroll', updateMobileProgress, { passive: true });
+          updateMobileProgress();
 
-      // Subtle horizontal parallax on inner card images during track movement
-      const cardImages = document.querySelectorAll<HTMLElement>('.product-card-img');
-      cardImages.forEach((img) => {
-        reelTimeline.fromTo(img, { xPercent: 8 }, { xPercent: -8, ease: 'none' }, 0);
-      });
-
-      // 2. Desktop Micro-Interaction: 3D Subtle Tilt & Image Parallax using gsap.quickTo
-      productCards.forEach((card) => {
-        const img = card.querySelector<HTMLElement>('.product-card-img');
-
-        // Prepare high-performance quickTo setters for 60 FPS transform-gpu
-        const setCardRotateX = gsap.quickTo(card, 'rotationX', {
-          duration: 0.45,
-          ease: 'power3.out',
-        });
-        const setCardRotateY = gsap.quickTo(card, 'rotationY', {
-          duration: 0.45,
-          ease: 'power3.out',
-        });
-        const setCardZ = gsap.quickTo(card, 'z', {
-          duration: 0.45,
-          ease: 'power3.out',
-        });
-
-        const setImgX = img ? gsap.quickTo(img, 'x', { duration: 0.4, ease: 'power3.out' }) : null;
-        const setImgY = img ? gsap.quickTo(img, 'y', { duration: 0.4, ease: 'power3.out' }) : null;
-
-        let rect: DOMRect | null = null;
-
-        const onMouseEnter = () => {
-          rect = card.getBoundingClientRect();
-          setCardZ(12);
-        };
-
-        const onMouseMove = (e: MouseEvent) => {
-          if (!rect) rect = card.getBoundingClientRect();
-          const cardWidth = rect.width;
-          const cardHeight = rect.height;
-
-          const mouseX = e.clientX - rect.left;
-          const mouseY = e.clientY - rect.top;
-
-          // Normalized offset -1 to 1
-          const xPercent = (mouseX / cardWidth - 0.5) * 2;
-          const yPercent = (mouseY / cardHeight - 0.5) * 2;
-
-          // Very subtle calm 3D tilt: max 1.5 deg rotation (smooth and grounded)
-          setCardRotateX(-yPercent * 1.5);
-          setCardRotateY(xPercent * 1.8);
-
-          // Subtle internal image counter-parallax
-          if (setImgX && setImgY) {
-            setImgX(xPercent * 3);
-            setImgY(yPercent * 2);
-          }
-        };
-
-        const onMouseLeave = () => {
-          rect = null;
-          setCardRotateX(0);
-          setCardRotateY(0);
-          setCardZ(0);
-          if (setImgX && setImgY) {
-            setImgX(0);
-            setImgY(0);
-          }
-        };
-
-        card.addEventListener('mouseenter', onMouseEnter, { passive: true });
-        card.addEventListener('mousemove', onMouseMove, { passive: true });
-        card.addEventListener('mouseleave', onMouseLeave, { passive: true });
-      });
-
-      // Keyboard navigation with Arrow Left / Arrow Right
-      window.addEventListener('keydown', (e: KeyboardEvent) => {
-        const cartActive = document.querySelector('.cart-overlay.active');
-        if (cartActive) return;
-
-        if (e.key === 'ArrowRight' || e.key === 'ArrowLeft') {
-          const st =
-            ScrollTrigger.getById('collection-trigger') ||
-            ScrollTrigger.getAll().find((s) => s.trigger === reelSection);
-          if (st) {
-            const stepDelta = 1 / Math.max(1, totalSlides - 1);
-            let targetProgress = st.progress + (e.key === 'ArrowRight' ? stepDelta : -stepDelta);
-            targetProgress = Math.max(0, Math.min(1, targetProgress));
-            if (window.__lenis) {
-              const targetScroll = st.start + targetProgress * (st.end - st.start);
-              window.__lenis.scrollTo(targetScroll);
-            }
-          }
+          return () => {
+            reelWrapper.removeEventListener('scroll', updateMobileProgress);
+          };
         }
-      });
-    }
+      }
+    );
   }
 
   if (document.readyState === 'loading') {

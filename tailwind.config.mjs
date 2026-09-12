@@ -34,6 +34,9 @@ export default {
         'zen-float': '0 25px 60px -20px rgba(36, 48, 38, 0.18)',
         'zen-subtle': '0 4px 20px -2px rgba(28, 31, 29, 0.05)',
       },
+      screens: {
+        short: { raw: '(max-height: 720px)' },
+      },
     },
   },
   plugins: [],
